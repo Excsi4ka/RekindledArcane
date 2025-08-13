@@ -1,0 +1,16 @@
+[
+{
+  "modid": "RekindledArcane",
+  "name": "Rekindled Arcane",
+  "description": "Discover long lost secrets and relics of the past",
+  "version": "1.0",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Excsi"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

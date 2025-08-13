@@ -1,0 +1,8 @@
+{
+  "menu.ding": {
+    "category": "master",
+    "sounds": [
+      "menu_ding"
+    ]
+  }
+}

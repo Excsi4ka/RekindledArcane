@@ -1,0 +1,34 @@
+package excsi.rekindledarcane.common.data.player;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+
+import java.util.HashMap;
+import java.util.UUID;
+
+public class PlayerDataManager {
+
+    private static final HashMap<UUID, PlayerData> playerData = new HashMap<>();
+
+    public static PlayerData getPlayerData(EntityPlayer player) {
+        return playerData.get(player.getUniqueID());
+    }
+
+    public static void readDataForPlayer(EntityPlayer player, NBTTagCompound tagCompound) {
+        PlayerData data = new PlayerData();
+        data.readData(tagCompound);
+        playerData.put(player.getUniqueID(), data);
+    }
+
+    public static void writeDataForPlayer(EntityPlayer player, NBTTagCompound tagCompound) {
+        PlayerData data = playerData.get(player.getUniqueID());
+        data.writeData(tagCompound);
+    }
+
+    public static void setPlayerDataDefault(EntityPlayer player) {
+        PlayerData data = new PlayerData();
+        playerData.put(player.getUniqueID(), data);
+    }
+
+
+}
