@@ -15,7 +15,7 @@ import java.util.List;
 
 public class SkillCategorySelectionScreen extends GuiScreen {
 
-    public static ResourceLocation backgroundTex = new ResourceLocation("rekindledarcane","textures/gui/img.png");
+    public static ResourceLocation backgroundTex = new ResourceLocation("rekindledarcane","textures/gui/background.png");
 
     public int lastMouseX, lastMouseY;
 

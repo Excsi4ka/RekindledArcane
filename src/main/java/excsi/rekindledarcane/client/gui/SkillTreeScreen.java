@@ -14,7 +14,7 @@ import org.lwjgl.input.Mouse;
 
 public class SkillTreeScreen extends GuiScreen {
 
-    public static ResourceLocation backgroundTex = new ResourceLocation("rekindledarcane","textures/gui/img.png");
+    public static ResourceLocation backgroundTex = new ResourceLocation("rekindledarcane","textures/gui/background.png");
 
     public GuiScreen parentScreen;
 

@@ -19,6 +19,8 @@ public class Config {
 
     public static boolean shouldHealPlayerOnRespawn;
 
+    public static float magicResistanceCap;
+
     public static void loadConfig(File file) {
         CONFIG = new Configuration(file);
 
@@ -29,6 +31,10 @@ public class Config {
         CONFIG.addCustomCategoryComment(CATEGORY_GENERAL,"General mod settings");
         shouldHealPlayerOnRespawn = CONFIG.getBoolean("HealPlayerOnRespawn", CATEGORY_GENERAL,
                 false, "Should players be healed to their maximum health on respawn");
+
+        CONFIG.addCustomCategoryComment(CATEGORY_SKILLS, "Skill system related settings");
+        magicResistanceCap = CONFIG.getFloat("MagicResistanceAttributeCap", CATEGORY_SKILLS, 100, 0,
+                100, "The cap for magic resistance attribute value, 100 means full magic resistance is possible to achieve");
 
         CONFIG.save();
     }

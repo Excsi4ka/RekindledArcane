@@ -10,6 +10,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.Clone;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 
@@ -31,6 +32,18 @@ public class RekindledArcaneEvents {
         EntityPlayer player = event.player;
         if(Config.shouldHealPlayerOnRespawn && !player.worldObj.isRemote) {
             player.setHealth(player.getMaxHealth());
+        }
+    }
+
+    @SubscribeEvent
+    public void onLivingHurt(LivingHurtEvent event) {
+        if(event.entityLiving instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) event.entityLiving;
+            double value = player.getEntityAttribute(RekindledArcaneAPI.MAGIC_RESISTANCE).getAttributeValue();
+            value = Math.min(Config.magicResistanceCap, value);
+            if(!event.source.isMagicDamage())
+                return;
+            event.ammount *= 1 - value / 100;
         }
     }
 

@@ -3,7 +3,7 @@
   "modid": "RekindledArcane",
   "name": "Rekindled Arcane",
   "description": "Discover long lost secrets and relics of the past",
-  "version": "1.0",
+  "version": "1.0.0",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",

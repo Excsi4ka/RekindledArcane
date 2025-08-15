@@ -4,7 +4,8 @@ import cpw.mods.fml.relauncher.Side;
 import excsi.rekindledarcane.core.ASMUtils;
 import excsi.rekindledarcane.core.SubTransformer;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.*;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodNode;
 
 public class ThaumcraftTransformer extends SubTransformer {
 

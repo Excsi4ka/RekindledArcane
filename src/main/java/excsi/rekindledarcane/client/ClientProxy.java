@@ -10,7 +10,6 @@ import excsi.rekindledarcane.common.CommonProxy;
 import excsi.rekindledarcane.common.util.Config;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 

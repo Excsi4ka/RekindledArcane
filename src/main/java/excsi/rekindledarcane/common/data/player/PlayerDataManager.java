@@ -25,10 +25,9 @@ public class PlayerDataManager {
         data.writeData(tagCompound);
     }
 
-    public static void setPlayerDataDefault(EntityPlayer player) {
+    public static PlayerData setPlayerDataDefault(EntityPlayer player) {
         PlayerData data = new PlayerData();
         playerData.put(player.getUniqueID(), data);
+        return data;
     }
-
-
 }

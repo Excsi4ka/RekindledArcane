@@ -3,17 +3,20 @@ package excsi.rekindledarcane.common.event;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import excsi.rekindledarcane.RekindledArcane;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
+import excsi.rekindledarcane.common.network.PacketManager;
+import excsi.rekindledarcane.common.network.server.PacketFullPlayerDataSync;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 //todo add data backup
-public class SaveDataEventHandler {
+public class DataEventHandler {
 
     @SubscribeEvent
     public void playerDataRead(PlayerEvent.LoadFromFile event) {
@@ -52,5 +55,15 @@ public class SaveDataEventHandler {
             RekindledArcane.LOG.error(e.getMessage() + " Couldn't save " + player.getCommandSenderName() + "'s player data");
             e.printStackTrace();
         }
+    }
+
+    @SubscribeEvent
+    public void onPlayerLogin(PlayerLoggedInEvent event) {
+        if(event.player.worldObj.isRemote)
+            return;
+        NBTTagCompound data = new NBTTagCompound();
+        PlayerDataManager.getPlayerData(event.player).writeData(data);
+        PacketFullPlayerDataSync packet = new PacketFullPlayerDataSync(data);
+        PacketManager.sendToPlayer(packet, event.player);
     }
 }

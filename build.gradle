@@ -30,7 +30,6 @@ minecraft {
 
 dependencies {
    //implementation fileTree(dir: 'libs', include: ['*.jar'])
-
 }
 
 repositories {
@@ -62,6 +61,6 @@ jar {
     manifest {
         attributes 'FMLCorePluginContainsFMLMod': 'true'
         attributes 'FMLCorePlugin': 'excsi.rekindledarcane.core.RekindledArcaneCore'
-        //attributes 'FMLAT': 'BloodMagicExpansion_at.cfg'
+        attributes 'FMLAT': 'RekindledArcane_at.cfg'
     }
 }

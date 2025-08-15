@@ -34,6 +34,8 @@ public interface ISkill {
 
     void forgetSkill(EntityPlayer player);
 
+    boolean reapplyOnRestart();
+
     ISkill setCoreSkill();
 
     ISkill setSkillCategory(ISkillCategory category);

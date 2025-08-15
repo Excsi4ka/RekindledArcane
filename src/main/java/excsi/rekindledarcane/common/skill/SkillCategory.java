@@ -5,7 +5,9 @@ import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
 
 import java.awt.Color;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Set;
 
 public class SkillCategory implements ISkillCategory {
 
@@ -65,6 +67,11 @@ public class SkillCategory implements ISkillCategory {
     @Override
     public Color getPrimaryColor() {
         return color;
+    }
+
+    @Override
+    public int hashCode() {
+        return nameID.hashCode();
     }
 
     @Override

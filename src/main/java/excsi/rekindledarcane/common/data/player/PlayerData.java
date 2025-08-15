@@ -8,19 +8,19 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PlayerData {
 
     private int skillPoints;
 
-    public HashMap<ISkillCategory, List<ISkill>> unlockedSkills = new HashMap<>();
+    public HashMap<ISkillCategory, Set<ISkill>> unlockedSkills = new HashMap<>();
 
     public PlayerData() {
         skillPoints = 0;
-        RekindledArcaneAPI.getAllCategories().forEach(category -> unlockedSkills.put(category, new ArrayList<>()));
+        RekindledArcaneAPI.getAllCategories().forEach(category -> unlockedSkills.put(category, new HashSet<>()));
     }
 
     public void readData(NBTTagCompound compound) {
@@ -45,15 +45,19 @@ public class PlayerData {
         }
     }
 
-    public boolean hasSkill(ISkill skill) {
-        List<ISkill> skills = unlockedSkills.get(skill.getSkillCategory());
-        if(skills.isEmpty())
-            return false;
-        return skills.contains(skill);
+    public int getSkillPoints() {
+        return skillPoints;
     }
 
     public boolean hasEnoughPointsForSkill(ISkill skill) {
         return skillPoints >= skill.getSkillPointCost();
+    }
+
+    public boolean hasSkill(ISkill skill) {
+        Set<ISkill> skills = unlockedSkills.get(skill.getSkillCategory());
+        if(skills.isEmpty())
+            return false;
+        return skills.contains(skill);
     }
 
     public boolean unlockSkill(EntityPlayer player, ISkill skill, boolean notifyClient) {

@@ -37,10 +37,6 @@ public abstract class BaseAbstractSkill implements ISkill {
         return nameID;
     }
 
-    public String getUnlocalizedDescription() {
-        return getUnlocalizedName() + ".desc";
-    }
-
     @Override
     public String getUnlocalizedName() {
         return "rekindledarcane.skill." + nameID;
@@ -107,7 +103,11 @@ public abstract class BaseAbstractSkill implements ISkill {
     @Override
     public void addDescription(List<String> description) {
         description.add(StatCollector.translateToLocal(getUnlocalizedName()));
-        description.add(StatCollector.translateToLocal(getUnlocalizedDescription()));
+    }
+
+    @Override
+    public int hashCode() {
+        return nameID.hashCode();
     }
 
     @Override
@@ -115,6 +115,6 @@ public abstract class BaseAbstractSkill implements ISkill {
         if(!(obj instanceof ISkill))
             return false;
         ISkill skill = (ISkill) obj;
-        return skill.getNameID().equals(nameID) && skill.getSkillCategory().equals(skillCategory);
+        return skill.getNameID().equals(nameID);
     }
 }

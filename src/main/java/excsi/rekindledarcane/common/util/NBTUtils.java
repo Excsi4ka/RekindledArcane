@@ -5,11 +5,11 @@ import excsi.rekindledarcane.api.skill.ISkillCategory;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 
-import java.util.List;
+import java.util.Set;
 
 public class NBTUtils {
 
-    public static List<ISkill> readSkillsFromNBT(ISkillCategory category, NBTTagList nbtList, List<ISkill> skillList) {
+    public static Set<ISkill> readSkillsFromNBT(ISkillCategory category, NBTTagList nbtList, Set<ISkill> skillList) {
         for(int i = 0; i < nbtList.tagCount(); i++) {
             ISkill skill = category.getSkillFromID(nbtList.getStringTagAt(i));
             if(skill != null)
@@ -18,7 +18,7 @@ public class NBTUtils {
         return skillList;
     }
 
-    public static NBTTagList writeSkillsToNBT(NBTTagList nbtTagList, List<ISkill> skillList) {
+    public static NBTTagList writeSkillsToNBT(NBTTagList nbtTagList, Set<ISkill> skillList) {
         skillList.forEach(s -> nbtTagList.appendTag(new NBTTagString(s.getNameID())));
         return nbtTagList;
     }

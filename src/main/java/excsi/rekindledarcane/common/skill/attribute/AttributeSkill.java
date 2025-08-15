@@ -88,6 +88,11 @@ public class AttributeSkill extends BaseAbstractSkill {
         });
     }
 
+    @Override
+    public boolean reapplyOnRestart() {
+        return false;
+    }
+
     public static class AttributeDataHolder {
 
         private final AttributeOperation operation;
