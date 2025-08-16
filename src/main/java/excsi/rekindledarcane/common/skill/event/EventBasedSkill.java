@@ -1,26 +1,25 @@
 package excsi.rekindledarcane.common.skill.event;
 
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import excsi.rekindledarcane.api.skill.SkillType;
+import excsi.rekindledarcane.common.data.player.PlayerDataManager;
 import excsi.rekindledarcane.common.skill.AdditionalDataSkill;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 
-public abstract class EventBasedSkill<T extends Event> extends AdditionalDataSkill {
+public abstract class EventBasedSkill extends AdditionalDataSkill {
 
     public EventBasedSkill(String nameID) {
         super(nameID);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    @SubscribeEvent
-    public void onEvent(T event) {
-        processEvent(event);
+    public boolean hasThisSkill(EntityLivingBase entityLivingBase) {
+        if(!(entityLivingBase instanceof EntityPlayer))
+            return false;
+        return PlayerDataManager.getPlayerData((EntityPlayer) entityLivingBase).hasSkill(this);
     }
-
-    public abstract void processEvent(T event);
 
     @Override
     public SkillType getSkillType() {
@@ -28,18 +27,19 @@ public abstract class EventBasedSkill<T extends Event> extends AdditionalDataSki
     }
 
     @Override
-    public void unlockSkill(EntityPlayer player) {
-
-    }
+    public void unlockSkill(EntityPlayer player) {}
 
     @Override
-    public void forgetSkill(EntityPlayer player) {
-
-    }
+    public void forgetSkill(EntityPlayer player) {}
 
     @Override
     public boolean reapplyOnRestart() {
         return true;
+    }
+
+    @Override
+    public boolean hasData() {
+        return false;
     }
 
     @Override

@@ -11,10 +11,6 @@ import java.awt.Color;
 
 public class SkillSystemRegistry {
 
-    //public static ISkillCategory WARRIOR;
-
-    //public static ISkillCategory SORCERY;
-
     public static void register() {
         SkillCategory skillCategory = new SkillCategory("COMBAT", new Color(0, 66, 110, 152));
         RekindledArcaneAPI.registerSkillCategory(skillCategory.getNameID(), skillCategory);
@@ -22,23 +18,24 @@ public class SkillSystemRegistry {
         skillCategory.registerSkill(new AttributeSkill("strength")
                 .addSkillAttribute(SharedMonsterAttributes.maxHealth, AttributeOperation.ADDITIVE, 1)
                 .addSkillAttribute(RekindledArcaneAPI.MAGIC_RESISTANCE, AttributeOperation.ADDITIVE, 3)
-                .setPosition(new Point(-16,10))
-                .setCoreSkill());
+                .setPosition(Point.of(-16,20)));
 
         skillCategory.registerSkill(new AttributeSkill("strength2")
                 .addSkillAttribute(SharedMonsterAttributes.maxHealth, AttributeOperation.ADDITIVE, 5)
                 .addSkillAttribute(RekindledArcaneAPI.MAGIC_RESISTANCE, AttributeOperation.ADDITIVE, 2)
-                .setPosition(new Point(30,60)));
+                .setPreRequisite("strength")
+                .setPosition(Point.of(30,60)));
 
         skillCategory.registerSkill(new AttributeSkill("strength3")
                 .addSkillAttribute(SharedMonsterAttributes.maxHealth, AttributeOperation.ADDITIVE, 5)
                 .addSkillAttribute(RekindledArcaneAPI.MAGIC_RESISTANCE, AttributeOperation.ADDITIVE, 200)
-                .setPosition(new Point(30,90)));
+                .setPreRequisite("strength2")
+                .setPosition(Point.of(30,90)));
 
         skillCategory.registerSkill(new AttributeSkill("magic1")
                 .addSkillAttribute(SharedMonsterAttributes.maxHealth, AttributeOperation.MULTIPLY_BASE, 1)
                 .addSkillAttribute(RekindledArcaneAPI.MAGIC_RESISTANCE, AttributeOperation.ADDITIVE, 1)
-                .setPosition(new Point(60,90)));
+                .setPosition(Point.of(60,90)));
 
         skillCategory = new SkillCategory("SORCERY", new Color(50, 0, 134, 152));
         RekindledArcaneAPI.registerSkillCategory(skillCategory.getNameID(), skillCategory);

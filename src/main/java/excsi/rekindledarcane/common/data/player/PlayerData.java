@@ -16,7 +16,7 @@ public class PlayerData {
 
     private int skillPoints;
 
-    public HashMap<ISkillCategory, Set<ISkill>> unlockedSkills = new HashMap<>();
+    private final HashMap<ISkillCategory, Set<ISkill>> unlockedSkills = new HashMap<>();
 
     public PlayerData() {
         skillPoints = 0;
@@ -74,5 +74,9 @@ public class PlayerData {
         unlockedSkills.get(skill.getSkillCategory()).remove(skill);
         skill.forgetSkill(player);
         return true;
+    }
+
+    public Set<ISkill> getUnlockedSkillForCategory(ISkillCategory category) {
+        return unlockedSkills.get(category);
     }
 }

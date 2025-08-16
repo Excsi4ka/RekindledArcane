@@ -17,11 +17,13 @@ public abstract class BaseAbstractSkill implements ISkill {
 
     private int skillPointCost = 1;
 
-    private boolean isCoreSkill;
-
     private ISkillCategory skillCategory;
 
     private Point point;
+
+    private ISkill cachedPreRequisite = null, cachedAntiRequisite = null;
+
+    private String preRequisiteID, antiRequisiteID;
 
     private static final Point fallbackPoint = new Point(0,0);
 
@@ -66,17 +68,6 @@ public abstract class BaseAbstractSkill implements ISkill {
     }
 
     @Override
-    public boolean isCoreSkill() {
-        return isCoreSkill;
-    }
-
-    @Override
-    public ISkill setCoreSkill() {
-        isCoreSkill = true;
-        return this;
-    }
-
-    @Override
     public ISkill setSkillCategory(ISkillCategory skillCategory) {
         this.skillCategory = skillCategory;
         return this;
@@ -103,6 +94,32 @@ public abstract class BaseAbstractSkill implements ISkill {
     @Override
     public void addDescription(List<String> description) {
         description.add(StatCollector.translateToLocal(getUnlocalizedName()));
+    }
+
+    @Override
+    public ISkill setPreRequisite(String id) {
+        this.preRequisiteID = id;
+        return this;
+    }
+
+    @Override
+    public ISkill setAntiRequisite(String id) {
+        this.antiRequisiteID = id;
+        return this;
+    }
+
+    @Override
+    public ISkill getPreRequisite() {
+        if (cachedPreRequisite == null)
+            cachedPreRequisite = skillCategory.getSkillFromID(preRequisiteID);
+        return cachedPreRequisite;
+    }
+
+    @Override
+    public ISkill getAntiRequisite() {
+        if (cachedAntiRequisite == null)
+            cachedAntiRequisite = skillCategory.getSkillFromID(antiRequisiteID);
+        return cachedAntiRequisite;
     }
 
     @Override

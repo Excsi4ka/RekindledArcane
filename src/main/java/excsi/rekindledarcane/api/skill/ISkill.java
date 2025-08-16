@@ -18,7 +18,7 @@ public interface ISkill {
 
     SkillType getSkillType();
 
-    ISkill getPrerequisite();
+    ISkill getPreRequisite();
 
     ISkill getAntiRequisite();
 
@@ -28,21 +28,21 @@ public interface ISkill {
 
     int getSkillPointCost();
 
-    boolean isCoreSkill();
-
     void unlockSkill(EntityPlayer player);
 
     void forgetSkill(EntityPlayer player);
 
     boolean reapplyOnRestart();
 
-    ISkill setCoreSkill();
-
     ISkill setSkillCategory(ISkillCategory category);
 
     ISkill setSkillPointCost(int pointCost);
 
     ISkill setPosition(Point point);
+
+    ISkill setPreRequisite(String id);
+
+    ISkill setAntiRequisite(String id);
 
     @SideOnly(Side.CLIENT)
     void registerSkillIcon(IIconRegister textureAtlas);

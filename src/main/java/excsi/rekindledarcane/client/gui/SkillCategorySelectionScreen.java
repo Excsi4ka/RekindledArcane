@@ -2,20 +2,18 @@ package excsi.rekindledarcane.client.gui;
 
 import excsi.rekindledarcane.api.RekindledArcaneAPI;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
+import excsi.rekindledarcane.client.AssetLib;
 import excsi.rekindledarcane.client.gui.widgets.SkillCategoryWidget;
 import excsi.rekindledarcane.client.util.BlendMode;
 import excsi.rekindledarcane.client.util.StateRenderHelper;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SkillCategorySelectionScreen extends GuiScreen {
-
-    public static ResourceLocation backgroundTex = new ResourceLocation("rekindledarcane","textures/gui/background.png");
 
     public int lastMouseX, lastMouseY;
 
@@ -45,11 +43,11 @@ public class SkillCategorySelectionScreen extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        mc.getTextureManager().bindTexture(backgroundTex);
+        mc.getTextureManager().bindTexture(AssetLib.backgroundTex);
         StateRenderHelper.enableBlend();
         StateRenderHelper.blendMode(BlendMode.DEFAULT);
         StateRenderHelper.drawFullSizeTexturedRectangle(0, 0, width, height, zLevel);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        StateRenderHelper.disableTexture2D();
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glShadeModel(GL11.GL_SMOOTH);
         Tessellator tes = Tessellator.instance;

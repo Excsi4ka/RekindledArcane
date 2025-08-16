@@ -3,18 +3,24 @@ package excsi.rekindledarcane.client.gui;
 import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
 import excsi.rekindledarcane.api.skill.Point;
+import excsi.rekindledarcane.client.AssetLib;
 import excsi.rekindledarcane.client.gui.widgets.Widget;
 import excsi.rekindledarcane.client.gui.widgets.SkillUnlockWidget;
+import excsi.rekindledarcane.client.util.BlendMode;
 import excsi.rekindledarcane.client.util.SkillIconTextureManager;
 import excsi.rekindledarcane.client.util.StateRenderHelper;
-import net.minecraft.client.gui.GuiButton;
+import excsi.rekindledarcane.common.data.player.PlayerDataManager;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.Tessellator;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class SkillTreeScreen extends GuiScreen {
-
-    public static ResourceLocation backgroundTex = new ResourceLocation("rekindledarcane","textures/gui/background.png");
 
     public GuiScreen parentScreen;
 
@@ -24,19 +30,35 @@ public class SkillTreeScreen extends GuiScreen {
 
     public int lastMouseX, lastMouseY;
 
+    public Set<ISkill> unlockedSkills;
+
+    public Set<ISkill> lockedSkills;
+
+    public Map<ISkill, SkillUnlockWidget> skillWidgets;
+
     public SkillTreeScreen(ISkillCategory category, GuiScreen parentScreen) {
         this.category = category;
         this.parentScreen = parentScreen;
+        this.skillWidgets = new HashMap<>();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void initGui() {
+        skillWidgets.clear();
         int x = width / 2;
         int id = 0;
-        for(ISkill skill : category.getAllSkills()) {
+        unlockedSkills = PlayerDataManager.getPlayerData(mc.thePlayer).getUnlockedSkillForCategory(category);
+        lockedSkills = new HashSet<>(category.getAllSkills());
+        lockedSkills.removeAll(unlockedSkills);
+        for(ISkill skill : unlockedSkills) {
             Point point = skill.getPosition();
-            buttonList.add(new SkillUnlockWidget(id++, x + point.x, point.y, 32, 32, skill, this));
+            skillWidgets.put(skill, new SkillUnlockWidget(id++, x + point.x, point.y, 32, 32,
+                    skill, this, true));
+        }
+        for(ISkill skill : lockedSkills) {
+            Point point = skill.getPosition();
+            skillWidgets.put(skill, new SkillUnlockWidget(id++, x + point.x, point.y, 32, 32,
+                    skill, this, false));
         }
         lastMouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
         lastMouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
@@ -44,15 +66,30 @@ public class SkillTreeScreen extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        mc.getTextureManager().bindTexture(backgroundTex);
+        mc.getTextureManager().bindTexture(AssetLib.backgroundTex);
         StateRenderHelper.drawFullSizeTexturedRectangle(0,0,width,height,zLevel);
         mc.getTextureManager().bindTexture(SkillIconTextureManager.skillIconTextureAtlas);
         currentHoveringWidget = null;
-        super.drawScreen(mouseX, mouseY, partialTicks);
+        skillWidgets.values().forEach(widget -> widget.drawButton(mc, mouseX, mouseY));
 
         if(currentHoveringWidget != null) {
             func_146283_a(currentHoveringWidget.getDescriptionTooltip(), mouseX, mouseY);
         }
+
+        GL11.glLineWidth(6f);
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
+        StateRenderHelper.enableBlend();
+        StateRenderHelper.blendMode(BlendMode.DEFAULT);
+        StateRenderHelper.disableTexture2D();
+        Tessellator tes = Tessellator.instance;
+        tes.startDrawing(GL11.GL_LINES);
+        int alpha = (int) (Math.sin(mc.thePlayer.ticksExisted * 0.1) * 70 + 170);
+        skillWidgets.values().forEach(widget -> widget.drawConnectionLine(tes, alpha));
+        tes.draw();
+        StateRenderHelper.restoreStates();
+        GL11.glLineWidth(1f);
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
 
         //moving widgets in drawScreen because otherwise it doesn't update fast enough and looks jagged
         updateMouseMovement(mouseX, mouseY);
@@ -60,7 +97,6 @@ public class SkillTreeScreen extends GuiScreen {
         lastMouseY = mouseY;
     }
 
-    @SuppressWarnings("unchecked")
     public void updateMouseMovement(int mouseX, int mouseY) {
         if (!Mouse.isButtonDown(0))
             return;
@@ -68,11 +104,7 @@ public class SkillTreeScreen extends GuiScreen {
         int offsetY = mouseY - lastMouseY;
         if (offsetX == 0 && offsetY == 0)
             return;
-        buttonList.forEach(buttonObj -> {
-            GuiButton button = (GuiButton) buttonObj;
-            button.xPosition += offsetX;
-            button.yPosition += offsetY;
-        });
+        skillWidgets.values().forEach(button -> button.handleOffset(offsetX, offsetY));
     }
 
     @Override
@@ -80,5 +112,10 @@ public class SkillTreeScreen extends GuiScreen {
         if(index == 1) {
             mc.displayGuiScreen(parentScreen);
         }
+    }
+
+    @Override
+    public boolean doesGuiPauseGame() {
+        return false;
     }
 }

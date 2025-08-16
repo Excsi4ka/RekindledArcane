@@ -2,7 +2,6 @@ package excsi.rekindledarcane.common.skill.attribute;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.SkillType;
 import excsi.rekindledarcane.common.skill.BaseAbstractSkill;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -36,16 +35,6 @@ public class AttributeSkill extends BaseAbstractSkill {
     @Override
     public SkillType getSkillType() {
         return SkillType.PASSIVE;
-    }
-
-    @Override
-    public ISkill getPrerequisite() {
-        return null;
-    }
-
-    @Override
-    public ISkill getAntiRequisite() {
-        return null;
     }
 
     @Override

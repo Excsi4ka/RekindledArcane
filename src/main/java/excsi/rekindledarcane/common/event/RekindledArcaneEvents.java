@@ -3,7 +3,6 @@ package excsi.rekindledarcane.common.event;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import excsi.rekindledarcane.api.RekindledArcaneAPI;
 import excsi.rekindledarcane.api.event.PotionApplyEvent;
-import excsi.rekindledarcane.common.data.player.PlayerDataManager;
 import excsi.rekindledarcane.common.skill.attribute.PersistentAttributeModifier;
 import excsi.rekindledarcane.common.util.Config;
 import net.minecraft.entity.ai.attributes.AttributeModifier;

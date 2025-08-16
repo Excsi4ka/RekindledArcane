@@ -8,6 +8,8 @@ public class StateRenderHelper {
 
     public static boolean blendEnabled;
 
+    public static boolean textureEnabled;
+
     public static void enableBlend() {
         blendEnabled = GL11.glIsEnabled(GL11.GL_BLEND);
         if(!blendEnabled) {
@@ -15,11 +17,19 @@ public class StateRenderHelper {
         }
     }
 
+    public static void disableTexture2D() {
+        textureEnabled = GL11.glIsEnabled(GL11.GL_TEXTURE_2D);
+        if(textureEnabled) {
+            GL11.glDisable(GL11.GL_TEXTURE_2D);
+        }
+    }
+
     public static void restoreStates() {
         if (!blendEnabled) {
             GL11.glDisable(GL11.GL_BLEND);
-        } else {
-            GL11.glEnable(GL11.GL_BLEND);
+        }
+        if(textureEnabled) {
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
         }
     }
 
