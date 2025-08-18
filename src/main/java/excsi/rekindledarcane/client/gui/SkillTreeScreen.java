@@ -92,6 +92,10 @@ public class SkillTreeScreen extends GuiScreen {
         GL11.glLineWidth(1f);
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
 
+        mc.fontRenderer.drawStringWithShadow("SkillPoints: " + playerData.getSkillPoints(),
+                2, 3, 0xFFFFFF);
+
+        //render tooltips last because they mess with colors
         if(currentHoveringWidget != null) {
             func_146283_a(currentHoveringWidget.getDescriptionTooltip(), mouseX, mouseY);
         }

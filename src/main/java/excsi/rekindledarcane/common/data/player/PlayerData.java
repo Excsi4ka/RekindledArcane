@@ -66,6 +66,10 @@ public class PlayerData {
         skillPoints -= points;
     }
 
+    public int getSkillPoints() {
+        return skillPoints;
+    }
+
     public boolean hasEnoughPointsForSkill(ISkill skill) {
         return skillPoints >= skill.getSkillPointCost();
     }

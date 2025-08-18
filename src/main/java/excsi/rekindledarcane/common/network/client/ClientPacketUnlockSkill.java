@@ -47,6 +47,8 @@ public class ClientPacketUnlockSkill implements IMessage, IMessageHandler<Client
             ISkill skill = category.getSkillFromID(message.skillID);
             if(skill == null)
                 return null;
+            if(data.hasSkill(skill) || data.hasSkill(skill.getAntiRequisite()))
+                return null;
             if(data.hasSkill(skill.getPreRequisite()) && data.hasEnoughPointsForSkill(skill)) {
                 data.unlockSkill(player, skill, true);
                 data.consumePoints(skill.getSkillPointCost());

@@ -12,9 +12,9 @@ import java.util.Set;
 
 public class RekindledArcaneAPI {
 
-    public static IAttribute MAGIC_RESISTANCE = new RangedAttribute("rekindledarcane.magicResistance", 0,0,100).setShouldWatch(true);
+    public static IAttribute MAGIC_RESISTANCE = new RangedAttribute("rekindledarcane.magicResistance", 0, 0, 100).setShouldWatch(true);
 
-    public static IAttribute MAX_SUMMONS = new RangedAttribute("rekindledarcane.maxSummons", 0,0,10).setShouldWatch(true);
+    public static IAttribute MAX_SUMMONS = new RangedAttribute("rekindledarcane.maxSummons", 0, 0, 10).setShouldWatch(true);
 
     public static HashMap<String, ISkillCategory> skillCategoryMap = new HashMap<>();
 

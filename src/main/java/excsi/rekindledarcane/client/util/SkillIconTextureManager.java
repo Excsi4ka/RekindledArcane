@@ -9,8 +9,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
-import java.util.HashMap;
-
 public class SkillIconTextureManager {
 
     public static final ResourceLocation skillIconTextureAtlas = new ResourceLocation("textures/atlas/skill_icons.png");

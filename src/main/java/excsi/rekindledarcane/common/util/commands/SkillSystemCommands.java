@@ -39,7 +39,7 @@ public class SkillSystemCommands extends CommandBase {
         PlayerData data = PlayerDataManager.getPlayerData(player);
         if(args[0].equals("unlockSkill")) {
             data.unlockSkill(player, skill, true);
-        }else if (args[0].equals("forgetSkill")) {
+        } else if (args[0].equals("forgetSkill")) {
             data.forgetSkill(player, skill, true);
         }
     }

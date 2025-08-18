@@ -4,8 +4,11 @@ import cpw.mods.fml.relauncher.Side;
 import excsi.rekindledarcane.core.ASMUtils;
 import excsi.rekindledarcane.core.SubTransformer;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.VarInsnNode;
 
 public class ThaumcraftTransformer extends SubTransformer {
 
@@ -21,20 +24,19 @@ public class ThaumcraftTransformer extends SubTransformer {
     @Override
     public void transformClass(ClassNode node) {
         MethodNode mn = ASMUtils.getMethodNodeByName(node, "livingTick", "livingTick");
-//        AbstractInsnNode insNode = getFirstMethodCallAfter(mn,
-//                "baubles/api/BaublesApi",
-//                "getBaubles",
-//                "getBaubles",
-//                "(Lnet/minecraft/entity/player/EntityPlayer;)Lnet/minecraft/inventory/IInventory;",
-//                0)
-//                .getNext();
-//        mn.instructions.insert(insNode,new VarInsnNode(Opcodes.ISTORE,3));
-//        mn.instructions.insert(insNode,new MethodInsnNode(Opcodes.INVOKESTATIC,
-//                "hellfirepvp/astralsorcery/common/world/util/WorldEventNotifier",
-//                "runicShieldCallback",
-//                "(Lnet/minecraft/entity/player/EntityPlayer;I)I",
-//                false));
-//        mn.instructions.insert(insNode,new VarInsnNode(Opcodes.ILOAD,3));
-//        mn.instructions.insert(insNode,new VarInsnNode(Opcodes.ALOAD,2));
+        AbstractInsnNode insNode = ASMUtils.getFirstMatchingMethodInsNode(mn,
+                "baubles/api/BaublesApi",
+                "getBaubles",
+                "getBaubles",
+                "(Lnet/minecraft/entity/player/EntityPlayer;)Lnet/minecraft/inventory/IInventory;")
+                .getNext();
+        mn.instructions.insert(insNode, new VarInsnNode(Opcodes.ISTORE,3));
+        mn.instructions.insert(insNode, new MethodInsnNode(Opcodes.INVOKESTATIC,
+                "excsi/rekindledarcane/api/event/RunicShieldAmountEvent",
+                "fireRunicShieldEvent",
+                "(Lnet/minecraft/entity/player/EntityPlayer;I)I",
+                false));
+        mn.instructions.insert(insNode, new VarInsnNode(Opcodes.ILOAD,3));
+        mn.instructions.insert(insNode, new VarInsnNode(Opcodes.ALOAD,2));
     }
 }

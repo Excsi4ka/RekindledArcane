@@ -29,7 +29,7 @@ minecraft {
 }
 
 dependencies {
-   //implementation fileTree(dir: 'libs', include: ['*.jar'])
+   implementation fileTree(dir: 'deps', include: ['*.jar'])
 }
 
 repositories {

@@ -1,6 +1,8 @@
 package excsi.rekindledarcane.core;
 
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
 public class ASMUtils {
@@ -21,5 +23,18 @@ public class ASMUtils {
             }
         }
         throw new RuntimeException("Unable to find method named " + methodName + " in class " + classNode.name);
+    }
+
+    public static MethodInsnNode getFirstMatchingMethodInsNode(MethodNode methodNode, String owner, String methodName, String obfName, String descriptor) {
+        for (int i = 0; i < methodNode.instructions.size(); i++) {
+            AbstractInsnNode insnNode = methodNode.instructions.get(i);
+            if(!(insnNode instanceof MethodInsnNode))
+                continue;
+            MethodInsnNode min = (MethodInsnNode) insnNode;
+            if(min.owner.equals(owner) && min.desc.equals(descriptor) && (min.name.equals(methodName) || min.name.equals(obfName))) {
+                return min;
+            }
+        }
+        throw new RuntimeException("Unable to find method instruction in " + methodName);
     }
 }
