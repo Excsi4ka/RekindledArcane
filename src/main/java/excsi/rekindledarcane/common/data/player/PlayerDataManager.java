@@ -16,13 +16,13 @@ public class PlayerDataManager {
 
     public static void readDataForPlayer(EntityPlayer player, NBTTagCompound tagCompound) {
         PlayerData data = new PlayerData();
-        data.readData(tagCompound);
+        data.readData(tagCompound, player);
         playerData.put(player.getUniqueID(), data);
     }
 
     public static void writeDataForPlayer(EntityPlayer player, NBTTagCompound tagCompound) {
         PlayerData data = playerData.get(player.getUniqueID());
-        data.writeData(tagCompound);
+        data.writeData(tagCompound, player);
     }
 
     public static PlayerData setPlayerDataDefault(EntityPlayer player) {

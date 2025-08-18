@@ -1,2 +1,6 @@
+#attributes
+attribute.name.rekindledarcane.magicResistance=Magic Resistance
+attribute.name.rekindledarcane.maxSummons=Max Summons
+
 rekindledarcane.skill.strength=Strength I
 rekindledarcane.skill.strength2=Strength II

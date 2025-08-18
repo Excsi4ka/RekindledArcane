@@ -4,7 +4,7 @@ import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
 import net.minecraft.nbt.NBTTagCompound;
 
-public abstract class AdditionalDataSkill extends BaseAbstractSkill {
+public abstract class AdditionalDataSkill extends AbstractSkill {
 
     public String registryName;
 

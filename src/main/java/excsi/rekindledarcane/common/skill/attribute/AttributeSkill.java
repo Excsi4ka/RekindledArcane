@@ -3,17 +3,20 @@ package excsi.rekindledarcane.common.skill.attribute;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import excsi.rekindledarcane.api.skill.SkillType;
-import excsi.rekindledarcane.common.skill.BaseAbstractSkill;
+import excsi.rekindledarcane.common.skill.AbstractSkill;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.BaseAttributeMap;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 
 import java.util.Collection;
 import java.util.List;
 
-public class AttributeSkill extends BaseAbstractSkill {
+public class AttributeSkill extends AbstractSkill {
 
     public final Multimap<String, AttributeDataHolder> modifierMultimap = HashMultimap.create();
 
@@ -29,7 +32,22 @@ public class AttributeSkill extends BaseAbstractSkill {
     @Override
     public void addDescription(List<String> description) {
         super.addDescription(description);
-        //add attributes
+        description.add("");
+        modifierMultimap.keySet().forEach(key -> {
+            Collection<AttributeDataHolder> attributeDataHolders = modifierMultimap.get(key);
+            attributeDataHolders.forEach(data -> addAttributeDescription(description, key, data));
+        });
+    }
+
+    //from ItemStack's tooltip handler
+    private void addAttributeDescription(List<String> list, String attribute, AttributeDataHolder data) {
+        double amount = data.getOperation() == AttributeOperation.ADDITIVE ? data.getAmount() : data.getAmount() * 100;
+        if (amount >= 0) {
+            list.add(EnumChatFormatting.BLUE + StatCollector.translateToLocalFormatted("attribute.modifier.plus." + data.getOperation().getOperation(), new Object[]{ItemStack.field_111284_a.format(amount), StatCollector.translateToLocal("attribute.name." + attribute)}));
+        } else {
+            amount *= -1;
+            list.add(EnumChatFormatting.RED + StatCollector.translateToLocalFormatted("attribute.modifier.take." + data.getOperation().getOperation(), new Object[]{ItemStack.field_111284_a.format(amount), StatCollector.translateToLocal("attribute.name." + attribute)}));
+        }
     }
 
     @Override

@@ -13,13 +13,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class PacketFullPlayerDataSync implements IMessage, IMessageHandler<PacketFullPlayerDataSync,IMessage> {
+public class ServerPacketFullPlayerDataSync implements IMessage, IMessageHandler<ServerPacketFullPlayerDataSync,IMessage> {
 
     public NBTTagCompound data;
 
-    public PacketFullPlayerDataSync() {}
+    public ServerPacketFullPlayerDataSync() {}
 
-    public PacketFullPlayerDataSync(NBTTagCompound data) {
+    public ServerPacketFullPlayerDataSync(NBTTagCompound data) {
         this.data = data;
     }
 
@@ -35,14 +35,14 @@ public class PacketFullPlayerDataSync implements IMessage, IMessageHandler<Packe
 
     @Override
     @SideOnly(Side.CLIENT)
-    public IMessage onMessage(PacketFullPlayerDataSync message, MessageContext ctx) {
+    public IMessage onMessage(ServerPacketFullPlayerDataSync message, MessageContext ctx) {
         if(ctx.side == Side.CLIENT) {
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             PlayerData playerData = PlayerDataManager.getPlayerData(player);
             if(playerData == null) {
                 playerData = PlayerDataManager.setPlayerDataDefault(player);
             }
-            playerData.readData(message.data);
+            playerData.readData(message.data, player);
         }
         return null;
     }

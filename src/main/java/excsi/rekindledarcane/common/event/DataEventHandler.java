@@ -4,7 +4,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import excsi.rekindledarcane.RekindledArcane;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
 import excsi.rekindledarcane.common.network.PacketManager;
-import excsi.rekindledarcane.common.network.server.PacketFullPlayerDataSync;
+import excsi.rekindledarcane.common.network.server.ServerPacketFullPlayerDataSync;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -61,9 +61,10 @@ public class DataEventHandler {
     public void onPlayerLogin(PlayerLoggedInEvent event) {
         if(event.player.worldObj.isRemote)
             return;
+        EntityPlayer player = event.player;
         NBTTagCompound data = new NBTTagCompound();
-        PlayerDataManager.getPlayerData(event.player).writeData(data);
-        PacketFullPlayerDataSync packet = new PacketFullPlayerDataSync(data);
-        PacketManager.sendToPlayer(packet, event.player);
+        PlayerDataManager.getPlayerData(player).writeData(data, player);
+        ServerPacketFullPlayerDataSync packet = new ServerPacketFullPlayerDataSync(data);
+        PacketManager.sendToPlayer(packet, player);
     }
 }

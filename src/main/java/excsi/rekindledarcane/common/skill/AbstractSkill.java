@@ -11,7 +11,7 @@ import net.minecraft.util.StatCollector;
 
 import java.util.List;
 
-public abstract class BaseAbstractSkill implements ISkill {
+public abstract class AbstractSkill implements ISkill {
 
     private final String nameID;
 
@@ -30,7 +30,7 @@ public abstract class BaseAbstractSkill implements ISkill {
     @SideOnly(Side.CLIENT)
     public IIcon skillIcon;
 
-    public BaseAbstractSkill(String nameID) {
+    public AbstractSkill(String nameID) {
         this.nameID = nameID;
     }
 

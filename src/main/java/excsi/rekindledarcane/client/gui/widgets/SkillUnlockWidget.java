@@ -26,8 +26,8 @@ public class SkillUnlockWidget extends Widget {
         this.unlocked = unlocked;
         if(skill.getPreRequisite() != null) {
             Point connectionPoint = skill.getPreRequisite().getPosition();
-            connectionX = parentScreen.width / 2 + connectionPoint.x + 16;
-            connectionY = connectionPoint.y + 16;
+            connectionX = parentScreen.width / 2 + connectionPoint.x + 11;
+            connectionY = connectionPoint.y + 11;
         }
     }
 
@@ -35,7 +35,7 @@ public class SkillUnlockWidget extends Widget {
     public void drawButton(Minecraft mc, int mouseX, int mouseY) {
         if(!unlocked)
             GL11.glColor3d(0.3,0.3,0.3);
-        StateRenderHelper.drawIcon(xPosition + 8, yPosition + 8, 16, 16, 10, skill.getIcon());
+        StateRenderHelper.drawIcon(xPosition + 3, yPosition + 3, 16, 16, 10, skill.getIcon());
         StateRenderHelper.drawIcon(xPosition, yPosition, width, height, 10, skill.getSkillType().frameIcon);
         if(isMouseOver(mouseX, mouseY)) {
             parentScreen.currentHoveringWidget = this;
@@ -62,7 +62,7 @@ public class SkillUnlockWidget extends Widget {
             tes.setColorRGBA(0, 170, 0, alpha);
         else
             tes.setColorRGBA(194, 197, 204, 100);
-        tes.addVertex(xPosition + width / 2, yPosition + height / 2, 0);
+        tes.addVertex(xPosition + 11, yPosition + 11, 0);
         tes.addVertex(connectionX, connectionY, 0);
     }
 }
