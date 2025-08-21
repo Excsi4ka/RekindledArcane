@@ -36,10 +36,10 @@ public class ServerPacketFullPlayerDataSync implements IMessage, IMessageHandler
     @Override
     @SideOnly(Side.CLIENT)
     public IMessage onMessage(ServerPacketFullPlayerDataSync message, MessageContext ctx) {
-        if(ctx.side == Side.CLIENT) {
+        if (ctx.side == Side.CLIENT) {
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             PlayerData playerData = PlayerDataManager.getPlayerData(player);
-            if(playerData == null) {
+            if (playerData == null) {
                 playerData = PlayerDataManager.setPlayerDataDefault(player);
             }
             playerData.readData(message.data, player);

@@ -17,17 +17,19 @@ import java.util.Set;
 
 public class PlayerData {
 
-    private int skillPoints;
+    private int skillPoints, unlockedSkillsCount;
 
     private final HashMap<ISkillCategory, Set<ISkill>> unlockedSkills = new HashMap<>();
 
     public PlayerData() {
         skillPoints = 0;
+        unlockedSkillsCount = 0;
         RekindledArcaneAPI.getAllCategories().forEach(category -> unlockedSkills.put(category, new HashSet<>()));
     }
 
     public void readData(NBTTagCompound compound, EntityPlayer player) {
         skillPoints = compound.getInteger("skillPoints");
+        unlockedSkillsCount = compound.getInteger("unlockedSkillsCount");
         unlockedSkills.forEach((category, skills) -> {
             if(compound.hasKey(category.getNameID())) {
                 readSkillsFromNBT(player, category, skills, compound);
@@ -37,6 +39,7 @@ public class PlayerData {
 
     public void writeData(NBTTagCompound compound, EntityPlayer player) {
         compound.setInteger("skillPoints", skillPoints);
+        compound.setInteger("unlockedSkillsCount", unlockedSkillsCount);
         unlockedSkills.forEach((category, skills) -> compound.setTag(category.getNameID(),
                 writeSkillsToNBT(player, compound, skills)));
     }
@@ -45,6 +48,7 @@ public class PlayerData {
         if (hasSkill(skill))
             return;
         unlockedSkills.get(skill.getSkillCategory()).add(skill);
+        unlockedSkillsCount++;
         if (notifyClient) {
             PacketManager.sendToPlayer(new ServerPacketUnlockSkill(skill.getSkillCategory(), skill), player);
             skill.unlockSkill(player);
@@ -55,19 +59,8 @@ public class PlayerData {
         if (!hasSkill(skill))
             return;
         unlockedSkills.get(skill.getSkillCategory()).remove(skill);
+        unlockedSkillsCount--;
         skill.forgetSkill(player);
-    }
-
-    public void addSkillPoints(int points, boolean notifyClient) {
-        skillPoints += points;
-    }
-
-    public int getSkillPoints() {
-        return skillPoints;
-    }
-
-    public boolean hasEnoughPointsForSkill(ISkill skill) {
-        return skillPoints >= skill.getSkillPointCost();
     }
 
     public boolean hasSkill(ISkill skill) {
@@ -81,6 +74,22 @@ public class PlayerData {
 
     public Set<ISkill> getUnlockedSkillForCategory(ISkillCategory category) {
         return unlockedSkills.get(category);
+    }
+
+    public void addSkillPoints(int points, boolean notifyClient) {
+        skillPoints += points;
+    }
+
+    public int getSkillPoints() {
+        return skillPoints;
+    }
+
+    public int getUnlockedSkillsCount() {
+        return unlockedSkillsCount;
+    }
+
+    public boolean hasEnoughPointsForSkill(ISkill skill) {
+        return skillPoints >= skill.getSkillPointCost();
     }
 
     public void readSkillsFromNBT(EntityPlayer player, ISkillCategory category, Set<ISkill> skillList, NBTTagCompound compound) {

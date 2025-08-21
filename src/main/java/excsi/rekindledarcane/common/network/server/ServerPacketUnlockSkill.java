@@ -43,20 +43,20 @@ public class ServerPacketUnlockSkill implements IMessage, IMessageHandler<Server
     @Override
     @SideOnly(Side.CLIENT)
     public IMessage onMessage(ServerPacketUnlockSkill message, MessageContext ctx) {
-        if(ctx.side == Side.CLIENT) {
+        if (ctx.side == Side.CLIENT) {
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             PlayerData data = PlayerDataManager.getPlayerData(player);
             ISkillCategory category = RekindledArcaneAPI.getCategory(message.categoryID);
-            if(category == null)
+            if (category == null)
                 return null;
             ISkill skill = category.getSkillFromID(message.skillID);
-            if(skill == null)
+            if (skill == null)
                 return null;
             data.unlockSkill(player, skill, false);
-            if(Minecraft.getMinecraft().currentScreen instanceof SkillTreeScreen) {
+            if (Minecraft.getMinecraft().currentScreen instanceof SkillTreeScreen) {
                 SkillTreeScreen screen = (SkillTreeScreen) Minecraft.getMinecraft().currentScreen;
                 SkillUnlockWidget widget = screen.skillWidgets.get(skill);
-                if(widget != null) {
+                if (widget != null) {
                     widget.unlocked = true;
                 }
             }

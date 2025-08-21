@@ -22,7 +22,7 @@ public class DataEventHandler {
     public void playerDataRead(PlayerEvent.LoadFromFile event) {
         File file = event.getPlayerFile("arcane");
         EntityPlayer player = event.entityPlayer;
-        if(file.exists()) {
+        if (file.exists()) {
             try {
                 FileInputStream fileInputStream = new FileInputStream(file);
                 NBTTagCompound data = CompressedStreamTools.readCompressed(fileInputStream);
@@ -44,7 +44,7 @@ public class DataEventHandler {
         File file = event.getPlayerFile("arcane");
         EntityPlayer player = event.entityPlayer;
         try {
-            if(file.exists() || file.createNewFile()) {
+            if (file.exists() || file.createNewFile()) {
                 NBTTagCompound tagCompound = new NBTTagCompound();
                 PlayerDataManager.writeDataForPlayer(player, tagCompound);
                 FileOutputStream fileOutputStream = new FileOutputStream(file);
@@ -59,7 +59,7 @@ public class DataEventHandler {
 
     @SubscribeEvent
     public void onPlayerLogin(PlayerLoggedInEvent event) {
-        if(event.player.worldObj.isRemote)
+        if (event.player.worldObj.isRemote)
             return;
         EntityPlayer player = event.player;
         NBTTagCompound data = new NBTTagCompound();

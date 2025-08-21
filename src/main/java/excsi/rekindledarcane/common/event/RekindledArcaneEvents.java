@@ -19,7 +19,7 @@ public class RekindledArcaneEvents {
 
     @SubscribeEvent
     public void onEntityCreated(EntityConstructing event) {
-        if(event.entity instanceof EntityPlayer) {
+        if (event.entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.entity;
             player.getAttributeMap().registerAttribute(RekindledArcaneAPI.MAGIC_RESISTANCE);
             player.getAttributeMap().registerAttribute(RekindledArcaneAPI.MAX_SUMMONS);
@@ -29,18 +29,18 @@ public class RekindledArcaneEvents {
     @SubscribeEvent
     public void onRespawn(PlayerRespawnEvent event) {
         EntityPlayer player = event.player;
-        if(Config.shouldHealPlayerOnRespawn && !player.worldObj.isRemote) {
+        if (Config.shouldHealPlayerOnRespawn && !player.worldObj.isRemote) {
             player.setHealth(player.getMaxHealth());
         }
     }
 
     @SubscribeEvent
     public void onLivingHurt(LivingHurtEvent event) {
-        if(event.entityLiving instanceof EntityPlayer) {
+        if (event.entityLiving instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.entityLiving;
             double value = player.getEntityAttribute(RekindledArcaneAPI.MAGIC_RESISTANCE).getAttributeValue();
             value = Math.min(Config.magicResistanceCap, value);
-            if(!event.source.isMagicDamage())
+            if (!event.source.isMagicDamage())
                 return;
             event.ammount *= 1 - value / 100;
         }
@@ -55,19 +55,19 @@ public class RekindledArcaneEvents {
     @SuppressWarnings("unchecked")
     @SubscribeEvent
     public void onPlayerClone(Clone event) {
-        if(!event.wasDeath) return;
+        if (!event.wasDeath) return;
 
         Collection<IAttributeInstance> attributeInstanceList = event.original.getAttributeMap().getAllAttributes();
         attributeInstanceList.forEach(attributeInstance -> {
             IAttributeInstance newAttribInstance = event.entityPlayer.getEntityAttribute(attributeInstance.getAttribute());
             Collection<AttributeModifier> oldModifiers = attributeInstance.func_111122_c();
             oldModifiers.forEach(oldAttribModifier -> {
-                if(oldAttribModifier instanceof PersistentAttributeModifier) {
+                if (oldAttribModifier instanceof PersistentAttributeModifier) {
                     newAttribInstance.applyModifier(new PersistentAttributeModifier(oldAttribModifier.getID(),
                             oldAttribModifier.getName(), oldAttribModifier.getAmount(), oldAttribModifier.getOperation()));
                     return;
                 }
-                if(oldAttribModifier.getName().startsWith("PersistentModifier:")) {
+                if (oldAttribModifier.getName().startsWith("PersistentModifier:")) {
                     newAttribInstance.applyModifier(new PersistentAttributeModifier(oldAttribModifier.getID(),
                             oldAttribModifier.getName(), oldAttribModifier.getAmount(), oldAttribModifier.getOperation()));
                 }

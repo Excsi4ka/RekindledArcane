@@ -2,7 +2,7 @@ package excsi.rekindledarcane.common.skill;
 
 import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
-import excsi.rekindledarcane.common.data.player.SkillData;
+import excsi.rekindledarcane.common.data.skill.ISkillData;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import java.util.HashMap;
 import java.util.UUID;
 
-public abstract class AbstractSkillWithData<DATA extends SkillData> extends AbstractSkill {
+public abstract class AbstractSkillWithData<DATA extends ISkillData> extends AbstractSkill {
 
     public String registryName;
 
@@ -34,6 +34,11 @@ public abstract class AbstractSkillWithData<DATA extends SkillData> extends Abst
     @Override
     public void forgetSkill(EntityPlayer player) {
         skillPlayerToDataMap.remove(player.getUniqueID());
+    }
+
+    @Override
+    public boolean reapplyOnRestart() {
+        return false;
     }
 
     public void writeDataInternal(EntityPlayer player, NBTTagCompound compound) {

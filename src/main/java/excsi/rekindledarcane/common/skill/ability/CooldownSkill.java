@@ -1,11 +1,11 @@
 package excsi.rekindledarcane.common.skill.ability;
 
 import excsi.rekindledarcane.api.skill.SkillType;
-import excsi.rekindledarcane.common.data.player.SkillData;
+import excsi.rekindledarcane.common.data.skill.BasicSkillData;
 import excsi.rekindledarcane.common.skill.AbstractSkillWithData;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class CooldownSkill extends AbstractSkillWithData<SkillData> {
+public class CooldownSkill extends AbstractSkillWithData<BasicSkillData> {
 
     public CooldownSkill(String nameID) {
         super(nameID);
@@ -17,24 +17,19 @@ public class CooldownSkill extends AbstractSkillWithData<SkillData> {
     }
 
     @Override
-    public boolean reapplyOnRestart() {
-        return false;
-    }
-
-    @Override
-    public void writeToNBT(SkillData skillData, NBTTagCompound tagCompound) {
+    public void writeToNBT(BasicSkillData skillData, NBTTagCompound tagCompound) {
         tagCompound.setInteger("cooldown", skillData.getSkillCooldown());
     }
 
     @Override
-    public SkillData readFromNBT(NBTTagCompound compound) {
-        SkillData data = createDefaultDataInstance();
+    public BasicSkillData readFromNBT(NBTTagCompound compound) {
+        BasicSkillData data = createDefaultDataInstance();
         data.setSkillCooldown(compound.getInteger("cooldown"));
         return data;
     }
 
     @Override
-    public SkillData createDefaultDataInstance() {
-        return new SkillData();
+    public BasicSkillData createDefaultDataInstance() {
+        return new BasicSkillData();
     }
 }

@@ -10,6 +10,7 @@ import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
 import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
+import excsi.rekindledarcane.common.util.Config;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -38,18 +39,20 @@ public class ClientPacketUnlockSkill implements IMessage, IMessageHandler<Client
 
     @Override
     public IMessage onMessage(ClientPacketUnlockSkill message, MessageContext ctx) {
-        if(ctx.side == Side.SERVER) {
+        if (ctx.side == Side.SERVER) {
             EntityPlayer player = ctx.getServerHandler().playerEntity;
             PlayerData data = PlayerDataManager.getPlayerData(player);
             ISkillCategory category = RekindledArcaneAPI.getCategory(message.categoryID);
-            if(category == null)
+            if (category == null)
                 return null;
             ISkill skill = category.getSkillFromID(message.skillID);
-            if(skill == null)
+            if (skill == null)
                 return null;
-            if(data.hasSkill(skill) || data.hasSkill(skill.getAntiRequisite()))
+            if (data.getUnlockedSkillsCount() >= Config.maxSkillsCap)
                 return null;
-            if(data.hasSkill(skill.getPreRequisite()) && data.hasEnoughPointsForSkill(skill)) {
+            if (data.hasSkill(skill) || data.hasSkill(skill.getAntiRequisite()))
+                return null;
+            if (data.hasSkill(skill.getPreRequisite()) && data.hasEnoughPointsForSkill(skill)) {
                 data.unlockSkill(player, skill, true);
                 data.addSkillPoints(-skill.getSkillPointCost(), true);
             }

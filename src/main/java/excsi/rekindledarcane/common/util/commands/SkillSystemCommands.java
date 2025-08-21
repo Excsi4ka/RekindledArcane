@@ -5,7 +5,10 @@ import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
 import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
-import net.minecraft.command.*;
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.command.PlayerNotFoundException;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 
@@ -25,19 +28,19 @@ public class SkillSystemCommands extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-        if(args == null || args.length < 4)
+        if (args == null || args.length < 4)
             throw new WrongUsageException(getCommandUsage(sender));
         EntityPlayer player = getPlayer(sender, args[1]);
-        if(player == null)
+        if (player == null)
             throw new PlayerNotFoundException();
         ISkillCategory category = RekindledArcaneAPI.getCategory(args[2]);
-        if(category == null)
+        if (category == null)
             throw new WrongUsageException("No valid category found");
         ISkill skill = category.getSkillFromID(args[3]);
-        if(skill == null)
+        if (skill == null)
             throw new WrongUsageException("No valid skill found");
         PlayerData data = PlayerDataManager.getPlayerData(player);
-        if(args[0].equals("unlockSkill")) {
+        if (args[0].equals("unlockSkill")) {
             data.unlockSkill(player, skill, true);
         } else if (args[0].equals("forgetSkill")) {
             data.forgetSkill(player, skill, true);

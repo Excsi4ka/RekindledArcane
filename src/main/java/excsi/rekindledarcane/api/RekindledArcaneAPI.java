@@ -21,7 +21,7 @@ public class RekindledArcaneAPI {
     public static Logger LOG = LogManager.getLogger("RekindledArcaneAPI");
 
     public static ISkillCategory registerSkillCategory(String id, ISkillCategory category) {
-        if(skillCategoryMap.containsKey(id)) {
+        if (skillCategoryMap.containsKey(id)) {
             LOG.error("Duplicate category ID: " + id + " can not register");
             return null;
         }
