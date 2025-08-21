@@ -5,7 +5,6 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import excsi.rekindledarcane.client.event.ClientEventHandler;
-import excsi.rekindledarcane.client.util.SkillIconTextureManager;
 import excsi.rekindledarcane.common.CommonProxy;
 import excsi.rekindledarcane.common.util.Config;
 import net.minecraft.client.Minecraft;
@@ -27,7 +26,7 @@ public class ClientProxy extends CommonProxy {
         super.init(event);
         Minecraft.getMinecraft()
                 .getTextureManager()
-                .loadTextureMap(SkillIconTextureManager.skillIconTextureAtlas,
+                .loadTextureMap(AssetLib.skillIconTextureAtlas,
                         new TextureMap(Config.skillIconsTextureAtlasID,"textures/skills"));
     }
 

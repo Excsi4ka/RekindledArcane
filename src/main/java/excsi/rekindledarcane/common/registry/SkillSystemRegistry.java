@@ -3,9 +3,11 @@ package excsi.rekindledarcane.common.registry;
 import excsi.rekindledarcane.api.RekindledArcaneAPI;
 import excsi.rekindledarcane.api.skill.Point;
 import excsi.rekindledarcane.common.skill.SkillCategory;
+import excsi.rekindledarcane.common.skill.ability.CooldownSkill;
+import excsi.rekindledarcane.common.skill.ability.ToggleableSkill;
 import excsi.rekindledarcane.common.skill.attribute.AttributeOperation;
 import excsi.rekindledarcane.common.skill.attribute.AttributeSkill;
-import excsi.rekindledarcane.common.skill.event.SmallRunicShieldEventSkill;
+import excsi.rekindledarcane.common.skill.event.LesserRunicShieldSkill;
 import excsi.rekindledarcane.common.skill.event.TestEventSkill;
 import net.minecraft.entity.SharedMonsterAttributes;
 
@@ -57,9 +59,17 @@ public class SkillSystemRegistry {
                 .setPreRequisite("strength3")
                 .setPosition(Point.of(-20, 110)));
 
-        skillCategory.registerSkill(new SmallRunicShieldEventSkill("event2")
+        skillCategory.registerSkill(new LesserRunicShieldSkill("event2")
                 .setPreRequisite("event1")
                 .setPosition(Point.of(-60, 125)));
+
+        skillCategory.registerSkill(new CooldownSkill("tg2")
+                .setPreRequisite("event1")
+                .setPosition(Point.of(-100, 125)));
+
+        skillCategory.registerSkill(new ToggleableSkill("tg1")
+                .setPreRequisite("event1")
+                .setPosition(Point.of(-100, 155)));
 
         skillCategory = new SkillCategory("SORCERY", new Color(50, 0, 134, 152));
         RekindledArcaneAPI.registerSkillCategory(skillCategory.getNameID(), skillCategory);

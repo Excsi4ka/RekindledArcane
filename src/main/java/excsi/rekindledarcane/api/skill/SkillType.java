@@ -18,7 +18,7 @@ public enum SkillType {
 
     public final Color typeColor;
 
-    //set in SkillIconTextureManager
+    //set in AssetLib
     @SideOnly(Side.CLIENT)
     public IIcon frameIcon;
 

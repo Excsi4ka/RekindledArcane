@@ -3,9 +3,9 @@ package excsi.rekindledarcane.common.skill.event;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import excsi.rekindledarcane.api.event.RunicShieldAmountEvent;
 
-public class SmallRunicShieldEventSkill extends EventSkillBase {
+public class LesserRunicShieldSkill extends EventSkillBase {
 
-    public SmallRunicShieldEventSkill(String nameID) {
+    public LesserRunicShieldSkill(String nameID) {
         super(nameID);
     }
 

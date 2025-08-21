@@ -1,16 +1,15 @@
 package excsi.rekindledarcane.common.skill.event;
 
 import excsi.rekindledarcane.api.skill.SkillType;
-import excsi.rekindledarcane.common.skill.AdditionalDataSkill;
+import excsi.rekindledarcane.common.skill.AbstractSkill;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.util.HashSet;
 import java.util.UUID;
 
-public abstract class EventSkillBase extends AdditionalDataSkill {
+public abstract class EventSkillBase extends AbstractSkill {
 
     public final HashSet<UUID> playersWithSkill;
 
@@ -44,20 +43,5 @@ public abstract class EventSkillBase extends AdditionalDataSkill {
     @Override
     public boolean reapplyOnRestart() {
         return true;
-    }
-
-    @Override
-    public boolean hasData() {
-        return false;
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound compound) {
-
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT() {
-        return null;
     }
 }

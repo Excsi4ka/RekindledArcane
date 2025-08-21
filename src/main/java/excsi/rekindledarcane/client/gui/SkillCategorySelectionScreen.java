@@ -54,10 +54,10 @@ public class SkillCategorySelectionScreen extends GuiScreen {
         tes.startDrawing(GL11.GL_TRIANGLE_STRIP);
         radialMenuComponents.forEach(component -> component.drawButton(mc, mouseX, mouseY));
         tes.draw();
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glShadeModel(GL11.GL_FLAT);
         GL11.glEnable(GL11.GL_CULL_FACE);
         StateRenderHelper.restoreStates();
+
         updateMouseMovement(mouseX, mouseY);
 
         if(currentlySelected != null) {

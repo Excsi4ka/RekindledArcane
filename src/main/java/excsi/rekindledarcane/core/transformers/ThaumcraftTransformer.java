@@ -28,15 +28,14 @@ public class ThaumcraftTransformer extends SubTransformer {
                 "baubles/api/BaublesApi",
                 "getBaubles",
                 "getBaubles",
-                "(Lnet/minecraft/entity/player/EntityPlayer;)Lnet/minecraft/inventory/IInventory;")
-                .getNext();
-        mn.instructions.insert(insNode, new VarInsnNode(Opcodes.ISTORE,3));
-        mn.instructions.insert(insNode, new MethodInsnNode(Opcodes.INVOKESTATIC,
+                "(Lnet/minecraft/entity/player/EntityPlayer;)Lnet/minecraft/inventory/IInventory;");
+        mn.instructions.insertBefore(insNode, new VarInsnNode(Opcodes.ALOAD, 2));
+        mn.instructions.insertBefore(insNode, new VarInsnNode(Opcodes.ILOAD, 3));
+        mn.instructions.insertBefore(insNode, new MethodInsnNode(Opcodes.INVOKESTATIC,
                 "excsi/rekindledarcane/api/event/RunicShieldAmountEvent",
                 "fireRunicShieldEvent",
                 "(Lnet/minecraft/entity/player/EntityPlayer;I)I",
                 false));
-        mn.instructions.insert(insNode, new VarInsnNode(Opcodes.ILOAD,3));
-        mn.instructions.insert(insNode, new VarInsnNode(Opcodes.ALOAD,2));
+        mn.instructions.insertBefore(insNode, new VarInsnNode(Opcodes.ISTORE, 3));
     }
 }

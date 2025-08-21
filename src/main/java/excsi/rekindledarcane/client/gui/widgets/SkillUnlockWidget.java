@@ -33,14 +33,16 @@ public class SkillUnlockWidget extends Widget {
 
     @Override
     public void drawButton(Minecraft mc, int mouseX, int mouseY) {
+        Tessellator tessellator = Tessellator.instance;
         if(!unlocked)
-            GL11.glColor3d(0.3,0.3,0.3);
-        StateRenderHelper.drawIcon(xPosition + 3, yPosition + 3, 16, 16, 10, skill.getIcon());
-        StateRenderHelper.drawIcon(xPosition, yPosition, width, height, 10, skill.getSkillType().frameIcon);
+            tessellator.setColorOpaque_F(0.3f,0.3f,0.3f);
+        else
+            tessellator.setColorOpaque_F(1f,1f,1f);
+        StateRenderHelper.batchDrawIcon(tessellator, xPosition + 3, yPosition + 3, 16, 16, 10, skill.getIcon());
+        StateRenderHelper.batchDrawIcon(tessellator, xPosition, yPosition, width, height, 10, skill.getSkillType().frameIcon);
         if(isMouseOver(mouseX, mouseY)) {
             parentScreen.currentHoveringWidget = this;
         }
-        GL11.glColor3d(1,1,1);
     }
 
     @Override

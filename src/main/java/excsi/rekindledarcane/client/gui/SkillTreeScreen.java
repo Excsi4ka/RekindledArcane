@@ -6,7 +6,6 @@ import excsi.rekindledarcane.api.skill.Point;
 import excsi.rekindledarcane.client.AssetLib;
 import excsi.rekindledarcane.client.gui.widgets.SkillUnlockWidget;
 import excsi.rekindledarcane.client.util.BlendMode;
-import excsi.rekindledarcane.client.util.SkillIconTextureManager;
 import excsi.rekindledarcane.client.util.StateRenderHelper;
 import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
@@ -14,6 +13,7 @@ import excsi.rekindledarcane.common.network.PacketManager;
 import excsi.rekindledarcane.common.network.client.ClientPacketUnlockSkill;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -71,11 +71,14 @@ public class SkillTreeScreen extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        Tessellator tes = Tessellator.instance;
         mc.getTextureManager().bindTexture(AssetLib.backgroundTex);
         StateRenderHelper.drawFullSizeTexturedRectangle(0,0,width,height,zLevel);
-        mc.getTextureManager().bindTexture(SkillIconTextureManager.skillIconTextureAtlas);
+        mc.getTextureManager().bindTexture(AssetLib.skillIconTextureAtlas);
         currentHoveringWidget = null;
+        tes.startDrawingQuads();
         skillWidgets.values().forEach(widget -> widget.drawButton(mc, mouseX, mouseY));
+        tes.draw();
 
         GL11.glLineWidth(6f);
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
@@ -83,7 +86,6 @@ public class SkillTreeScreen extends GuiScreen {
         StateRenderHelper.enableBlend();
         StateRenderHelper.blendMode(BlendMode.DEFAULT);
         StateRenderHelper.disableTexture2D();
-        Tessellator tes = Tessellator.instance;
         tes.startDrawing(GL11.GL_LINES);
         int alpha = (int) (Math.sin(mc.thePlayer.ticksExisted * 0.1) * 70 + 170);
         skillWidgets.values().forEach(widget -> widget.drawConnectionLine(tes, alpha));
@@ -127,7 +129,7 @@ public class SkillTreeScreen extends GuiScreen {
 
     @Override
     protected void keyTyped(char character, int index) {
-        if(index == 1) {
+        if(index == Keyboard.KEY_ESCAPE) {
             mc.displayGuiScreen(parentScreen);
         }
     }

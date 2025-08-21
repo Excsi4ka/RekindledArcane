@@ -57,6 +57,13 @@ public class StateRenderHelper {
         tes.draw();
     }
 
+    public static void batchDrawIcon(Tessellator tes, int x, int y, int width, int height, float zOffset, IIcon icon) {
+        tes.addVertexWithUV(x + width,y + height,zOffset,icon.getMaxU(),icon.getMaxV());
+        tes.addVertexWithUV(x + width,y,zOffset,icon.getMaxU(),icon.getMinV());
+        tes.addVertexWithUV(x,y,zOffset,icon.getMinU(),icon.getMinV());
+        tes.addVertexWithUV(x,y + height,zOffset,icon.getMinU(),icon.getMaxV());
+    }
+
     public static void drawTestGradientSquare(int x, int y, int width, int height, int z) {
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glShadeModel(GL11.GL_SMOOTH);
