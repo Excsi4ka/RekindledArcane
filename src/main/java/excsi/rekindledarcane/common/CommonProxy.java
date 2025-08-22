@@ -9,14 +9,14 @@ import excsi.rekindledarcane.common.event.RekindledArcaneEvents;
 import excsi.rekindledarcane.common.event.DataEventHandler;
 import excsi.rekindledarcane.common.network.PacketManager;
 import excsi.rekindledarcane.common.registry.SkillSystemRegistry;
-import excsi.rekindledarcane.common.util.Config;
+import excsi.rekindledarcane.common.util.RekindledArcaneConfig;
 import excsi.rekindledarcane.common.util.commands.SkillSystemCommands;
 import net.minecraftforge.common.MinecraftForge;
 
 public class CommonProxy {
 
     public void preInit(FMLPreInitializationEvent event) {
-        Config.loadConfig(event.getSuggestedConfigurationFile());
+        RekindledArcaneConfig.loadConfig(event.getSuggestedConfigurationFile());
         PacketManager.init();
         SkillSystemRegistry.register();
 

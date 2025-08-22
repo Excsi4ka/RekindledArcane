@@ -132,6 +132,6 @@ public abstract class AbstractSkill implements ISkill {
         if(!(obj instanceof ISkill))
             return false;
         ISkill skill = (ISkill) obj;
-        return skill.getNameID().equals(nameID);
+        return skill.getNameID().equals(nameID) && skillCategory.equals(skill.getSkillCategory());
     }
 }

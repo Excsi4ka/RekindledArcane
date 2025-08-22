@@ -65,8 +65,8 @@ public class SkillTreeScreen extends GuiScreen {
             skillWidgets.put(skill, new SkillUnlockWidget(id++, x + point.x, point.y, 22, 22,
                     skill, this, false));
         }
-        lastMouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
-        lastMouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+        lastMouseX = Mouse.getEventX() * width / mc.displayWidth;
+        lastMouseY = height - Mouse.getEventY() * height / mc.displayHeight - 1;
     }
 
     @Override

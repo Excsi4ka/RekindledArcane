@@ -4,7 +4,7 @@ import net.minecraftforge.common.config.Configuration;
 
 import java.io.File;
 
-public class Config {
+public class RekindledArcaneConfig {
 
     public static Configuration CONFIG;
 
@@ -35,11 +35,11 @@ public class Config {
                 false, "Should players be healed to their maximum health on respawn");
 
         CONFIG.addCustomCategoryComment(CATEGORY_SKILLS, "Skill system related settings");
-        magicResistanceCap = CONFIG.getFloat("MagicResistanceAttributeCap", CATEGORY_SKILLS, 100, 0,
-                100, "The cap for magic resistance attribute value, 100 means full magic resistance is possible to achieve");
-
         maxSkillsCap = CONFIG.getInt("MaxSkillsCap", CATEGORY_SKILLS, 50, 0,
                 Integer.MAX_VALUE, "Maximum number of skills a player can unlock");
+
+        magicResistanceCap = CONFIG.getFloat("MagicResistanceAttributeCap", CATEGORY_SKILLS, 100, 0,
+                100, "The cap for magic resistance attribute value, 100 means full magic resistance is possible to achieve");
 
         CONFIG.save();
     }

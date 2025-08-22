@@ -16,8 +16,8 @@ public class PlayerDataManager {
 
     public static void readDataForPlayer(EntityPlayer player, NBTTagCompound tagCompound) {
         PlayerData data = new PlayerData();
-        data.readData(tagCompound, player);
         playerData.put(player.getUniqueID(), data);
+        data.readData(tagCompound, player);
     }
 
     public static void writeDataForPlayer(EntityPlayer player, NBTTagCompound tagCompound) {

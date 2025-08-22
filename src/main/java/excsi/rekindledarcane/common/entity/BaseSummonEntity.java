@@ -17,11 +17,6 @@ public abstract class BaseSummonEntity extends EntityLiving implements ISummon {
     }
 
     @Override
-    public int getLifespan() {
-        return 0;
-    }
-
-    @Override
     public int summoningWeight() {
         return 1;
     }

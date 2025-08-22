@@ -4,7 +4,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import excsi.rekindledarcane.api.RekindledArcaneAPI;
 import excsi.rekindledarcane.api.event.PotionApplyEvent;
 import excsi.rekindledarcane.common.skill.attribute.PersistentAttributeModifier;
-import excsi.rekindledarcane.common.util.Config;
+import excsi.rekindledarcane.common.util.RekindledArcaneConfig;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,7 +29,7 @@ public class RekindledArcaneEvents {
     @SubscribeEvent
     public void onRespawn(PlayerRespawnEvent event) {
         EntityPlayer player = event.player;
-        if (Config.shouldHealPlayerOnRespawn && !player.worldObj.isRemote) {
+        if (RekindledArcaneConfig.shouldHealPlayerOnRespawn && !player.worldObj.isRemote) {
             player.setHealth(player.getMaxHealth());
         }
     }
@@ -39,7 +39,7 @@ public class RekindledArcaneEvents {
         if (event.entityLiving instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.entityLiving;
             double value = player.getEntityAttribute(RekindledArcaneAPI.MAGIC_RESISTANCE).getAttributeValue();
-            value = Math.min(Config.magicResistanceCap, value);
+            value = Math.min(RekindledArcaneConfig.magicResistanceCap, value);
             if (!event.source.isMagicDamage())
                 return;
             event.ammount *= 1 - value / 100;

@@ -1,13 +1,13 @@
 package excsi.rekindledarcane.common.skill.event;
 
 import excsi.rekindledarcane.api.skill.SkillType;
-import excsi.rekindledarcane.common.data.skill.ISkillData;
+import excsi.rekindledarcane.common.data.skill.templates.AbstractData;
 import excsi.rekindledarcane.common.skill.AbstractSkillWithData;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 
-public abstract class EventWithDataSkillBase<DATA extends ISkillData> extends AbstractSkillWithData<DATA> {
+public abstract class EventWithDataSkillBase<DATA extends AbstractData> extends AbstractSkillWithData<DATA> {
 
     public EventWithDataSkillBase(String nameID) {
         super(nameID);

@@ -1,7 +1,10 @@
 package excsi.rekindledarcane.common.event;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.relauncher.Side;
 import excsi.rekindledarcane.RekindledArcane;
+import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
 import excsi.rekindledarcane.common.network.PacketManager;
 import excsi.rekindledarcane.common.network.server.ServerPacketFullPlayerDataSync;
@@ -55,6 +58,16 @@ public class DataEventHandler {
             RekindledArcane.LOG.error(e.getMessage() + " Couldn't save " + player.getCommandSenderName() + "'s player data");
             e.printStackTrace();
         }
+    }
+
+    @SubscribeEvent
+    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if(event.phase == TickEvent.Phase.START)
+            return;
+        if(event.side == Side.CLIENT)
+            return;
+        PlayerData data = PlayerDataManager.getPlayerData(event.player);
+        data.getSkillDataTracker().tick(event.player);
     }
 
     @SubscribeEvent

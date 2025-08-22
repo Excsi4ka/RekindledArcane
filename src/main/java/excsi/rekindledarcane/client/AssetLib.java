@@ -3,7 +3,7 @@ package excsi.rekindledarcane.client;
 import excsi.rekindledarcane.RekindledArcane;
 import excsi.rekindledarcane.api.RekindledArcaneAPI;
 import excsi.rekindledarcane.api.skill.SkillType;
-import excsi.rekindledarcane.common.util.Config;
+import excsi.rekindledarcane.common.util.RekindledArcaneConfig;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
@@ -22,7 +22,7 @@ public class AssetLib {
     }
 
     public static void stitchSkillTextures(TextureStitchEvent.Pre event) {
-        if (event.map.getTextureType() != Config.skillIconsTextureAtlasID)
+        if (event.map.getTextureType() != RekindledArcaneConfig.skillIconsTextureAtlasID)
             return;
 
         RekindledArcane.LOG.info("Creating a texture atlas for skill icons");

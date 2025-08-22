@@ -7,6 +7,8 @@ import cpw.mods.fml.relauncher.Side;
 import excsi.rekindledarcane.RekindledArcane;
 import excsi.rekindledarcane.common.network.client.ClientPacketUnlockSkill;
 import excsi.rekindledarcane.common.network.server.ServerPacketFullPlayerDataSync;
+import excsi.rekindledarcane.common.network.server.ServerPacketSyncSkillPoints;
+import excsi.rekindledarcane.common.network.server.ServerPacketSyncTrackingData;
 import excsi.rekindledarcane.common.network.server.ServerPacketUnlockSkill;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -20,6 +22,8 @@ public class PacketManager {
         WRAPPER.registerMessage(ServerPacketFullPlayerDataSync.class, ServerPacketFullPlayerDataSync.class, id++, Side.CLIENT);
         WRAPPER.registerMessage(ClientPacketUnlockSkill.class, ClientPacketUnlockSkill.class, id++, Side.SERVER);
         WRAPPER.registerMessage(ServerPacketUnlockSkill.class, ServerPacketUnlockSkill.class, id++, Side.CLIENT);
+        WRAPPER.registerMessage(ServerPacketSyncTrackingData.class, ServerPacketSyncTrackingData.class, id++, Side.CLIENT);
+        WRAPPER.registerMessage(ServerPacketSyncSkillPoints.class, ServerPacketSyncSkillPoints.class, id++, Side.CLIENT);
     }
 
     public static void sendToPlayer(IMessage message, EntityPlayer player) {

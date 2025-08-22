@@ -10,7 +10,7 @@ import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
 import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
-import excsi.rekindledarcane.common.util.Config;
+import excsi.rekindledarcane.common.util.RekindledArcaneConfig;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -48,7 +48,7 @@ public class ClientPacketUnlockSkill implements IMessage, IMessageHandler<Client
             ISkill skill = category.getSkillFromID(message.skillID);
             if (skill == null)
                 return null;
-            if (data.getUnlockedSkillsCount() >= Config.maxSkillsCap)
+            if (data.getUnlockedSkillsCount() >= RekindledArcaneConfig.maxSkillsCap)
                 return null;
             if (data.hasSkill(skill) || data.hasSkill(skill.getAntiRequisite()))
                 return null;
