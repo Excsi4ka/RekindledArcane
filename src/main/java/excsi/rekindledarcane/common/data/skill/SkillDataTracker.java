@@ -51,7 +51,7 @@ public class SkillDataTracker {
                 continue;
             tickable.tick();
         }
-        if(!dataQueuedToSync.isEmpty())
+        if(dataQueuedToSync.isEmpty())
             return;
         ServerPacketSyncTrackingData packetSyncTrackingData = new ServerPacketSyncTrackingData(createPacketData());
         PacketManager.sendToPlayer(packetSyncTrackingData, player);

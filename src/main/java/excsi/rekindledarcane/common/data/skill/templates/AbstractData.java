@@ -23,7 +23,7 @@ public abstract class AbstractData {
     public abstract void readFromNBT(NBTTagCompound compound);
 
     public void markChanged() {
-        if(!sendClientUpdates && !needsClientSync())
+        if(!sendClientUpdates || !needsClientSync())
             return;
         dataTracker.queueDataToSync(this);
     }

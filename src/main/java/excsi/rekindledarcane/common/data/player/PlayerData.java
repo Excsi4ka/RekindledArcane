@@ -6,6 +6,8 @@ import excsi.rekindledarcane.api.skill.ISkillCategory;
 import excsi.rekindledarcane.common.data.skill.templates.AbstractData;
 import excsi.rekindledarcane.common.data.skill.SkillDataTracker;
 import excsi.rekindledarcane.common.network.PacketManager;
+import excsi.rekindledarcane.common.network.server.ServerPacketForgetSkill;
+import excsi.rekindledarcane.common.network.server.ServerPacketSyncSkillPoints;
 import excsi.rekindledarcane.common.network.server.ServerPacketUnlockSkill;
 import excsi.rekindledarcane.common.skill.AbstractSkillWithData;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,8 +30,8 @@ public class PlayerData {
     public PlayerData() {
         skillPoints = 0;
         unlockedSkillsCount = 0;
-        skillDataTracker = new SkillDataTracker();
         RekindledArcaneAPI.getAllCategories().forEach(category -> unlockedSkills.put(category, new HashSet<>()));
+        skillDataTracker = new SkillDataTracker();
     }
 
     public void readData(NBTTagCompound compound, EntityPlayer player) {
@@ -54,9 +56,9 @@ public class PlayerData {
             return;
         unlockedSkills.get(skill.getSkillCategory()).add(skill);
         unlockedSkillsCount++;
+        skill.unlockSkill(player);
         if (notifyClient) {
             PacketManager.sendToPlayer(new ServerPacketUnlockSkill(skill.getSkillCategory(), skill), player);
-            skill.unlockSkill(player);
         }
     }
 
@@ -66,6 +68,9 @@ public class PlayerData {
         unlockedSkills.get(skill.getSkillCategory()).remove(skill);
         unlockedSkillsCount--;
         skill.forgetSkill(player);
+        if (notifyClient) {
+            PacketManager.sendToPlayer(new ServerPacketForgetSkill(skill.getSkillCategory(), skill), player);
+        }
     }
 
     public boolean hasSkill(ISkill skill) {
@@ -81,8 +86,12 @@ public class PlayerData {
         return unlockedSkills.get(category);
     }
 
-    public void addSkillPoints(int points, boolean notifyClient) {
+    public void addSkillPoints(EntityPlayer player, int points, boolean notifyClient) {
         skillPoints += points;
+        if(notifyClient) {
+            ServerPacketSyncSkillPoints packet = new ServerPacketSyncSkillPoints(skillPoints);
+            PacketManager.sendToPlayer(packet, player);
+        }
     }
 
     public int getSkillPoints() {
@@ -97,7 +106,7 @@ public class PlayerData {
         return unlockedSkillsCount;
     }
 
-    public boolean hasEnoughPointsForSkill(ISkill skill) {
+    public boolean hasEnoughPoints(ISkill skill) {
         return skillPoints >= skill.getSkillPointCost();
     }
 

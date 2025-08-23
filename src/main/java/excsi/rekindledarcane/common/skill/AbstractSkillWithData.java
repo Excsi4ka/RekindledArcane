@@ -38,12 +38,10 @@ public abstract class AbstractSkillWithData<DATA extends AbstractData> extends A
 
     @Override
     public void forgetSkill(EntityPlayer player) {
+        PlayerData playerData = PlayerDataManager.getPlayerData(player);
         DATA data = skillPlayerToDataMap.get(player.getUniqueID());
-        if(data != null) {
-            PlayerData playerData = PlayerDataManager.getPlayerData(player);
-            playerData.stopTrackingData(data);
-            skillPlayerToDataMap.remove(player.getUniqueID());
-        }
+        playerData.stopTrackingData(data);
+        skillPlayerToDataMap.remove(player.getUniqueID());
     }
 
     @Override

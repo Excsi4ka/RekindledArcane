@@ -21,16 +21,6 @@ public abstract class EventWithDataSkillBase<DATA extends AbstractData> extends 
     }
 
     @Override
-    public void unlockSkill(EntityPlayer player) {
-        super.unlockSkill(player);
-    }
-
-    @Override
-    public void forgetSkill(EntityPlayer player) {
-        super.forgetSkill(player);
-    }
-
-    @Override
     public SkillType getSkillType() {
         return SkillType.PASSIVE;
     }

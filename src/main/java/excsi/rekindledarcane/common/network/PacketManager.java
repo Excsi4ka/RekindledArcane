@@ -6,6 +6,7 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 import excsi.rekindledarcane.RekindledArcane;
 import excsi.rekindledarcane.common.network.client.ClientPacketUnlockSkill;
+import excsi.rekindledarcane.common.network.server.ServerPacketForgetSkill;
 import excsi.rekindledarcane.common.network.server.ServerPacketFullPlayerDataSync;
 import excsi.rekindledarcane.common.network.server.ServerPacketSyncSkillPoints;
 import excsi.rekindledarcane.common.network.server.ServerPacketSyncTrackingData;
@@ -22,6 +23,7 @@ public class PacketManager {
         WRAPPER.registerMessage(ServerPacketFullPlayerDataSync.class, ServerPacketFullPlayerDataSync.class, id++, Side.CLIENT);
         WRAPPER.registerMessage(ClientPacketUnlockSkill.class, ClientPacketUnlockSkill.class, id++, Side.SERVER);
         WRAPPER.registerMessage(ServerPacketUnlockSkill.class, ServerPacketUnlockSkill.class, id++, Side.CLIENT);
+        WRAPPER.registerMessage(ServerPacketForgetSkill.class, ServerPacketForgetSkill.class, id++, Side.CLIENT);
         WRAPPER.registerMessage(ServerPacketSyncTrackingData.class, ServerPacketSyncTrackingData.class, id++, Side.CLIENT);
         WRAPPER.registerMessage(ServerPacketSyncSkillPoints.class, ServerPacketSyncSkillPoints.class, id++, Side.CLIENT);
     }

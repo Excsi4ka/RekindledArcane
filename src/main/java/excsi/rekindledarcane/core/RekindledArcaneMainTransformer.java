@@ -45,6 +45,7 @@ public class RekindledArcaneMainTransformer implements IClassTransformer {
                 return writer.toByteArray();
             } catch (Exception e) {
                 RekindledArcaneCore.LOG.error("Error while transforming " + subTransformer.className);
+                e.printStackTrace();
             }
         }
 

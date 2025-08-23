@@ -1,26 +1,29 @@
-package excsi.rekindledarcane.common.network.client;
+package excsi.rekindledarcane.common.network.server;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import excsi.rekindledarcane.api.RekindledArcaneAPI;
 import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
+import excsi.rekindledarcane.client.gui.SkillTreeScreen;
+import excsi.rekindledarcane.client.gui.widgets.SkillUnlockWidget;
 import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
-import excsi.rekindledarcane.common.util.RekindledArcaneConfig;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class ClientPacketUnlockSkill implements IMessage, IMessageHandler<ClientPacketUnlockSkill,IMessage> {
+public class ServerPacketForgetSkill implements IMessage, IMessageHandler<ServerPacketForgetSkill,IMessage> {
 
     public String categoryID, skillID;
 
-    public ClientPacketUnlockSkill() {}
+    public ServerPacketForgetSkill() {}
 
-    public ClientPacketUnlockSkill(ISkillCategory skillCategory, ISkill skill) {
+    public ServerPacketForgetSkill(ISkillCategory skillCategory, ISkill skill) {
         this.categoryID = skillCategory.getNameID();
         this.skillID = skill.getNameID();
     }
@@ -38,9 +41,10 @@ public class ClientPacketUnlockSkill implements IMessage, IMessageHandler<Client
     }
 
     @Override
-    public IMessage onMessage(ClientPacketUnlockSkill message, MessageContext ctx) {
-        if (ctx.side == Side.SERVER) {
-            EntityPlayer player = ctx.getServerHandler().playerEntity;
+    @SideOnly(Side.CLIENT)
+    public IMessage onMessage(ServerPacketForgetSkill message, MessageContext ctx) {
+        if (ctx.side == Side.CLIENT) {
+            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             PlayerData data = PlayerDataManager.getPlayerData(player);
             ISkillCategory category = RekindledArcaneAPI.getCategory(message.categoryID);
             if (category == null)
@@ -48,13 +52,13 @@ public class ClientPacketUnlockSkill implements IMessage, IMessageHandler<Client
             ISkill skill = category.getSkillFromID(message.skillID);
             if (skill == null)
                 return null;
-            if (data.getUnlockedSkillsCount() >= RekindledArcaneConfig.maxSkillsCap)
-                return null;
-            if (data.hasSkill(skill) || data.hasSkill(skill.getAntiRequisite()))
-                return null;
-            if ((skill.getPreRequisite() == null || data.hasSkill(skill.getPreRequisite())) && data.hasEnoughPoints(skill)) {
-                data.unlockSkill(player, skill, true);
-                data.addSkillPoints(player, -skill.getSkillPointCost(), true);
+            data.forgetSkill(player, skill, false);
+            if (Minecraft.getMinecraft().currentScreen instanceof SkillTreeScreen) {
+                SkillTreeScreen screen = (SkillTreeScreen) Minecraft.getMinecraft().currentScreen;
+                SkillUnlockWidget widget = screen.skillWidgets.get(skill);
+                if (widget != null) {
+                    widget.unlocked = false;
+                }
             }
         }
         return null;

@@ -3,7 +3,6 @@ package excsi.rekindledarcane.client;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import excsi.rekindledarcane.client.event.ClientEventHandler;
 import excsi.rekindledarcane.common.CommonProxy;
 import excsi.rekindledarcane.common.util.RekindledArcaneConfig;
@@ -28,12 +27,6 @@ public class ClientProxy extends CommonProxy {
                 .getTextureManager()
                 .loadTextureMap(AssetLib.skillIconTextureAtlas,
                         new TextureMap(RekindledArcaneConfig.skillIconsTextureAtlasID,"textures/skills"));
-    }
-
-    @Override
-    public void serverStarting(FMLServerStartingEvent event) {
-        super.serverStarting(event);
-        //client only commands
         ClientCommandHandler.instance.registerCommand(new TestCommand());
     }
 }

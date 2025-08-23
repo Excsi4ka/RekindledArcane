@@ -38,10 +38,7 @@ public class ServerPacketFullPlayerDataSync implements IMessage, IMessageHandler
     public IMessage onMessage(ServerPacketFullPlayerDataSync message, MessageContext ctx) {
         if (ctx.side == Side.CLIENT) {
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-            PlayerData playerData = PlayerDataManager.getPlayerData(player);
-            if (playerData == null) {
-                playerData = PlayerDataManager.setPlayerDataDefault(player);
-            }
+            PlayerData playerData = PlayerDataManager.setPlayerDataDefault(player);
             playerData.readData(message.data, player);
         }
         return null;

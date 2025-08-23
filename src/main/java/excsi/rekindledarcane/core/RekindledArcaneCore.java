@@ -10,6 +10,7 @@ import java.util.Map;
 
 @IFMLLoadingPlugin.Name(value = "RekindledArcaneCore")
 @IFMLLoadingPlugin.TransformerExclusions({"excsi.rekindledarcane.core"})
+@IFMLLoadingPlugin.SortingIndex(value = 1001)
 public class RekindledArcaneCore implements IFMLLoadingPlugin {
 
     public static final Logger LOG = LogManager.getLogger("RekindledArcaneCore");

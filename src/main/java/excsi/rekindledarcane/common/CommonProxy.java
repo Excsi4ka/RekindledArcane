@@ -7,6 +7,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import excsi.rekindledarcane.common.event.RekindledArcaneEvents;
 import excsi.rekindledarcane.common.event.DataEventHandler;
+import excsi.rekindledarcane.common.items.SkillPointItem;
 import excsi.rekindledarcane.common.network.PacketManager;
 import excsi.rekindledarcane.common.registry.SkillSystemRegistry;
 import excsi.rekindledarcane.common.util.RekindledArcaneConfig;
@@ -24,7 +25,7 @@ public class CommonProxy {
         FMLCommonHandler.instance().bus().register(new DataEventHandler());
         MinecraftForge.EVENT_BUS.register(new RekindledArcaneEvents());
         FMLCommonHandler.instance().bus().register(new RekindledArcaneEvents());
-
+        new SkillPointItem();
     }
 
     public void init(FMLInitializationEvent event) {
