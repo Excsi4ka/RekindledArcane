@@ -6,7 +6,6 @@ import excsi.rekindledarcane.client.gui.SkillTreeScreen;
 import excsi.rekindledarcane.client.util.StateRenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import org.lwjgl.opengl.GL11;
 
 public class SkillUnlockWidget extends Widget {
 
@@ -43,11 +42,6 @@ public class SkillUnlockWidget extends Widget {
         if(isMouseOver(mouseX, mouseY)) {
             parentScreen.currentHoveringWidget = this;
         }
-    }
-
-    @Override
-    public boolean isMouseOver(int mouseX, int mouseY) {
-        return mouseX >= xPosition && mouseY >= yPosition && mouseX < xPosition + width && mouseY < yPosition + height;
     }
 
     public void handleOffset(int offsetX, int offsetY) {

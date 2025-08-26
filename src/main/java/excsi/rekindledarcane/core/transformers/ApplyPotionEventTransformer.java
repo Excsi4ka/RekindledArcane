@@ -1,7 +1,7 @@
 package excsi.rekindledarcane.core.transformers;
 
 import cpw.mods.fml.relauncher.Side;
-import excsi.rekindledarcane.core.ASMUtils;
+import excsi.rekindledarcane.core.AsmHelper;
 import excsi.rekindledarcane.core.SubTransformer;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
@@ -26,7 +26,7 @@ public class ApplyPotionEventTransformer extends SubTransformer {
 
     @Override
     public void transformClass(ClassNode node) {
-        MethodNode mn = ASMUtils.getMethodNodeByName(node, "addPotionEffect", "func_70690_d");
+        MethodNode mn = AsmHelper.getMethodNodeByName(node, "addPotionEffect", "func_70690_d");
         AbstractInsnNode abstractInsnNode = mn.instructions.getFirst();
         mn.instructions.insertBefore(abstractInsnNode, new VarInsnNode(Opcodes.ALOAD, 0));
         mn.instructions.insertBefore(abstractInsnNode, new VarInsnNode(Opcodes.ALOAD, 1));

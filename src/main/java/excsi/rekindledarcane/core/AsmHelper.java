@@ -5,7 +5,7 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
-public class ASMUtils {
+public class AsmHelper {
 
     public static MethodNode getMethodNodeByName(ClassNode classNode, String methodName, String obfMethodName) {
         for (MethodNode node : classNode.methods) {
@@ -14,6 +14,24 @@ public class ASMUtils {
             }
         }
         throw new RuntimeException("Unable to find method named " + methodName + " in class " + classNode.name);
+    }
+
+    public static MethodNode getMethodNodeByNameNullable(ClassNode classNode, String methodName, String obfMethodName) {
+        for (MethodNode node : classNode.methods) {
+            if (node.name.equals(methodName) || node.name.equals(obfMethodName)) {
+                return node;
+            }
+        }
+        return null;
+    }
+
+    public static AbstractInsnNode getFirstMatchingOpcode(MethodNode node, int opcode) {
+        for (int i = 0; i < node.instructions.size(); i++) {
+            AbstractInsnNode insnNode = node.instructions.get(i);
+            if(insnNode.getOpcode() == opcode)
+                return insnNode;
+        }
+        throw new RuntimeException("Unable to find opcode in " + node);
     }
 
     public static MethodNode getMethodNodeByDescriptor(ClassNode classNode, String methodName, String obfMethodName, String descriptor) {
@@ -35,6 +53,6 @@ public class ASMUtils {
                 return min;
             }
         }
-        throw new RuntimeException("Unable to find method instruction in " + methodName);
+        throw new RuntimeException("Unable to find method instruction in " + methodNode);
     }
 }

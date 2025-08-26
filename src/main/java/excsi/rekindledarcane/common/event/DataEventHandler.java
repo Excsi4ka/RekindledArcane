@@ -67,7 +67,7 @@ public class DataEventHandler {
         if(event.side == Side.CLIENT)
             return;
         PlayerData data = PlayerDataManager.getPlayerData(event.player);
-        data.getSkillDataTracker().tick(event.player);
+        data.tick(event.player);
     }
 
     @SubscribeEvent

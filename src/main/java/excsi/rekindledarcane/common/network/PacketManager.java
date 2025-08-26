@@ -5,6 +5,7 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 import excsi.rekindledarcane.RekindledArcane;
+import excsi.rekindledarcane.common.network.client.ClientPacketKeyPress;
 import excsi.rekindledarcane.common.network.client.ClientPacketUnlockSkill;
 import excsi.rekindledarcane.common.network.server.ServerPacketForgetSkill;
 import excsi.rekindledarcane.common.network.server.ServerPacketFullPlayerDataSync;
@@ -20,8 +21,9 @@ public class PacketManager {
 
     public static void init() {
         int id = 0;
-        WRAPPER.registerMessage(ServerPacketFullPlayerDataSync.class, ServerPacketFullPlayerDataSync.class, id++, Side.CLIENT);
         WRAPPER.registerMessage(ClientPacketUnlockSkill.class, ClientPacketUnlockSkill.class, id++, Side.SERVER);
+        WRAPPER.registerMessage(ClientPacketKeyPress.class, ClientPacketKeyPress.class, id++, Side.SERVER);
+        WRAPPER.registerMessage(ServerPacketFullPlayerDataSync.class, ServerPacketFullPlayerDataSync.class, id++, Side.CLIENT);
         WRAPPER.registerMessage(ServerPacketUnlockSkill.class, ServerPacketUnlockSkill.class, id++, Side.CLIENT);
         WRAPPER.registerMessage(ServerPacketForgetSkill.class, ServerPacketForgetSkill.class, id++, Side.CLIENT);
         WRAPPER.registerMessage(ServerPacketSyncTrackingData.class, ServerPacketSyncTrackingData.class, id++, Side.CLIENT);

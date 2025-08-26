@@ -1,24 +1,49 @@
 package excsi.rekindledarcane.client.event;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.InputEvent;
 import excsi.rekindledarcane.client.AssetLib;
-import excsi.rekindledarcane.client.TestCommand;
+import excsi.rekindledarcane.client.ClientProxy;
 import excsi.rekindledarcane.client.gui.SkillCategorySelectionScreen;
-import excsi.rekindledarcane.common.data.player.PlayerDataManager;
-import excsi.rekindledarcane.common.data.skill.templates.BasicSkillData;
+import excsi.rekindledarcane.common.registry.ItemRegistry;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraft.client.model.ModelBiped;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumAction;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
 public class ClientEventHandler {
 
     @SubscribeEvent
-    public void clientTick(TickEvent.ClientTickEvent event) {
-        if (TestCommand.display && Minecraft.getMinecraft().thePlayer.ticksExisted > TestCommand.time) {
+    public void onKeyPress(InputEvent.KeyInputEvent event) {
+        if (ClientProxy.activateAbilityKey.isPressed()) {
+            //PacketManager.sendToServer(new ClientPacketKeyPress(0));
             Minecraft.getMinecraft().displayGuiScreen(new SkillCategorySelectionScreen());
-            TestCommand.display = false;
         }
+    }
+
+    public static void renderCallback(EntityLivingBase entity, ModelBiped modelBiped) {
+        if(!(entity instanceof EntityPlayer))
+            return;
+        EntityPlayer player = (EntityPlayer) entity;
+        if(player.isUsingItem()) {
+            EnumAction action = player.getHeldItem().getItemUseAction();
+            if(action == ItemRegistry.raiseSword) {
+//                modelBiped.bipedRightArm.rotateAngleZ = -0.5f;
+//                modelBiped.bipedRightArm.rotateAngleY = 3f;
+//                modelBiped.bipedRightArm.rotateAngleX = 3f;
+                //modelBiped.bipedLeftArm.rotateAngleY = 0.6f;
+                //modelBiped.bipedLeftArm.rotateAngleX = 4.5f;
+
+                float mult = (float) Math.sin(entity.ticksExisted) / 3;
+                modelBiped.bipedRightArm.rotateAngleX = 3f;
+                modelBiped.bipedRightArm.rotateAngleZ = mult;
+                modelBiped.bipedLeftArm.rotateAngleX = 3f;
+                modelBiped.bipedLeftArm.rotateAngleZ = -mult;
+            }
+        }
+
     }
 
     @SubscribeEvent
@@ -26,17 +51,4 @@ public class ClientEventHandler {
         AssetLib.stitchSkillTextures(event);
     }
 
-    @SubscribeEvent
-    public void onOverlay(RenderGameOverlayEvent.Post event) {
-        if (event.type != RenderGameOverlayEvent.ElementType.ALL)
-            return;
-        int x = event.resolution.getScaledWidth() / 2;
-        int y = event.resolution.getScaledHeight() / 2;
-        PlayerDataManager.getPlayerData(Minecraft.getMinecraft().thePlayer).getSkillDataTracker().tickingData.forEach(data -> {
-            if (data instanceof BasicSkillData) {
-                int time = ((BasicSkillData) data).getSkillCooldown();
-                Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(String.valueOf(time), x + 10, y, 0xFFFFFF);
-            }
-        });
-    }
 }

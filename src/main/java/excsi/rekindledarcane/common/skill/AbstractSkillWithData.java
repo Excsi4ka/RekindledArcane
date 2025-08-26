@@ -4,7 +4,7 @@ import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
 import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
-import excsi.rekindledarcane.common.data.skill.templates.AbstractData;
+import excsi.rekindledarcane.common.data.skill.AbstractData;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,6 +16,7 @@ public abstract class AbstractSkillWithData<DATA extends AbstractData> extends A
 
     public String registryName;
 
+    //fast data lookup? maybe
     public final HashMap<UUID, DATA> skillPlayerToDataMap = new HashMap<>();
 
     public AbstractSkillWithData(String nameID) {
@@ -49,6 +50,8 @@ public abstract class AbstractSkillWithData<DATA extends AbstractData> extends A
         return false;
     }
 
+    public abstract DATA createDefaultDataInstance();
+
     public void writeData(EntityPlayer player, NBTTagCompound compound) {
         DATA data = skillPlayerToDataMap.get(player.getUniqueID());
         NBTTagCompound tagCompound = new NBTTagCompound();
@@ -63,8 +66,6 @@ public abstract class AbstractSkillWithData<DATA extends AbstractData> extends A
         playerData.trackData(data);
         skillPlayerToDataMap.put(player.getUniqueID(), data);
     }
-
-    public abstract DATA createDefaultDataInstance();
 
     public DATA getSkillData(EntityLivingBase entityLivingBase) {
         if(!(entityLivingBase instanceof EntityPlayer))

@@ -15,6 +15,8 @@ public class AssetLib {
 
     public static final ResourceLocation skillIconTextureAtlas = new ResourceLocation("textures/atlas/skill_icons.png");
 
+    public static final ResourceLocation menuDing = new ResourceLocation("rekindledarcane","menu.ding");
+
     public static IIcon missingSkillTexture;
 
     public static ResourceLocation rl(String resourcePath) {

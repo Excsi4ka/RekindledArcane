@@ -1,6 +1,7 @@
 package excsi.rekindledarcane.core;
 
 import excsi.rekindledarcane.core.transformers.ApplyPotionEventTransformer;
+import excsi.rekindledarcane.core.transformers.ModelBipedTransformer;
 import excsi.rekindledarcane.core.transformers.ThaumcraftTransformer;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
@@ -20,6 +21,7 @@ public class RekindledArcaneMainTransformer implements IClassTransformer {
     public RekindledArcaneMainTransformer() {
         register(new ThaumcraftTransformer());
         register(new ApplyPotionEventTransformer());
+        register(new ModelBipedTransformer());
     }
 
     @Override
@@ -42,26 +44,25 @@ public class RekindledArcaneMainTransformer implements IClassTransformer {
 
                 ClassWriter writer = new ClassWriter(subTransformer.flag);
                 classNode.accept(writer);
-                return writer.toByteArray();
+                basicClass = writer.toByteArray();
             } catch (Exception e) {
                 RekindledArcaneCore.LOG.error("Error while transforming " + subTransformer.className);
                 e.printStackTrace();
             }
+//            if (true) {
+//                try {
+//                    File f = new File("C:/Users/Home/Desktop/123/RekindledArcane/outputClasses/" + transformedName + ".class");
+//                    f.getParentFile().mkdirs();
+//                    f.createNewFile();
+//                    FileOutputStream out = new FileOutputStream(f);
+//                    out.write(basicClass);
+//                    out.close();
+//                }
+//                catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
         }
-
-//        if (true) {
-//            try {
-//                File f = new File("C:/Users/Home/Desktop/123/RekindledArcane/outputClasses/" + transformedName + ".class");
-//                f.getParentFile().mkdirs();
-//                f.createNewFile();
-//                FileOutputStream out = new FileOutputStream(f);
-//                out.write(basicClass);
-//                out.close();
-//            }
-//            catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
         return basicClass;
     }
 

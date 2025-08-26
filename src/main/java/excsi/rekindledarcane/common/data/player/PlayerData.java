@@ -3,11 +3,11 @@ package excsi.rekindledarcane.common.data.player;
 import excsi.rekindledarcane.api.RekindledArcaneAPI;
 import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
-import excsi.rekindledarcane.common.data.skill.templates.AbstractData;
-import excsi.rekindledarcane.common.data.skill.SkillDataTracker;
+import excsi.rekindledarcane.common.data.skill.AbstractData;
 import excsi.rekindledarcane.common.network.PacketManager;
 import excsi.rekindledarcane.common.network.server.ServerPacketForgetSkill;
 import excsi.rekindledarcane.common.network.server.ServerPacketSyncSkillPoints;
+import excsi.rekindledarcane.common.network.server.ServerPacketSyncTrackingData;
 import excsi.rekindledarcane.common.network.server.ServerPacketUnlockSkill;
 import excsi.rekindledarcane.common.skill.AbstractSkillWithData;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,8 +15,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class PlayerData {
@@ -25,13 +27,18 @@ public class PlayerData {
 
     private final HashMap<ISkillCategory, Set<ISkill>> unlockedSkills = new HashMap<>();
 
-    private final SkillDataTracker skillDataTracker;
+    //-------- For data tracking and updating --------
+    public HashMap<String, AbstractData> trackingData = new HashMap<>();
+
+    public List<AbstractData> dataQueuedToSync = new ArrayList<>();
+
+    public List<ITickable> tickingStuff = new ArrayList<>();
+    //----------------------------------------------------
 
     public PlayerData() {
-        skillPoints = 0;
-        unlockedSkillsCount = 0;
+        this.skillPoints = 0;
+        this.unlockedSkillsCount = 0;
         RekindledArcaneAPI.getAllCategories().forEach(category -> unlockedSkills.put(category, new HashSet<>()));
-        skillDataTracker = new SkillDataTracker();
     }
 
     public void readData(NBTTagCompound compound, EntityPlayer player) {
@@ -110,16 +117,33 @@ public class PlayerData {
         return skillPoints >= skill.getSkillPointCost();
     }
 
-    public SkillDataTracker getSkillDataTracker() {
-        return skillDataTracker;
-    }
-
     public void trackData(AbstractData data) {
-        skillDataTracker.addDataToTracker(data);
+        if(data.sendClientUpdates) {
+            trackingData.put(data.registryName, data);
+            data.setDataTracker(this);
+        }
+        if(data instanceof ITickable) {
+            tickingStuff.add((ITickable) data);
+        }
     }
 
     public void stopTrackingData(AbstractData data) {
-        skillDataTracker.stopTrackingData(data);
+        trackingData.remove(data.registryName);
+        tickingStuff.remove((ITickable) data);
+    }
+
+    public void queueDataToSync(AbstractData data) {
+        dataQueuedToSync.add(data);
+    }
+
+    public void tick(EntityPlayer player) {
+        tickingStuff.forEach(tickable -> {
+            if (tickable.shouldTick()) tickable.tick();
+        });
+        if(dataQueuedToSync.isEmpty())
+            return;
+        ServerPacketSyncTrackingData packetSyncTrackingData = new ServerPacketSyncTrackingData(dataQueuedToSync);
+        PacketManager.sendToPlayer(packetSyncTrackingData, player);
     }
 
     public void readSkillsFromNBT(EntityPlayer player, ISkillCategory category, Set<ISkill> skillList, NBTTagCompound compound) {

@@ -1,7 +1,7 @@
 package excsi.rekindledarcane.core.transformers;
 
 import cpw.mods.fml.relauncher.Side;
-import excsi.rekindledarcane.core.ASMUtils;
+import excsi.rekindledarcane.core.AsmHelper;
 import excsi.rekindledarcane.core.SubTransformer;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
@@ -23,8 +23,8 @@ public class ThaumcraftTransformer extends SubTransformer {
 
     @Override
     public void transformClass(ClassNode node) {
-        MethodNode mn = ASMUtils.getMethodNodeByName(node, "livingTick", "livingTick");
-        AbstractInsnNode insNode = ASMUtils.getFirstMatchingMethodInsNode(mn,
+        MethodNode mn = AsmHelper.getMethodNodeByName(node, "livingTick", "livingTick");
+        AbstractInsnNode insNode = AsmHelper.getFirstMatchingMethodInsNode(mn,
                 "baubles/api/BaublesApi",
                 "getBaubles",
                 "getBaubles",

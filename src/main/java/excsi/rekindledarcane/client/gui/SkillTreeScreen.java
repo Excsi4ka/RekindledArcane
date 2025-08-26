@@ -18,7 +18,6 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,10 +28,6 @@ public class SkillTreeScreen extends GuiScreen {
     public ISkillCategory category;
 
     public SkillUnlockWidget currentHoveringWidget;
-
-    public Set<ISkill> unlockedSkills;
-
-    public Set<ISkill> lockedSkills;
 
     public Map<ISkill, SkillUnlockWidget> skillWidgets;
 
@@ -52,18 +47,12 @@ public class SkillTreeScreen extends GuiScreen {
         int x = width / 2;
         int id = 0;
         playerData = PlayerDataManager.getPlayerData(mc.thePlayer);
-        unlockedSkills = playerData.getUnlockedSkillForCategory(category);
-        lockedSkills = new HashSet<>(category.getAllSkills());
-        lockedSkills.removeAll(unlockedSkills);
-        for(ISkill skill : unlockedSkills) {
+        Set<ISkill> unlockedSkills = playerData.getUnlockedSkillForCategory(category);
+        for (ISkill skill : category.getAllSkills()) {
+            boolean isUnlocked = unlockedSkills.contains(skill);
             Point point = skill.getPosition();
             skillWidgets.put(skill, new SkillUnlockWidget(id++, x + point.x, point.y, 22, 22,
-                    skill, this, true));
-        }
-        for(ISkill skill : lockedSkills) {
-            Point point = skill.getPosition();
-            skillWidgets.put(skill, new SkillUnlockWidget(id++, x + point.x, point.y, 22, 22,
-                    skill, this, false));
+                    skill, this, isUnlocked));
         }
         lastMouseX = Mouse.getEventX() * width / mc.displayWidth;
         lastMouseY = height - Mouse.getEventY() * height / mc.displayHeight - 1;
@@ -76,6 +65,7 @@ public class SkillTreeScreen extends GuiScreen {
         StateRenderHelper.drawFullSizeTexturedRectangle(0,0,width,height,zLevel);
         mc.getTextureManager().bindTexture(AssetLib.skillIconTextureAtlas);
         currentHoveringWidget = null;
+
         tes.startDrawingQuads();
         skillWidgets.values().forEach(widget -> widget.drawButton(mc, mouseX, mouseY));
         tes.draw();
@@ -120,6 +110,8 @@ public class SkillTreeScreen extends GuiScreen {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int button) {
+        if(button != 0)
+            return;
         if(currentHoveringWidget == null)
             return;
         ISkill skill = currentHoveringWidget.skill;

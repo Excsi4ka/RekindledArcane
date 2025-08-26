@@ -1,11 +1,11 @@
 package excsi.rekindledarcane.client.gui.widgets;
 
 import excsi.rekindledarcane.api.skill.ISkillCategory;
+import excsi.rekindledarcane.client.AssetLib;
 import excsi.rekindledarcane.client.gui.SkillCategorySelectionScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.ResourceLocation;
 
 public class SkillCategoryWidget extends Widget {
 
@@ -14,8 +14,6 @@ public class SkillCategoryWidget extends Widget {
     public double startAngle, stopAngle;
 
     public SkillCategorySelectionScreen parentScreen;
-
-    public static final ResourceLocation soundLoc = new ResourceLocation("rekindledarcane","menu.ding");
 
     public SkillCategoryWidget(int id, int x, int y, int width, int height, ISkillCategory category, double startAngle, double stopAngle, SkillCategorySelectionScreen screen) {
         super(id, x, y, width, height, null);
@@ -44,6 +42,6 @@ public class SkillCategoryWidget extends Widget {
     }
 
     public void onSelect() {
-        parentScreen.mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(soundLoc, 1.0F));
+        parentScreen.mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(AssetLib.menuDing, 1.0F));
     }
 }

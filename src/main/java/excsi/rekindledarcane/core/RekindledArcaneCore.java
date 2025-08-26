@@ -15,6 +15,8 @@ public class RekindledArcaneCore implements IFMLLoadingPlugin {
 
     public static final Logger LOG = LogManager.getLogger("RekindledArcaneCore");
 
+    public static Boolean isDevEnvironment;
+
     public static Side SIDE = FMLLaunchHandler.side();
 
     @Override
@@ -34,7 +36,7 @@ public class RekindledArcaneCore implements IFMLLoadingPlugin {
 
     @Override
     public void injectData(Map<String, Object> data) {
-
+        isDevEnvironment = !(Boolean)data.get("runtimeDeobfuscationEnabled");
     }
 
     @Override

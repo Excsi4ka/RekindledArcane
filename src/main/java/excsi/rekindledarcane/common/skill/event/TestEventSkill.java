@@ -1,18 +1,18 @@
 package excsi.rekindledarcane.common.skill.event;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import excsi.rekindledarcane.common.data.skill.templates.BasicSkillData;
+import excsi.rekindledarcane.common.data.skill.CooldownData;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
-public class TestEventSkill extends EventWithDataSkillBase<BasicSkillData> {
+public class TestEventSkill extends EventWithDataSkillBase<CooldownData> {
 
     public TestEventSkill(String nameID) {
         super(nameID);
     }
 
     @Override
-    public BasicSkillData createDefaultDataInstance() {
-        return new BasicSkillData(registryName, true);
+    public CooldownData createDefaultDataInstance() {
+        return new CooldownData(registryName, 5, false);
     }
 
     @SubscribeEvent
@@ -21,7 +21,7 @@ public class TestEventSkill extends EventWithDataSkillBase<BasicSkillData> {
             return;
         if(event.entityLiving.worldObj.isRemote)
             return;
-        BasicSkillData data = getSkillData(event.entityLiving);
+        CooldownData data = getSkillData(event.entityLiving);
         if(data.getSkillCooldown() == 0) {
             data.setSkillCooldown(600);
             event.setCanceled(true);
