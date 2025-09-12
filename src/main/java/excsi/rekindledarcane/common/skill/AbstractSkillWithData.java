@@ -2,6 +2,7 @@ package excsi.rekindledarcane.common.skill;
 
 import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
+import excsi.rekindledarcane.api.skill.ISkillDataHandler;
 import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
 import excsi.rekindledarcane.common.data.skill.AbstractData;
@@ -12,9 +13,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import java.util.HashMap;
 import java.util.UUID;
 
-public abstract class AbstractSkillWithData<DATA extends AbstractData> extends AbstractSkill {
+public abstract class AbstractSkillWithData<DATA extends AbstractData> extends AbstractSkill implements ISkillDataHandler {
 
-    public String registryName;
+    private String registryName;
 
     //fast data lookup? maybe
     public final HashMap<UUID, DATA> skillPlayerToDataMap = new HashMap<>();
@@ -52,6 +53,7 @@ public abstract class AbstractSkillWithData<DATA extends AbstractData> extends A
 
     public abstract DATA createDefaultDataInstance();
 
+    @Override
     public void writeData(EntityPlayer player, NBTTagCompound compound) {
         DATA data = skillPlayerToDataMap.get(player.getUniqueID());
         NBTTagCompound tagCompound = new NBTTagCompound();
@@ -59,12 +61,18 @@ public abstract class AbstractSkillWithData<DATA extends AbstractData> extends A
         compound.setTag(registryName, tagCompound);
     }
 
+    @Override
     public void readData(EntityPlayer player, NBTTagCompound compound) {
         DATA data = createDefaultDataInstance();
         data.readFromNBT(compound.getCompoundTag(registryName));
         PlayerData playerData = PlayerDataManager.getPlayerData(player);
         playerData.trackData(data);
         skillPlayerToDataMap.put(player.getUniqueID(), data);
+    }
+
+    @Override
+    public String getRegistryName() {
+        return registryName;
     }
 
     public DATA getSkillData(EntityLivingBase entityLivingBase) {

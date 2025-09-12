@@ -1,5 +1,6 @@
 package excsi.rekindledarcane.api;
 
+import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
@@ -16,7 +17,7 @@ public class RekindledArcaneAPI {
 
     public static IAttribute MAX_SUMMONS = new RangedAttribute("rekindledarcane.maxSummons", 0, 0, 10).setShouldWatch(true);
 
-    public static HashMap<String, ISkillCategory> skillCategoryMap = new HashMap<>();
+    private static final HashMap<String, ISkillCategory> skillCategoryMap = new HashMap<>();
 
     public static Logger LOG = LogManager.getLogger("RekindledArcaneAPI");
 
@@ -35,6 +36,13 @@ public class RekindledArcaneAPI {
 
     public static Collection<ISkillCategory> getAllCategories() {
         return skillCategoryMap.values();
+    }
+
+    public static ISkill getSkillByRegistryName(String name) {
+        int i = name.indexOf(':');
+        ISkillCategory category = skillCategoryMap.get(name.substring(0, i));
+        if(category == null) return null;
+        return category.getSkillFromID(name.substring(i + 1));
     }
 
     public static Set<String> getCategoryNames() {

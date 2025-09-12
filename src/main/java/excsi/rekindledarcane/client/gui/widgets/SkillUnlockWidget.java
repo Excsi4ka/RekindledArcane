@@ -18,10 +18,10 @@ public class SkillUnlockWidget extends Widget {
     public int connectionX, connectionY;
 
     public SkillUnlockWidget(int id, int x, int y, int width, int height, ISkill skill, SkillTreeScreen parentScreen, boolean unlocked) {
-        super(id, x, y, width, height, null);
+        super(id, x, y, width, height);
         this.skill = skill;
         this.parentScreen = parentScreen;
-        this.skill.addDescription(descriptionTooltip);
+        this.skill.addDescription(descriptionTooltip); //maybe shouldn't store descriptions for all skills upon screen init;
         this.unlocked = unlocked;
         if(skill.getPreRequisite() != null) {
             Point connectionPoint = skill.getPreRequisite().getPosition();

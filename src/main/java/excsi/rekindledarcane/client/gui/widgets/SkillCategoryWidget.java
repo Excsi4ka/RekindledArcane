@@ -16,7 +16,7 @@ public class SkillCategoryWidget extends Widget {
     public SkillCategorySelectionScreen parentScreen;
 
     public SkillCategoryWidget(int id, int x, int y, int width, int height, ISkillCategory category, double startAngle, double stopAngle, SkillCategorySelectionScreen screen) {
-        super(id, x, y, width, height, null);
+        super(id, x, y, width, height);
         this.category = category;
         this.startAngle = Math.toDegrees(startAngle);
         this.stopAngle = Math.toDegrees(stopAngle);

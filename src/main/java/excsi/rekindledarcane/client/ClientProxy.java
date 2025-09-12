@@ -18,11 +18,20 @@ public class ClientProxy extends CommonProxy {
 
     public static KeyBinding activateAbilityKey = new KeyBinding("arcane.castAbility", Keyboard.KEY_NONE, RekindledArcane.MODID);
 
+    public static KeyBinding abilityChooseScreen = new KeyBinding("arcane.openSelection", Keyboard.KEY_NONE, RekindledArcane.MODID);
+
+    public static KeyBinding switchLeft = new KeyBinding("arcane.abilityCycleLeft", Keyboard.KEY_NONE, RekindledArcane.MODID);
+
+    public static KeyBinding switchRight = new KeyBinding("arcane.abilityCycleRight", Keyboard.KEY_NONE, RekindledArcane.MODID);
+
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
 
         ClientRegistry.registerKeyBinding(activateAbilityKey);
+        ClientRegistry.registerKeyBinding(abilityChooseScreen);
+        ClientRegistry.registerKeyBinding(switchLeft);
+        ClientRegistry.registerKeyBinding(switchRight);
 
         FMLCommonHandler.instance().bus().register(new ClientEventHandler());
         MinecraftForge.EVENT_BUS.register(new ClientEventHandler());

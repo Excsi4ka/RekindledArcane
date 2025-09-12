@@ -17,6 +17,8 @@ public class AssetLib {
 
     public static final ResourceLocation menuDing = new ResourceLocation("rekindledarcane","menu.ding");
 
+    public static final ResourceLocation skillSelectorGui = rl("textures/gui/gui.png");
+
     public static IIcon missingSkillTexture;
 
     public static ResourceLocation rl(String resourcePath) {

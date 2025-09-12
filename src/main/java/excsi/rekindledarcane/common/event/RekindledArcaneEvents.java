@@ -2,7 +2,6 @@ package excsi.rekindledarcane.common.event;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import excsi.rekindledarcane.api.RekindledArcaneAPI;
-import excsi.rekindledarcane.api.event.PotionApplyEvent;
 import excsi.rekindledarcane.common.skill.attribute.PersistentAttributeModifier;
 import excsi.rekindledarcane.common.util.RekindledArcaneConfig;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -44,11 +43,6 @@ public class RekindledArcaneEvents {
                 return;
             event.ammount *= 1 - value / 100;
         }
-    }
-
-    @SubscribeEvent
-    public void onPotionApply(PotionApplyEvent event) {
-        //event.setCanceled(true);
     }
 
     //reapply persistent attribute modifiers on respawn

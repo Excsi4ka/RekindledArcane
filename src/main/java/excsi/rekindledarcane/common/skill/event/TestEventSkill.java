@@ -12,7 +12,7 @@ public class TestEventSkill extends EventWithDataSkillBase<CooldownData> {
 
     @Override
     public CooldownData createDefaultDataInstance() {
-        return new CooldownData(registryName, 5, false);
+        return new CooldownData(getRegistryName(), 5, false);
     }
 
     @SubscribeEvent

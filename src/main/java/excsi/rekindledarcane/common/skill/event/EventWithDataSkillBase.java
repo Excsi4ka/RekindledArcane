@@ -22,6 +22,6 @@ public abstract class EventWithDataSkillBase<DATA extends AbstractData> extends 
 
     @Override
     public SkillType getSkillType() {
-        return SkillType.PASSIVE;
+        return SkillType.ABILITY;
     }
 }

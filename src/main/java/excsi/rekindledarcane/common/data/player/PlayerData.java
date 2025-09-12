@@ -1,15 +1,16 @@
 package excsi.rekindledarcane.common.data.player;
 
 import excsi.rekindledarcane.api.RekindledArcaneAPI;
+import excsi.rekindledarcane.api.skill.IActiveSkillAbility;
 import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
+import excsi.rekindledarcane.api.skill.ISkillDataHandler;
 import excsi.rekindledarcane.common.data.skill.AbstractData;
 import excsi.rekindledarcane.common.network.PacketManager;
 import excsi.rekindledarcane.common.network.server.ServerPacketForgetSkill;
 import excsi.rekindledarcane.common.network.server.ServerPacketSyncSkillPoints;
 import excsi.rekindledarcane.common.network.server.ServerPacketSyncTrackingData;
 import excsi.rekindledarcane.common.network.server.ServerPacketUnlockSkill;
-import excsi.rekindledarcane.common.skill.AbstractSkillWithData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -23,11 +24,13 @@ import java.util.Set;
 
 public class PlayerData {
 
-    private int skillPoints, unlockedSkillsCount;
+    private int skillPoints, unlockedSkillsCount, unlockedActiveSkillSlots;
 
     private final HashMap<ISkillCategory, Set<ISkill>> unlockedSkills = new HashMap<>();
 
-    //-------- For data tracking and updating --------
+    private final List<IActiveSkillAbility> activeSkills = new ArrayList<>(1);
+
+    //-------- For data tracking and updating ---------
     public HashMap<String, AbstractData> trackingData = new HashMap<>();
 
     public List<AbstractData> dataQueuedToSync = new ArrayList<>();
@@ -38,24 +41,35 @@ public class PlayerData {
     public PlayerData() {
         this.skillPoints = 0;
         this.unlockedSkillsCount = 0;
+        this.unlockedActiveSkillSlots = 1;
         RekindledArcaneAPI.getAllCategories().forEach(category -> unlockedSkills.put(category, new HashSet<>()));
     }
 
     public void readData(NBTTagCompound compound, EntityPlayer player) {
         skillPoints = compound.getInteger("skillPoints");
         unlockedSkillsCount = compound.getInteger("unlockedSkillsCount");
+        unlockedActiveSkillSlots = compound.getInteger("activeSlotCount");
         unlockedSkills.forEach((category, skills) -> {
             if(compound.hasKey(category.getNameID())) {
                 readSkillsFromNBT(player, category, skills, compound);
             }
         });
+        NBTTagList list = compound.getTagList("equippedSkills", 8); //8 for string
+        for (int i = 0; i < list.tagCount(); i++) {
+            ISkill skill = RekindledArcaneAPI.getSkillByRegistryName(list.getStringTagAt(i));
+            activeSkills.add((IActiveSkillAbility) skill);
+        }
     }
 
     public void writeData(NBTTagCompound compound, EntityPlayer player) {
         compound.setInteger("skillPoints", skillPoints);
         compound.setInteger("unlockedSkillsCount", unlockedSkillsCount);
+        compound.setInteger("activeSlotCount", unlockedActiveSkillSlots);
         unlockedSkills.forEach((category, skills) -> compound.setTag(category.getNameID(),
                 writeSkillsToNBT(player, compound, skills)));
+        NBTTagList list = new NBTTagList();
+        activeSkills.forEach(activeSkill -> list.appendTag(new NBTTagString(activeSkill.getRegistryName())));
+        compound.setTag("equippedSkills", list);
     }
 
     public void unlockSkill(EntityPlayer player, ISkill skill, boolean notifyClient) {
@@ -96,8 +110,7 @@ public class PlayerData {
     public void addSkillPoints(EntityPlayer player, int points, boolean notifyClient) {
         skillPoints += points;
         if(notifyClient) {
-            ServerPacketSyncSkillPoints packet = new ServerPacketSyncSkillPoints(skillPoints);
-            PacketManager.sendToPlayer(packet, player);
+            PacketManager.sendToPlayer(new ServerPacketSyncSkillPoints(skillPoints), player);
         }
     }
 
@@ -115,6 +128,10 @@ public class PlayerData {
 
     public boolean hasEnoughPoints(ISkill skill) {
         return skillPoints >= skill.getSkillPointCost();
+    }
+
+    public List<IActiveSkillAbility> getEquippedActiveSkills() {
+        return activeSkills;
     }
 
     public void trackData(AbstractData data) {
@@ -136,6 +153,18 @@ public class PlayerData {
         dataQueuedToSync.add(data);
     }
 
+    public void unlockActiveSlot() {
+        unlockedActiveSkillSlots = Math.min(unlockedActiveSkillSlots + 1, 5);
+    }
+
+    public void lockActiveSlot() {
+        unlockedActiveSkillSlots = Math.max(unlockedActiveSkillSlots - 1, 0);
+    }
+
+    public int getActiveSlots() {
+        return unlockedActiveSkillSlots;
+    }
+
     public void tick(EntityPlayer player) {
         tickingStuff.forEach(tickable -> {
             if (tickable.shouldTick()) tickable.tick();
@@ -146,7 +175,7 @@ public class PlayerData {
         PacketManager.sendToPlayer(packetSyncTrackingData, player);
     }
 
-    public void readSkillsFromNBT(EntityPlayer player, ISkillCategory category, Set<ISkill> skillList, NBTTagCompound compound) {
+    private void readSkillsFromNBT(EntityPlayer player, ISkillCategory category, Set<ISkill> skillList, NBTTagCompound compound) {
         NBTTagList nbtList = compound.getTagList(category.getNameID(),8); //8 for string nbt
         for (int i = 0; i < nbtList.tagCount(); i++) {
             ISkill skill = category.getSkillFromID(nbtList.getStringTagAt(i));
@@ -157,19 +186,19 @@ public class PlayerData {
             if (skill.reapplyOnRestart())
                 skill.unlockSkill(player);
 
-            if (skill instanceof AbstractSkillWithData) {
-                AbstractSkillWithData<?> dataSkill = (AbstractSkillWithData<?>) skill;
+            if (skill instanceof ISkillDataHandler) {
+                ISkillDataHandler dataSkill = (ISkillDataHandler) skill;
                 dataSkill.readData(player, compound);
             }
         }
     }
 
-    public static NBTTagList writeSkillsToNBT(EntityPlayer player, NBTTagCompound compound, Set<ISkill> skillList) {
+    private static NBTTagList writeSkillsToNBT(EntityPlayer player, NBTTagCompound compound, Set<ISkill> skillList) {
         NBTTagList nbtTagList = new NBTTagList();
         skillList.forEach(skill -> {
             nbtTagList.appendTag(new NBTTagString(skill.getNameID()));
-            if(skill instanceof AbstractSkillWithData) {
-                ((AbstractSkillWithData<?>) skill).writeData(player, compound);
+            if(skill instanceof ISkillDataHandler) {
+                ((ISkillDataHandler) skill).writeData(player, compound);
             }
         });
         return nbtTagList;

@@ -13,6 +13,10 @@ public abstract class Widget extends GuiButton {
         super(id, x, y, width, height, label);
     }
 
+    public Widget(int id, int x, int y, int width, int height) {
+        this(id, x, y, width, height, null);
+    }
+
     public boolean isMouseOver(int mouseX, int mouseY) {
         return mouseX >= xPosition && mouseY >= yPosition && mouseX < xPosition + width && mouseY < yPosition + height;
     }
