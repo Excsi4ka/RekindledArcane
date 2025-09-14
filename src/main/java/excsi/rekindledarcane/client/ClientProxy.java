@@ -6,6 +6,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import excsi.rekindledarcane.RekindledArcane;
 import excsi.rekindledarcane.client.event.ClientEventHandler;
+import excsi.rekindledarcane.client.fx.ParticleBatchRender;
 import excsi.rekindledarcane.common.CommonProxy;
 import excsi.rekindledarcane.common.util.RekindledArcaneConfig;
 import net.minecraft.client.Minecraft;
@@ -24,6 +25,8 @@ public class ClientProxy extends CommonProxy {
 
     public static KeyBinding switchRight = new KeyBinding("arcane.abilityCycleRight", Keyboard.KEY_NONE, RekindledArcane.MODID);
 
+    public static KeyBinding temp = new KeyBinding("arcane.temp", Keyboard.KEY_NONE, RekindledArcane.MODID);
+
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
@@ -32,9 +35,12 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.registerKeyBinding(abilityChooseScreen);
         ClientRegistry.registerKeyBinding(switchLeft);
         ClientRegistry.registerKeyBinding(switchRight);
+        ClientRegistry.registerKeyBinding(temp);
 
         FMLCommonHandler.instance().bus().register(new ClientEventHandler());
         MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
+        FMLCommonHandler.instance().bus().register(ParticleBatchRender.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(ParticleBatchRender.INSTANCE);
     }
 
     @Override

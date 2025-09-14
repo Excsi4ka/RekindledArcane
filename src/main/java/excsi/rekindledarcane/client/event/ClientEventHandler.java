@@ -29,9 +29,12 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public void onKeyPress(InputEvent.KeyInputEvent event) {
-        if (ClientProxy.activateAbilityKey.isPressed()) {
+        if (ClientProxy.temp.isPressed()) {
             //PacketManager.sendToServer(new ClientPacketKeyPress(0));
             Minecraft.getMinecraft().displayGuiScreen(new SkillCategorySelectionScreen());
+        }
+        if(ClientProxy.activateAbilityKey.isPressed()) {
+
         }
         if (ClientProxy.abilityChooseScreen.isPressed()) {
             Minecraft.getMinecraft().displayGuiScreen(new SkillSelectionScreen());
@@ -56,9 +59,9 @@ public class ClientEventHandler {
         Tessellator tes = Tessellator.instance;
         tes.startDrawingQuads();
 
-        //StateRenderHelper.enableBlend();
-        //StateRenderHelper.blendMode(BlendMode.DEFAULT);
-        //GL11.glColor4f(1f,1f,1f,1f);
+        StateRenderHelper.enableBlend();
+        StateRenderHelper.blendMode(BlendMode.DEFAULT);
+        GL11.glColor4f(1f,1f,1f,1f);
         for (int i = 0; i < 5; i++) {
             if(currentlySelected == i) {
                 StateRenderHelper.batchDrawIcon(tes, 4 + 21 * i, y - 1, 22, 22, 0, SkillType.ABILITY.frameIcon);
@@ -67,7 +70,7 @@ public class ClientEventHandler {
             StateRenderHelper.batchDrawIcon(tes, 5 + 21 * i, y, 20, 20, 0, SkillType.PASSIVE.frameIcon);
         }
         tes.draw();
-        //StateRenderHelper.restoreStates();
+        StateRenderHelper.restoreStates();
     }
 
     public static void renderCallback(Entity entity, ModelBiped modelBiped) {
