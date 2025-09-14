@@ -48,6 +48,7 @@ public class SkillSystemCommands extends CommandBase {
     }
 
     @Override
+    @SuppressWarnings("rawtypes")
     public List addTabCompletionOptions(ICommandSender sender, String[] args) {
         switch (args.length) {
             case 1: return getListOfStringsMatchingLastWord(args, "unlockSkill","forgetSkill");

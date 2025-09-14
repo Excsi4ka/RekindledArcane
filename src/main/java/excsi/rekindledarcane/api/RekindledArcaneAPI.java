@@ -17,6 +17,8 @@ public class RekindledArcaneAPI {
 
     public static IAttribute MAX_SUMMONS = new RangedAttribute("rekindledarcane.maxSummons", 0, 0, 10).setShouldWatch(true);
 
+    public static IAttribute SPELL_POWER = new RangedAttribute("rekindledarcane.spellPower", 0, 0, Double.MAX_VALUE).setShouldWatch(true);
+
     private static final HashMap<String, ISkillCategory> skillCategoryMap = new HashMap<>();
 
     public static Logger LOG = LogManager.getLogger("RekindledArcaneAPI");
