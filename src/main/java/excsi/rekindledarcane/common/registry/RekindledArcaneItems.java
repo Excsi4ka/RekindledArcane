@@ -7,7 +7,7 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.util.EnumHelper;
 
-public class ItemRegistry {
+public class RekindledArcaneItems {
 
     public static Item skillPoint;
 

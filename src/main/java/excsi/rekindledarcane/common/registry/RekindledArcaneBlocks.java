@@ -1,4 +1,4 @@
 package excsi.rekindledarcane.common.registry;
 
-public class BlockRegistry {
+public class RekindledArcaneBlocks {
 }

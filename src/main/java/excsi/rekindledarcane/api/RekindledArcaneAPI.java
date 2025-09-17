@@ -41,6 +41,7 @@ public class RekindledArcaneAPI {
     }
 
     public static ISkill getSkillByRegistryName(String name) {
+        if(name.isEmpty()) return null;
         int i = name.indexOf(':');
         ISkillCategory category = skillCategoryMap.get(name.substring(0, i));
         if(category == null) return null;

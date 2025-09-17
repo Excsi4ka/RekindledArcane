@@ -2,6 +2,7 @@ package excsi.rekindledarcane.client.event;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
+import excsi.rekindledarcane.api.skill.IActiveSkillAbility;
 import excsi.rekindledarcane.api.skill.SkillType;
 import excsi.rekindledarcane.client.AssetLib;
 import excsi.rekindledarcane.client.ClientProxy;
@@ -11,7 +12,9 @@ import excsi.rekindledarcane.client.util.BlendMode;
 import excsi.rekindledarcane.client.util.StateRenderHelper;
 import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
-import excsi.rekindledarcane.common.registry.ItemRegistry;
+import excsi.rekindledarcane.common.network.PacketManager;
+import excsi.rekindledarcane.common.network.client.ClientPacketKeyPress;
+import excsi.rekindledarcane.common.registry.RekindledArcaneItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.Tessellator;
@@ -30,20 +33,21 @@ public class ClientEventHandler {
     @SubscribeEvent
     public void onKeyPress(InputEvent.KeyInputEvent event) {
         if (ClientProxy.temp.isPressed()) {
-            //PacketManager.sendToServer(new ClientPacketKeyPress(0));
             Minecraft.getMinecraft().displayGuiScreen(new SkillCategorySelectionScreen());
         }
         if(ClientProxy.activateAbilityKey.isPressed()) {
-
+            PacketManager.sendToServer(new ClientPacketKeyPress(currentlySelected));
         }
         if (ClientProxy.abilityChooseScreen.isPressed()) {
             Minecraft.getMinecraft().displayGuiScreen(new SkillSelectionScreen());
         }
         if(ClientProxy.switchLeft.isPressed()) {
-            currentlySelected = currentlySelected - 1 < 0 ? 4 : currentlySelected - 1;
+            PlayerData data = PlayerDataManager.getPlayerData(Minecraft.getMinecraft().thePlayer);
+            currentlySelected = currentlySelected - 1 < 0 ? data.getActiveSlotCount() - 1 : currentlySelected - 1;
         }
         if(ClientProxy.switchRight.isPressed()) {
-            currentlySelected = currentlySelected + 1 > 4 ? 0 : currentlySelected + 1;
+            PlayerData data = PlayerDataManager.getPlayerData(Minecraft.getMinecraft().thePlayer);
+            currentlySelected = currentlySelected + 1 > data.getActiveSlotCount() - 1 ? 0 : currentlySelected + 1;
         }
     }
 
@@ -62,7 +66,11 @@ public class ClientEventHandler {
         StateRenderHelper.enableBlend();
         StateRenderHelper.blendMode(BlendMode.DEFAULT);
         GL11.glColor4f(1f,1f,1f,1f);
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < data.getActiveSlotCount(); i++) {
+            IActiveSkillAbility ability = data.getEquippedActiveSkills().get(i);
+            if(ability != null) {
+                StateRenderHelper.batchDrawIcon(tes,5 + 21 * i, y, 20, 20, 0, ability.getIcon());
+            }
             if(currentlySelected == i) {
                 StateRenderHelper.batchDrawIcon(tes, 4 + 21 * i, y - 1, 22, 22, 0, SkillType.ABILITY.frameIcon);
                 continue;
@@ -79,7 +87,7 @@ public class ClientEventHandler {
         EntityPlayer player = (EntityPlayer) entity;
         if(player.isUsingItem()) {
             EnumAction action = player.getHeldItem().getItemUseAction();
-            if(action == ItemRegistry.raiseSword) {
+            if(action == RekindledArcaneItems.raiseSword) {
                 float partialTicks = Minecraft.getMinecraft().timer.renderPartialTicks;
                 int time = player.getItemInUseDuration();
                 float raising = Math.min(1f, (time + partialTicks)/ 8f);

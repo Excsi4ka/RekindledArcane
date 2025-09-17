@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -24,11 +25,11 @@ import java.util.Set;
 
 public class PlayerData {
 
-    private int skillPoints, unlockedSkillsCount, unlockedActiveSkillSlots;
+    private int skillPoints, unlockedSkillsCount, slotCount;
 
     private final HashMap<ISkillCategory, Set<ISkill>> unlockedSkills = new HashMap<>();
 
-    private final List<IActiveSkillAbility> activeSkills = new ArrayList<>(1);
+    private final List<IActiveSkillAbility> activeSkills = Arrays.asList(new IActiveSkillAbility[5]);
 
     //-------- For data tracking and updating ---------
     public HashMap<String, AbstractData> trackingData = new HashMap<>();
@@ -41,14 +42,14 @@ public class PlayerData {
     public PlayerData() {
         this.skillPoints = 0;
         this.unlockedSkillsCount = 0;
-        this.unlockedActiveSkillSlots = 1;
+        this.slotCount = 1;
         RekindledArcaneAPI.getAllCategories().forEach(category -> unlockedSkills.put(category, new HashSet<>()));
     }
 
     public void readData(NBTTagCompound compound, EntityPlayer player) {
         skillPoints = compound.getInteger("skillPoints");
         unlockedSkillsCount = compound.getInteger("unlockedSkillsCount");
-        unlockedActiveSkillSlots = compound.getInteger("activeSlotCount");
+        slotCount = compound.getInteger("activeSlotCount");
         unlockedSkills.forEach((category, skills) -> {
             if(compound.hasKey(category.getNameID())) {
                 readSkillsFromNBT(player, category, skills, compound);
@@ -57,18 +58,18 @@ public class PlayerData {
         NBTTagList list = compound.getTagList("equippedSkills", 8); //8 for string
         for (int i = 0; i < list.tagCount(); i++) {
             ISkill skill = RekindledArcaneAPI.getSkillByRegistryName(list.getStringTagAt(i));
-            activeSkills.add((IActiveSkillAbility) skill);
+            activeSkills.set(i, (IActiveSkillAbility) skill);
         }
     }
 
     public void writeData(NBTTagCompound compound, EntityPlayer player) {
         compound.setInteger("skillPoints", skillPoints);
         compound.setInteger("unlockedSkillsCount", unlockedSkillsCount);
-        compound.setInteger("activeSlotCount", unlockedActiveSkillSlots);
+        compound.setInteger("activeSlotCount", slotCount);
         unlockedSkills.forEach((category, skills) -> compound.setTag(category.getNameID(),
                 writeSkillsToNBT(player, compound, skills)));
         NBTTagList list = new NBTTagList();
-        activeSkills.forEach(activeSkill -> list.appendTag(new NBTTagString(activeSkill.getRegistryName())));
+        activeSkills.forEach(activeSkill -> list.appendTag(new NBTTagString(activeSkill != null ? activeSkill.getRegistryName() : "")));
         compound.setTag("equippedSkills", list);
     }
 
@@ -134,6 +135,16 @@ public class PlayerData {
         return activeSkills;
     }
 
+    public List<IActiveSkillAbility> getAllActiveSkills() {
+        List<IActiveSkillAbility> list = new ArrayList<>();
+        unlockedSkills.forEach(((category, iSkills) -> iSkills.forEach(skill -> {
+            if (skill instanceof IActiveSkillAbility) {
+                list.add((IActiveSkillAbility) skill);
+            }
+        })));
+        return list;
+    }
+
     public void trackData(AbstractData data) {
         if(data.sendClientUpdates) {
             trackingData.put(data.registryName, data);
@@ -154,15 +165,15 @@ public class PlayerData {
     }
 
     public void unlockActiveSlot() {
-        unlockedActiveSkillSlots = Math.min(unlockedActiveSkillSlots + 1, 5);
+        slotCount = Math.min(slotCount + 1, 5);
     }
 
     public void lockActiveSlot() {
-        unlockedActiveSkillSlots = Math.max(unlockedActiveSkillSlots - 1, 0);
+        slotCount = Math.max(slotCount - 1, 0);
     }
 
-    public int getActiveSlots() {
-        return unlockedActiveSkillSlots;
+    public int getActiveSlotCount() {
+        return slotCount;
     }
 
     public void tick(EntityPlayer player) {

@@ -8,11 +8,16 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import excsi.rekindledarcane.common.event.RekindledArcaneEvents;
 import excsi.rekindledarcane.common.event.DataEventHandler;
 import excsi.rekindledarcane.common.network.PacketManager;
-import excsi.rekindledarcane.common.registry.ItemRegistry;
+import excsi.rekindledarcane.common.registry.RekindledArcaneEntities;
+import excsi.rekindledarcane.common.registry.RekindledArcaneItems;
 import excsi.rekindledarcane.common.registry.SkillSystemRegistry;
+import excsi.rekindledarcane.common.util.ParticleType;
 import excsi.rekindledarcane.common.util.RekindledArcaneConfig;
 import excsi.rekindledarcane.common.util.commands.SkillSystemCommands;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+
+import java.awt.*;
 
 public class CommonProxy {
 
@@ -20,7 +25,8 @@ public class CommonProxy {
         RekindledArcaneConfig.loadConfig(event.getSuggestedConfigurationFile());
         PacketManager.init();
         SkillSystemRegistry.register();
-        ItemRegistry.register();
+        RekindledArcaneItems.register();
+        RekindledArcaneEntities.register();
 
         MinecraftForge.EVENT_BUS.register(new DataEventHandler());
         FMLCommonHandler.instance().bus().register(new DataEventHandler());
@@ -38,4 +44,11 @@ public class CommonProxy {
     public void serverStarting(FMLServerStartingEvent event) {
         event.registerServerCommand(new SkillSystemCommands());
     }
+
+    public void addEffect(ParticleType type, World world, double x, double y, double z, Color color, float scale, float resizeSpeed, int maxAge) {}
+
+    public void addEffect(ParticleType type, World world, double x, double y, double z, int r, int g, int b, float scale, float resizeSpeed, int maxAge) {}
+
+    public void addEffect(ParticleType type, World world, double x, double y, double z, int r, int g, int b, double dx, double dy, double dz, float scale, float resizeSpeed, int maxAge) {}
+
 }

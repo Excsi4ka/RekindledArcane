@@ -22,6 +22,7 @@ public class RekindledArcaneEvents {
             EntityPlayer player = (EntityPlayer) event.entity;
             player.getAttributeMap().registerAttribute(RekindledArcaneAPI.MAGIC_RESISTANCE);
             player.getAttributeMap().registerAttribute(RekindledArcaneAPI.MAX_SUMMONS);
+            player.getAttributeMap().registerAttribute(RekindledArcaneAPI.SPELL_POWER);
         }
     }
 

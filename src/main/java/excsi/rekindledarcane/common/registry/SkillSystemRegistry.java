@@ -3,10 +3,12 @@ package excsi.rekindledarcane.common.registry;
 import excsi.rekindledarcane.api.RekindledArcaneAPI;
 import excsi.rekindledarcane.api.skill.Point;
 import excsi.rekindledarcane.common.skill.SkillCategory;
+import excsi.rekindledarcane.common.skill.ability.MagicSliceSkill;
 import excsi.rekindledarcane.common.skill.attribute.AttributeOperation;
 import excsi.rekindledarcane.common.skill.attribute.AttributeSkill;
 import excsi.rekindledarcane.common.skill.event.LesserRunicShieldSkill;
 import excsi.rekindledarcane.common.skill.event.TestEventSkill;
+import excsi.rekindledarcane.common.skill.special.UnlockActiveSlotSkill;
 import net.minecraft.entity.SharedMonsterAttributes;
 
 import java.awt.Color;
@@ -60,6 +62,14 @@ public class SkillSystemRegistry {
         skillCategory.registerSkill(new LesserRunicShieldSkill("event2")
                 .setPreRequisite("event1")
                 .setPosition(Point.of(-60, 125)));
+
+        skillCategory.registerSkill(new MagicSliceSkill("slice")
+                .setPreRequisite("event2")
+                .setPosition(Point.of(-100, 125)));
+
+        skillCategory.registerSkill(new UnlockActiveSlotSkill("slot")
+                .setPreRequisite("event2")
+                .setPosition(Point.of(-100, 155)));
 
         skillCategory = new SkillCategory("SORCERY", new Color(50, 0, 134, 152));
         RekindledArcaneAPI.registerSkillCategory(skillCategory.getNameID(), skillCategory);

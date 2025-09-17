@@ -1,5 +1,6 @@
 package excsi.rekindledarcane.client.gui.widgets;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 
 import java.util.ArrayList;
@@ -19,6 +20,11 @@ public abstract class Widget extends GuiButton {
 
     public boolean isMouseOver(int mouseX, int mouseY) {
         return mouseX >= xPosition && mouseY >= yPosition && mouseX < xPosition + width && mouseY < yPosition + height;
+    }
+
+    @Override
+    public void drawButton(Minecraft mc, int mouseX, int mouseY) {
+        super.drawButton(mc, mouseX, mouseY);
     }
 
     public List<String> getDescriptionTooltip() {

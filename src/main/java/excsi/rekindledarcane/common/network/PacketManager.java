@@ -5,12 +5,16 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 import excsi.rekindledarcane.RekindledArcane;
+import excsi.rekindledarcane.common.network.client.ClientPacketEquipSkill;
 import excsi.rekindledarcane.common.network.client.ClientPacketKeyPress;
+import excsi.rekindledarcane.common.network.client.ClientPacketUnEquipSkill;
 import excsi.rekindledarcane.common.network.client.ClientPacketUnlockSkill;
+import excsi.rekindledarcane.common.network.server.ServerPacketEquipSkill;
 import excsi.rekindledarcane.common.network.server.ServerPacketForgetSkill;
 import excsi.rekindledarcane.common.network.server.ServerPacketFullPlayerDataSync;
 import excsi.rekindledarcane.common.network.server.ServerPacketSyncSkillPoints;
 import excsi.rekindledarcane.common.network.server.ServerPacketSyncTrackingData;
+import excsi.rekindledarcane.common.network.server.ServerPacketUnEquipSkill;
 import excsi.rekindledarcane.common.network.server.ServerPacketUnlockSkill;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -23,11 +27,16 @@ public class PacketManager {
         int id = 0;
         WRAPPER.registerMessage(ClientPacketUnlockSkill.class, ClientPacketUnlockSkill.class, id++, Side.SERVER);
         WRAPPER.registerMessage(ClientPacketKeyPress.class, ClientPacketKeyPress.class, id++, Side.SERVER);
+        WRAPPER.registerMessage(ClientPacketEquipSkill.class, ClientPacketEquipSkill.class, id++, Side.SERVER);
+        WRAPPER.registerMessage(ClientPacketUnEquipSkill.class, ClientPacketUnEquipSkill.class, id++, Side.SERVER);
+
         WRAPPER.registerMessage(ServerPacketFullPlayerDataSync.class, ServerPacketFullPlayerDataSync.class, id++, Side.CLIENT);
         WRAPPER.registerMessage(ServerPacketUnlockSkill.class, ServerPacketUnlockSkill.class, id++, Side.CLIENT);
         WRAPPER.registerMessage(ServerPacketForgetSkill.class, ServerPacketForgetSkill.class, id++, Side.CLIENT);
         WRAPPER.registerMessage(ServerPacketSyncTrackingData.class, ServerPacketSyncTrackingData.class, id++, Side.CLIENT);
         WRAPPER.registerMessage(ServerPacketSyncSkillPoints.class, ServerPacketSyncSkillPoints.class, id++, Side.CLIENT);
+        WRAPPER.registerMessage(ServerPacketEquipSkill.class, ServerPacketEquipSkill.class, id++, Side.CLIENT);
+        WRAPPER.registerMessage(ServerPacketUnEquipSkill.class, ServerPacketUnEquipSkill.class, id++, Side.CLIENT);
     }
 
     public static void sendToPlayer(IMessage message, EntityPlayer player) {

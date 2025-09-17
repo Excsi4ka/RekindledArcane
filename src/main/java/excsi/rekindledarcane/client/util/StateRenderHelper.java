@@ -37,6 +37,15 @@ public class StateRenderHelper {
         GL11.glBlendFunc(mode.sFactor, mode.dFactor);
     }
 
+    public static void scissorStart(int x, int y, int width, int height, int scaleFactor) {
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
+        GL11.glScissor(x * scaleFactor, y * scaleFactor, width * scaleFactor, height * scaleFactor); //up<->down
+    }
+
+    public static void scissorEnd() {
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
+    }
+
     public static void drawFullSizeTexturedRectangle(int x, int y, int width, int height, float zOffset) {
         Tessellator tes = Tessellator.instance;
         tes.startDrawingQuads();
