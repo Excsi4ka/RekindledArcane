@@ -34,7 +34,7 @@ public class MagicSliceSkill extends CastableAbilitySkill<CooldownData> {
 //        AoeEntity entity = new AoeEntity(player.worldObj, new Color(50, 241, 0, 218).getRGB(), player);
 //        entity.setPosition(player.posX, player.posY, player.posZ);
 //        player.worldObj.spawnEntityInWorld(entity);
-        getSkillData(player).setSkillCooldown(200);
+        getSkillData(player).setSkillCooldown(100);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class MagicSliceSkill extends CastableAbilitySkill<CooldownData> {
         Vec3 vector = player.getLookVec().normalize();
         MathUtil.scale(vector, 1f);
         player.worldObj.spawnEntityInWorld(new MagicSliceProjectile(player.worldObj, player, 500)
-                .setCoordinates(player.posX, player.posY + 2.5, player.posZ)
+                .setCoordinates(player.posX, player.posY + 1.5, player.posZ)
                 .launch(vector.xCoord, vector.yCoord, vector.zCoord));
     }
 
@@ -65,11 +65,15 @@ public class MagicSliceSkill extends CastableAbilitySkill<CooldownData> {
 
     @Override
     public ISkillCastAnimation getAnimation() {
-        return (player, modelBiped, partialTicks) -> {
-            modelBiped.bipedRightArm.rotateAngleZ = MathHelper.sin((player.ticksExisted + partialTicks) * 0.65f) * 0.33f;
-            modelBiped.bipedRightArm.rotateAngleX = 3.75f;
-            modelBiped.bipedLeftArm.rotateAngleZ = -MathHelper.sin((player.ticksExisted + partialTicks) * 0.65f) * 0.33f;
-            modelBiped.bipedLeftArm.rotateAngleX = 3.75f;
+        return (player, modelBiped, timeElapsed, partialTicks) -> {
+            //modelBiped.bipedRightArm.rotateAngleY = MathHelper.sin((player.ticksExisted + partialTicks) * 0.65f) * 0.33f;
+            //modelBiped.bipedRightArm.rotateAngleZ = -MathHelper.sin((player.ticksExisted + partialTicks) * 0.65f) * 0.33f;
+            float move = -(timeElapsed + partialTicks) * 0.35f;
+            modelBiped.bipedRightArm.rotateAngleZ = Math.max(move, -5);
+            modelBiped.bipedLeftArm.rotateAngleZ = Math.max(move, 5);
+//            modelBiped.bipedLeftArm.rotateAngleY = -MathHelper.sin((player.ticksExisted + partialTicks) * 0.65f) * 0.33f;
+//            modelBiped.bipedLeftArm.rotateAngleZ = -MathHelper.sin((player.ticksExisted + partialTicks) * 0.65f) * 0.33f;
+//            modelBiped.bipedLeftArm.rotateAngleX = 3f;
         };
     }
 }

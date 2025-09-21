@@ -64,7 +64,8 @@ public class ClientSkillCastingManager {
 
         ICastableAbility handler = ClientSkillCastingManager.INSTANCE.playerAbilityMap.get(player.getUniqueID());
         float partialTicks = Minecraft.getMinecraft().timer.renderPartialTicks;
-        handler.getAnimation().animateModel(player, modelBiped, partialTicks);
+        int time = ClientSkillCastingManager.INSTANCE.playerCastTimeMap.get(uuid);
+        handler.getAnimation().animateModel(player, modelBiped, handler.getCastingTickAmount() - time, partialTicks);
     }
 
     public void clearPlayer(EntityPlayer player) {
