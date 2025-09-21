@@ -7,7 +7,7 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import excsi.rekindledarcane.api.RekindledArcaneAPI;
-import excsi.rekindledarcane.api.skill.IActiveSkillAbility;
+import excsi.rekindledarcane.api.skill.IActiveAbilitySkill;
 import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
 import excsi.rekindledarcane.client.gui.SkillSelectionScreen;
@@ -25,7 +25,7 @@ public class ServerPacketEquipSkill implements IMessage, IMessageHandler<ServerP
 
     public ServerPacketEquipSkill() {}
 
-    public ServerPacketEquipSkill(IActiveSkillAbility skillAbility, int slot) {
+    public ServerPacketEquipSkill(IActiveAbilitySkill skillAbility, int slot) {
         this.categoryID = skillAbility.getSkillCategory().getNameID();
         this.skillID = skillAbility.getNameID();
         this.slot = slot;
@@ -55,10 +55,10 @@ public class ServerPacketEquipSkill implements IMessage, IMessageHandler<ServerP
             if (category == null)
                 return null;
             ISkill skill = category.getSkillFromID(message.skillID);
-            if (!(skill instanceof IActiveSkillAbility))
+            if (!(skill instanceof IActiveAbilitySkill))
                 return null;
             if (message.slot < data.getActiveSlotCount()) {
-                IActiveSkillAbility ability = (IActiveSkillAbility) skill;
+                IActiveAbilitySkill ability = (IActiveAbilitySkill) skill;
                 data.getEquippedActiveSkills().set(message.slot, ability);
                 if (Minecraft.getMinecraft().currentScreen instanceof SkillSelectionScreen) {
                     SkillSelectionScreen screen = (SkillSelectionScreen) Minecraft.getMinecraft().currentScreen;

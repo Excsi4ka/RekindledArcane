@@ -1,7 +1,11 @@
 package excsi.rekindledarcane.common.event;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.relauncher.Side;
 import excsi.rekindledarcane.api.RekindledArcaneAPI;
+import excsi.rekindledarcane.api.event.ChangeHeldItemEvent;
+import excsi.rekindledarcane.common.skill.ServerSkillCastingManager;
 import excsi.rekindledarcane.common.skill.attribute.PersistentAttributeModifier;
 import excsi.rekindledarcane.common.util.RekindledArcaneConfig;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -35,6 +39,11 @@ public class RekindledArcaneEvents {
     }
 
     @SubscribeEvent
+    public void onItemChange(ChangeHeldItemEvent event) {
+        System.out.println(event.equippedStack);
+    }
+
+    @SubscribeEvent
     public void onLivingHurt(LivingHurtEvent event) {
         if (event.entityLiving instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.entityLiving;
@@ -44,6 +53,15 @@ public class RekindledArcaneEvents {
                 return;
             event.ammount *= 1 - value / 100;
         }
+    }
+
+    @SubscribeEvent
+    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if(event.side == Side.CLIENT)
+            return;
+        if(event.phase == TickEvent.Phase.START)
+            return;
+        ServerSkillCastingManager.INSTANCE.tick(event.player);
     }
 
     //reapply persistent attribute modifiers on respawn

@@ -6,6 +6,7 @@ import net.minecraft.world.World;
 
 import java.awt.*;
 
+//todo get rid of entityFX entirely and make a standalone basic class for particles
 public class BatchedEntityFX extends EntityFX {
 
     public float resizeRate = 1f;

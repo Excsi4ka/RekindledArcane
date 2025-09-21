@@ -26,7 +26,7 @@ public class ParticleBatchRender {
 
     public void addEffect(ParticleType type, BatchedEntityFX fx) {
         Queue<BatchedEntityFX> queue = queuedEffects.get(type);
-        if(queue.size() >= 2000) {
+        if(queue.size() >= 4000) {
             queue.poll();
         }
         queue.add(fx);

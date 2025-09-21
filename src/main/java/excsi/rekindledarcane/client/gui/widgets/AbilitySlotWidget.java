@@ -1,17 +1,17 @@
 package excsi.rekindledarcane.client.gui.widgets;
 
-import excsi.rekindledarcane.api.skill.IActiveSkillAbility;
+import excsi.rekindledarcane.api.skill.IActiveAbilitySkill;
 import excsi.rekindledarcane.client.util.StateRenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 
 public class AbilitySlotWidget extends Widget {
 
-    public IActiveSkillAbility ability;
+    public IActiveAbilitySkill ability;
 
     private boolean dragging;
 
-    public AbilitySlotWidget(int id, int x, int y, int width, int height, IActiveSkillAbility ability) {
+    public AbilitySlotWidget(int id, int x, int y, int width, int height, IActiveAbilitySkill ability) {
         super(id, x, y, width, height);
         this.ability = ability;
         this.dragging = false;

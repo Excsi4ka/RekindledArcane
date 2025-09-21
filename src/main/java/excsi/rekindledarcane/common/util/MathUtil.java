@@ -17,7 +17,7 @@ public class MathUtil {
         return start + pct * (end - start);
     }
 
-    public static AxisAlignedBB createAABB(Entity e, int radius){
+    public static AxisAlignedBB createAABB(Entity e, int radius) {
         return AxisAlignedBB.getBoundingBox(e.posX - radius,e.posY - radius,e.posZ - radius,
                 e.posX + radius,e.posY + radius,e.posZ + radius);
     }

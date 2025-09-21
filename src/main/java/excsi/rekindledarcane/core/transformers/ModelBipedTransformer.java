@@ -26,9 +26,9 @@ public class ModelBipedTransformer extends SubTransformer {
         MethodNode mn = AsmHelper.getMethodNodeByName(node, "setRotationAngles", "func_78087_a");
         AbstractInsnNode abstractInsnNode = AsmHelper.getFirstMatchingOpcode(mn, Opcodes.RETURN);
         mn.instructions.insertBefore(abstractInsnNode, new VarInsnNode(Opcodes.ALOAD, 7)); //entity
-        mn.instructions.insertBefore(abstractInsnNode, new VarInsnNode(Opcodes.ALOAD, 0)); //this
+        mn.instructions.insertBefore(abstractInsnNode, new VarInsnNode(Opcodes.ALOAD, 0));
         mn.instructions.insertBefore(abstractInsnNode, new MethodInsnNode(Opcodes.INVOKESTATIC,
-                "excsi/rekindledarcane/client/event/ClientEventHandler",
+                "excsi/rekindledarcane/client/util/ClientSkillCastingManager",
                 "renderCallback",
                 "(Lnet/minecraft/entity/Entity;Lnet/minecraft/client/model/ModelBiped;)V",
                 false));

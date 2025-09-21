@@ -4,14 +4,16 @@ import excsi.rekindledarcane.common.data.ITickable;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class CooldownData extends AbstractData implements ITickable {
+public class ToggleAndCooldownData extends AbstractData implements ITickable {
 
     private int skillCooldown;
 
     private final int updateFrequency;
 
-    public CooldownData(String regName, int updateFrequency, boolean needsClientUpdates) {
-        super(regName, needsClientUpdates);
+    private boolean toggled = false;
+
+    public ToggleAndCooldownData(String regName, int updateFrequency) {
+        super(regName, true);
         this.skillCooldown = 0;
         this.updateFrequency = updateFrequency;
     }
@@ -23,6 +25,15 @@ public class CooldownData extends AbstractData implements ITickable {
     public void setSkillCooldown(int skillCooldown) {
         markChanged();
         this.skillCooldown = skillCooldown;
+    }
+
+    public boolean isToggled() {
+        return toggled;
+    }
+
+    public void setToggled(boolean toggled) {
+        markChanged();
+        this.toggled = toggled;
     }
 
     @Override
@@ -38,11 +49,13 @@ public class CooldownData extends AbstractData implements ITickable {
     @Override
     public void writeToBuffer(ByteBuf buf) {
         buf.writeInt(skillCooldown);
+        buf.writeBoolean(toggled);
     }
 
     @Override
     public void readFromBuffer(ByteBuf buf) {
         skillCooldown = buf.readInt();
+        toggled = buf.readBoolean();
     }
 
     @Override

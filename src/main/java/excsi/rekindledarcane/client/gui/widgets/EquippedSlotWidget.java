@@ -1,6 +1,6 @@
 package excsi.rekindledarcane.client.gui.widgets;
 
-import excsi.rekindledarcane.api.skill.IActiveSkillAbility;
+import excsi.rekindledarcane.api.skill.IActiveAbilitySkill;
 import excsi.rekindledarcane.client.util.StateRenderHelper;
 import excsi.rekindledarcane.common.network.PacketManager;
 import excsi.rekindledarcane.common.network.client.ClientPacketEquipSkill;
@@ -10,11 +10,11 @@ import net.minecraft.client.renderer.Tessellator;
 
 public class EquippedSlotWidget extends Widget {
 
-    public IActiveSkillAbility ability;
+    public IActiveAbilitySkill ability;
 
     public boolean locked;
 
-    public EquippedSlotWidget(int id, int x, int y, int width, int height, IActiveSkillAbility ability, boolean locked) {
+    public EquippedSlotWidget(int id, int x, int y, int width, int height, IActiveAbilitySkill ability, boolean locked) {
         super(id, x, y, width, height);
         this.ability = ability;
         this.locked = locked;
@@ -27,7 +27,7 @@ public class EquippedSlotWidget extends Widget {
         }
     }
 
-    public void onEquip(IActiveSkillAbility ability) {
+    public void onEquip(IActiveAbilitySkill ability) {
         PacketManager.sendToServer(new ClientPacketEquipSkill(ability, id));
     }
 

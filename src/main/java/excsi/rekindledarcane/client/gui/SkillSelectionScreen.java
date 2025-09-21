@@ -1,6 +1,6 @@
 package excsi.rekindledarcane.client.gui;
 
-import excsi.rekindledarcane.api.skill.IActiveSkillAbility;
+import excsi.rekindledarcane.api.skill.IActiveAbilitySkill;
 import excsi.rekindledarcane.client.AssetLib;
 import excsi.rekindledarcane.client.gui.widgets.AbilitySlotWidget;
 import excsi.rekindledarcane.client.gui.widgets.EquippedSlotWidget;
@@ -69,9 +69,9 @@ public class SkillSelectionScreen extends GuiScreen {
         int y = height / 2 - 68;
         int x = width / 2 + 10;
         int id = 0, row = 0, column = 0;
-        List<IActiveSkillAbility> skills = playerData.getAllActiveSkills();
+        List<IActiveAbilitySkill> skills = playerData.getAllActiveSkills();
         skills.removeAll(playerData.getEquippedActiveSkills());
-        for (IActiveSkillAbility ability : skills) {
+        for (IActiveAbilitySkill ability : skills) {
             skillPoolButtons.add(new AbilitySlotWidget(id++, x + column++ * 27, y + 28 * row, 24, 24, ability));
             if(column == 3) {
                 column = 0;
@@ -82,7 +82,7 @@ public class SkillSelectionScreen extends GuiScreen {
         x = width / 2 - 82;
         for (int i = 0; i < 5; i++) {
             boolean unlocked = i < playerData.getActiveSlotCount();
-            IActiveSkillAbility ability = playerData.getEquippedActiveSkills().get(i);
+            IActiveAbilitySkill ability = playerData.getEquippedActiveSkills().get(i);
             equippedSkillsButtons.add(new EquippedSlotWidget(i, x, y + 31 * i, 22, 22, ability, !unlocked));
         }
     }

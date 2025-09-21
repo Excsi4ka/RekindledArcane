@@ -17,8 +17,6 @@ public abstract class AbstractData {
         this.sendClientUpdates = sendClientUpdates;
     }
 
-    public abstract boolean readyToSync();
-
     public abstract void writeToNBT(NBTTagCompound compound);
 
     public abstract void readFromNBT(NBTTagCompound compound);
@@ -29,8 +27,6 @@ public abstract class AbstractData {
 
     public void markChanged() {
         if(!sendClientUpdates)
-            return;
-        if(!readyToSync())
             return;
         playerData.queueDataToSync(this);
     }

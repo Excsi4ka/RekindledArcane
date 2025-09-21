@@ -9,12 +9,16 @@ import excsi.rekindledarcane.RekindledArcane;
 import excsi.rekindledarcane.client.event.ClientEventHandler;
 import excsi.rekindledarcane.client.fx.BatchedEntityFX;
 import excsi.rekindledarcane.client.fx.ParticleBatchRender;
+import excsi.rekindledarcane.client.renderer.AoeEntityRenderer;
 import excsi.rekindledarcane.client.renderer.EmptyRenderer;
 import excsi.rekindledarcane.common.CommonProxy;
-import excsi.rekindledarcane.common.entity.projectiles.MagicSliceProjectile;
+import excsi.rekindledarcane.common.entity.projectile.MagicSliceProjectile;
+import excsi.rekindledarcane.common.entity.projectile.TracedArrowProjectile;
+import excsi.rekindledarcane.common.entity.util.AoeEntity;
 import excsi.rekindledarcane.common.util.ParticleType;
 import excsi.rekindledarcane.common.util.RekindledArcaneConfig;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.RenderArrow;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.world.World;
@@ -51,6 +55,8 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(ParticleBatchRender.INSTANCE);
 
         RenderingRegistry.registerEntityRenderingHandler(MagicSliceProjectile.class, new EmptyRenderer());
+        RenderingRegistry.registerEntityRenderingHandler(TracedArrowProjectile.class, new RenderArrow());
+        RenderingRegistry.registerEntityRenderingHandler(AoeEntity.class, new AoeEntityRenderer());
     }
 
     @Override

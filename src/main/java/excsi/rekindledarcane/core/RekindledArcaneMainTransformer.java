@@ -2,6 +2,7 @@ package excsi.rekindledarcane.core;
 
 import excsi.rekindledarcane.core.transformers.ApplyPotionEventTransformer;
 import excsi.rekindledarcane.core.transformers.ModelBipedTransformer;
+import excsi.rekindledarcane.core.transformers.NetHandlerServerTransformer;
 import excsi.rekindledarcane.core.transformers.ThaumcraftTransformer;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
@@ -22,6 +23,7 @@ public class RekindledArcaneMainTransformer implements IClassTransformer {
         register(new ThaumcraftTransformer());
         register(new ApplyPotionEventTransformer());
         register(new ModelBipedTransformer());
+        register(new NetHandlerServerTransformer());
     }
 
     @Override

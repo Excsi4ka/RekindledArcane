@@ -1,4 +1,4 @@
-package excsi.rekindledarcane.common.data.player;
+package excsi.rekindledarcane.common.data;
 
 public interface ITickable {
 

@@ -6,7 +6,7 @@ import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import excsi.rekindledarcane.api.RekindledArcaneAPI;
-import excsi.rekindledarcane.api.skill.IActiveSkillAbility;
+import excsi.rekindledarcane.api.skill.IActiveAbilitySkill;
 import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
 import excsi.rekindledarcane.common.data.player.PlayerData;
@@ -24,7 +24,7 @@ public class ClientPacketEquipSkill implements IMessage, IMessageHandler<ClientP
 
     public ClientPacketEquipSkill() {}
 
-    public ClientPacketEquipSkill(IActiveSkillAbility skillAbility, int slot) {
+    public ClientPacketEquipSkill(IActiveAbilitySkill skillAbility, int slot) {
         this.categoryID = skillAbility.getSkillCategory().getNameID();
         this.skillID = skillAbility.getNameID();
         this.slot = slot;
@@ -55,10 +55,10 @@ public class ClientPacketEquipSkill implements IMessage, IMessageHandler<ClientP
             ISkill skill = category.getSkillFromID(message.skillID);
             if (!data.hasSkill(skill))
                 return null;
-            if (!(skill instanceof IActiveSkillAbility))
+            if (!(skill instanceof IActiveAbilitySkill))
                 return null;
             if (message.slot < data.getActiveSlotCount()) {
-                IActiveSkillAbility ability = (IActiveSkillAbility) skill;
+                IActiveAbilitySkill ability = (IActiveAbilitySkill) skill;
                 data.getEquippedActiveSkills().set(message.slot, ability);
                 PacketManager.sendToPlayer(new ServerPacketEquipSkill(ability, message.slot), player);
             }

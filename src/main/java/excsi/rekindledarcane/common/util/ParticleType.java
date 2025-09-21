@@ -18,7 +18,19 @@ public enum ParticleType {
                 StateRenderHelper.restoreStates();
                 GL11.glDepthMask(true);
                 GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
-            });
+            }),
+    AOE_CIRCLE(new ResourceLocation("rekindledarcane", "textures/particles/orbfx.png"),
+            () -> {
+                StateRenderHelper.enableBlend();
+                StateRenderHelper.blendMode(BlendMode.ADDITIVE);
+                GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+                GL11.glDepthMask(false);
+                GL11.glAlphaFunc(GL11.GL_GREATER, 0.003921569F);
+            }, () -> {
+                StateRenderHelper.restoreStates();
+                GL11.glDepthMask(true);
+                GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+        });
 
     private final ResourceLocation texture;
 

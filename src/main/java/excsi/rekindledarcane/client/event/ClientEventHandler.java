@@ -2,25 +2,23 @@ package excsi.rekindledarcane.client.event;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
-import excsi.rekindledarcane.api.skill.IActiveSkillAbility;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.relauncher.Side;
+import excsi.rekindledarcane.api.skill.IActiveAbilitySkill;
 import excsi.rekindledarcane.api.skill.SkillType;
 import excsi.rekindledarcane.client.AssetLib;
 import excsi.rekindledarcane.client.ClientProxy;
 import excsi.rekindledarcane.client.gui.SkillCategorySelectionScreen;
 import excsi.rekindledarcane.client.gui.SkillSelectionScreen;
 import excsi.rekindledarcane.client.util.BlendMode;
+import excsi.rekindledarcane.client.util.ClientSkillCastingManager;
 import excsi.rekindledarcane.client.util.StateRenderHelper;
 import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
 import excsi.rekindledarcane.common.network.PacketManager;
-import excsi.rekindledarcane.common.network.client.ClientPacketKeyPress;
-import excsi.rekindledarcane.common.registry.RekindledArcaneItems;
+import excsi.rekindledarcane.common.network.client.ClientPacketActivateAbility;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumAction;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -36,7 +34,7 @@ public class ClientEventHandler {
             Minecraft.getMinecraft().displayGuiScreen(new SkillCategorySelectionScreen());
         }
         if(ClientProxy.activateAbilityKey.isPressed()) {
-            PacketManager.sendToServer(new ClientPacketKeyPress(currentlySelected));
+            PacketManager.sendToServer(new ClientPacketActivateAbility(currentlySelected));
         }
         if (ClientProxy.abilityChooseScreen.isPressed()) {
             Minecraft.getMinecraft().displayGuiScreen(new SkillSelectionScreen());
@@ -67,7 +65,7 @@ public class ClientEventHandler {
         StateRenderHelper.blendMode(BlendMode.DEFAULT);
         GL11.glColor4f(1f,1f,1f,1f);
         for (int i = 0; i < data.getActiveSlotCount(); i++) {
-            IActiveSkillAbility ability = data.getEquippedActiveSkills().get(i);
+            IActiveAbilitySkill ability = data.getEquippedActiveSkills().get(i);
             if(ability != null) {
                 StateRenderHelper.batchDrawIcon(tes,5 + 21 * i, y, 20, 20, 0, ability.getIcon());
             }
@@ -81,22 +79,13 @@ public class ClientEventHandler {
         StateRenderHelper.restoreStates();
     }
 
-    public static void renderCallback(Entity entity, ModelBiped modelBiped) {
-        if(!(entity instanceof EntityPlayer))
+    @SubscribeEvent
+    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if(event.phase == TickEvent.Phase.START)
             return;
-        EntityPlayer player = (EntityPlayer) entity;
-        if(player.isUsingItem()) {
-            EnumAction action = player.getHeldItem().getItemUseAction();
-            if(action == RekindledArcaneItems.raiseSword) {
-                float partialTicks = Minecraft.getMinecraft().timer.renderPartialTicks;
-                int time = player.getItemInUseDuration();
-                float raising = Math.min(1f, (time + partialTicks)/ 8f);
-                modelBiped.bipedRightArm.rotateAngleX = -1.75f * raising ;
-                modelBiped.bipedRightArm.rotateAngleY = -0.5f * raising;
-                modelBiped.bipedLeftArm.rotateAngleX = -1.75f * raising;
-                modelBiped.bipedLeftArm.rotateAngleY = 0.5f * raising;
-            }
-        }
+        if(event.side == Side.SERVER)
+            return;
+        ClientSkillCastingManager.INSTANCE.tick(event.player);
     }
 
     @SubscribeEvent

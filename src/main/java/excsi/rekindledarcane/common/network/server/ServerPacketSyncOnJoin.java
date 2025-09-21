@@ -6,6 +6,7 @@ import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import excsi.rekindledarcane.client.util.ClientSkillCastingManager;
 import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
 import io.netty.buffer.ByteBuf;
@@ -13,13 +14,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class ServerPacketFullPlayerDataSync implements IMessage, IMessageHandler<ServerPacketFullPlayerDataSync,IMessage> {
+public class ServerPacketSyncOnJoin implements IMessage, IMessageHandler<ServerPacketSyncOnJoin,IMessage> {
 
     public NBTTagCompound data;
 
-    public ServerPacketFullPlayerDataSync() {}
+    public ServerPacketSyncOnJoin() {}
 
-    public ServerPacketFullPlayerDataSync(NBTTagCompound data) {
+    public ServerPacketSyncOnJoin(NBTTagCompound data) {
         this.data = data;
     }
 
@@ -35,11 +36,12 @@ public class ServerPacketFullPlayerDataSync implements IMessage, IMessageHandler
 
     @Override
     @SideOnly(Side.CLIENT)
-    public IMessage onMessage(ServerPacketFullPlayerDataSync message, MessageContext ctx) {
+    public IMessage onMessage(ServerPacketSyncOnJoin message, MessageContext ctx) {
         if (ctx.side == Side.CLIENT) {
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             PlayerData playerData = PlayerDataManager.setPlayerDataDefault(player);
             playerData.readData(message.data, player);
+            ClientSkillCastingManager.INSTANCE.clearPlayer(player);
         }
         return null;
     }

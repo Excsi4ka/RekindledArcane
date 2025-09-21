@@ -7,7 +7,8 @@ import excsi.rekindledarcane.RekindledArcane;
 import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
 import excsi.rekindledarcane.common.network.PacketManager;
-import excsi.rekindledarcane.common.network.server.ServerPacketFullPlayerDataSync;
+import excsi.rekindledarcane.common.network.server.ServerPacketSyncOnJoin;
+import excsi.rekindledarcane.common.skill.ServerSkillCastingManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -77,7 +78,8 @@ public class DataEventHandler {
         EntityPlayer player = event.player;
         NBTTagCompound data = new NBTTagCompound();
         PlayerDataManager.getPlayerData(player).writeData(data, player);
-        ServerPacketFullPlayerDataSync packet = new ServerPacketFullPlayerDataSync(data);
+        ServerPacketSyncOnJoin packet = new ServerPacketSyncOnJoin(data);
         PacketManager.sendToPlayer(packet, player);
+        ServerSkillCastingManager.INSTANCE.clearPlayer(player);
     }
 }

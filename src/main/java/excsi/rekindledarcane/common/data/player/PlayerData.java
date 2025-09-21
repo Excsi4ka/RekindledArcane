@@ -1,10 +1,11 @@
 package excsi.rekindledarcane.common.data.player;
 
 import excsi.rekindledarcane.api.RekindledArcaneAPI;
-import excsi.rekindledarcane.api.skill.IActiveSkillAbility;
+import excsi.rekindledarcane.api.skill.IActiveAbilitySkill;
 import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
 import excsi.rekindledarcane.api.skill.ISkillDataHandler;
+import excsi.rekindledarcane.common.data.ITickable;
 import excsi.rekindledarcane.common.data.skill.AbstractData;
 import excsi.rekindledarcane.common.network.PacketManager;
 import excsi.rekindledarcane.common.network.server.ServerPacketForgetSkill;
@@ -29,7 +30,7 @@ public class PlayerData {
 
     private final HashMap<ISkillCategory, Set<ISkill>> unlockedSkills = new HashMap<>();
 
-    private final List<IActiveSkillAbility> activeSkills = Arrays.asList(new IActiveSkillAbility[5]);
+    private final List<IActiveAbilitySkill> activeSkills = Arrays.asList(new IActiveAbilitySkill[5]);
 
     //-------- For data tracking and updating ---------
     public HashMap<String, AbstractData> trackingData = new HashMap<>();
@@ -58,7 +59,7 @@ public class PlayerData {
         NBTTagList list = compound.getTagList("equippedSkills", 8); //8 for string
         for (int i = 0; i < list.tagCount(); i++) {
             ISkill skill = RekindledArcaneAPI.getSkillByRegistryName(list.getStringTagAt(i));
-            activeSkills.set(i, (IActiveSkillAbility) skill);
+            activeSkills.set(i, (IActiveAbilitySkill) skill);
         }
     }
 
@@ -131,15 +132,15 @@ public class PlayerData {
         return skillPoints >= skill.getSkillPointCost();
     }
 
-    public List<IActiveSkillAbility> getEquippedActiveSkills() {
+    public List<IActiveAbilitySkill> getEquippedActiveSkills() {
         return activeSkills;
     }
 
-    public List<IActiveSkillAbility> getAllActiveSkills() {
-        List<IActiveSkillAbility> list = new ArrayList<>();
+    public List<IActiveAbilitySkill> getAllActiveSkills() {
+        List<IActiveAbilitySkill> list = new ArrayList<>();
         unlockedSkills.forEach(((category, iSkills) -> iSkills.forEach(skill -> {
-            if (skill instanceof IActiveSkillAbility) {
-                list.add((IActiveSkillAbility) skill);
+            if (skill instanceof IActiveAbilitySkill) {
+                list.add((IActiveAbilitySkill) skill);
             }
         })));
         return list;
