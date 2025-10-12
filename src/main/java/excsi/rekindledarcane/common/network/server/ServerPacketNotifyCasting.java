@@ -59,7 +59,7 @@ public class ServerPacketNotifyCasting implements IMessage, IMessageHandler<Serv
             if (!(skill instanceof ICastableAbility))
                 return null;
             ICastableAbility ability = (ICastableAbility) skill;
-            ClientSkillCastingManager.INSTANCE.addCastingPlayer(clientPlayer, ability);
+            ClientSkillCastingManager.INSTANCE.startCasting(clientPlayer, ability);
         }
         return null;
     }

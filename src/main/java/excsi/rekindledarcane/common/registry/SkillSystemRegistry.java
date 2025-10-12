@@ -3,9 +3,13 @@ package excsi.rekindledarcane.common.registry;
 import excsi.rekindledarcane.api.RekindledArcaneAPI;
 import excsi.rekindledarcane.api.skill.Point;
 import excsi.rekindledarcane.common.skill.SkillCategory;
-import excsi.rekindledarcane.common.skill.ability.MagicSliceSkill;
+import excsi.rekindledarcane.common.skill.ability.AutoStrikeSkill;
+import excsi.rekindledarcane.common.skill.ability.BattleCallSkill;
+import excsi.rekindledarcane.common.skill.ability.HookChainSkill;
+import excsi.rekindledarcane.common.skill.ability.MagicSlice;
 import excsi.rekindledarcane.common.skill.attribute.AttributeOperation;
 import excsi.rekindledarcane.common.skill.attribute.AttributeSkill;
+import excsi.rekindledarcane.common.skill.event.FortitudeSkill;
 import excsi.rekindledarcane.common.skill.event.LesserRunicShieldSkill;
 import excsi.rekindledarcane.common.skill.event.TestEventSkill;
 import excsi.rekindledarcane.common.skill.special.UnlockActiveSlotSkill;
@@ -63,13 +67,34 @@ public class SkillSystemRegistry {
                 .setPreRequisite("event1")
                 .setPosition(Point.of(-60, 125)));
 
-        skillCategory.registerSkill(new MagicSliceSkill("slice")
+        skillCategory.registerSkill(new MagicSlice("slice")
                 .setPreRequisite("event2")
                 .setPosition(Point.of(-100, 125)));
 
         skillCategory.registerSkill(new UnlockActiveSlotSkill("slot")
                 .setPreRequisite("event2")
                 .setPosition(Point.of(-100, 155)));
+
+        skillCategory.registerSkill(new BattleCallSkill("battleCry", 3)
+                .setPreRequisite("event2")
+                .setPosition(Point.of(-100, 185)));
+
+        skillCategory.registerSkill(new AutoStrikeSkill("autoStrike")
+                .setPreRequisite("battleCry")
+                .setPosition(Point.of(-150, 185)));
+
+        skillCategory.registerSkill(new AttributeSkill("magic4")
+                .addSkillAttribute(RekindledArcaneAPI.REACH_DISTANCE, AttributeOperation.ADDITIVE, 5)
+                .setPreRequisite("event2")
+                .setPosition(Point.of(-100, 210)));
+
+        skillCategory.registerSkill(new FortitudeSkill("magic5")
+                .setPreRequisite("event2")
+                .setPosition(Point.of(-100, 250)));
+
+        skillCategory.registerSkill(new HookChainSkill("hook")
+                .setPreRequisite("event2")
+                .setPosition(Point.of(-70, 170)));
 
         skillCategory = new SkillCategory("SORCERY", new Color(50, 0, 134, 152));
         RekindledArcaneAPI.registerSkillCategory(skillCategory.getNameID(), skillCategory);
@@ -83,5 +108,4 @@ public class SkillSystemRegistry {
         skillCategory = new SkillCategory("CRAFTSMANSHIP", new Color(136, 0, 0, 152));
         RekindledArcaneAPI.registerSkillCategory(skillCategory.getNameID(), skillCategory);
     }
-
 }

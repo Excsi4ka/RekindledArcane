@@ -1,6 +1,7 @@
 #attributes
 attribute.name.rekindledarcane.magicResistance=Magic Resistance
 attribute.name.rekindledarcane.maxSummons=Max Summons
+attribute.name.rekindledarcane.reachDistance=Reach Distance
 
 rekindledarcane.skill.strength=Strength I
 rekindledarcane.skill.strength2=Strength II

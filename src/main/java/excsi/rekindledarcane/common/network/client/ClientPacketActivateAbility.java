@@ -51,16 +51,12 @@ public class ClientPacketActivateAbility implements IMessage, IMessageHandler<Cl
             if (!ability.canUse(player))
                 return null;
 
+            if (ServerSkillCastingManager.INSTANCE.alreadyCasting(player))
+                return null;
+
             if (ability instanceof ICastableAbility) {
                 ICastableAbility castableAbility = (ICastableAbility) ability;
-
-                if(ServerSkillCastingManager.INSTANCE.alreadyCasting(player))
-                    return null;
-
-                ServerSkillCastingManager.INSTANCE.addCastingPlayer(player, castableAbility);
-
-                if (!(player.worldObj instanceof WorldServer))
-                    return null;
+                ServerSkillCastingManager.INSTANCE.startCasting(player, castableAbility);
 
                 WorldServer worldServer = (WorldServer) player.worldObj;
                 EntityTracker tracker = worldServer.getEntityTracker();
@@ -73,7 +69,7 @@ public class ClientPacketActivateAbility implements IMessage, IMessageHandler<Cl
                 PacketManager.sendToPlayer(new ServerPacketNotifyCasting(ability.getSkillCategory().getNameID(),
                         ability.getNameID(), player.getEntityId()), player);
             } else {
-                ability.activateAbility(player);
+                ability.resolveSkillCast(player);
             }
         }
         return null;

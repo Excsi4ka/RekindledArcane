@@ -7,9 +7,9 @@ import excsi.rekindledarcane.common.skill.AbstractSkillWithData;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 
-public abstract class InstantAbilitySkill<DATA extends AbstractData> extends AbstractSkillWithData<DATA> implements IActiveAbilitySkill {
+public abstract class InstantAbilitySkillBase<DATA extends AbstractData> extends AbstractSkillWithData<DATA> implements IActiveAbilitySkill {
 
-    public InstantAbilitySkill(String nameID) {
+    public InstantAbilitySkillBase(String nameID) {
         super(nameID);
     }
 

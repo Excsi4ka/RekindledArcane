@@ -13,6 +13,6 @@ public interface IActiveAbilitySkill extends ISkill, ISkillDataHandler {
      * Called when ability gets activated or if it's a {@link ICastableAbility} when casting is done.
      * Only server side.
      */
-    void activateAbility(EntityPlayer player);
+    void resolveSkillCast(EntityPlayer player);
 
 }

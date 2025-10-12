@@ -2,6 +2,8 @@ package excsi.rekindledarcane.common.registry;
 
 import cpw.mods.fml.common.registry.EntityRegistry;
 import excsi.rekindledarcane.RekindledArcane;
+import excsi.rekindledarcane.common.entity.projectile.CelestialGreatswordProjectile;
+import excsi.rekindledarcane.common.entity.projectile.HookChainProjectile;
 import excsi.rekindledarcane.common.entity.util.AoeEntity;
 import excsi.rekindledarcane.common.entity.projectile.MagicSliceProjectile;
 import excsi.rekindledarcane.common.entity.projectile.TracedArrowProjectile;
@@ -12,6 +14,8 @@ public class RekindledArcaneEntities {
         int id = EntityRegistry.findGlobalUniqueEntityId();
         EntityRegistry.registerModEntity(MagicSliceProjectile.class, "MagicSlice", id++, RekindledArcane.instance, 32, 20, false);
         EntityRegistry.registerModEntity(TracedArrowProjectile.class, "SpecialArrow", id++, RekindledArcane.instance, 65, 20, false);
-        EntityRegistry.registerModEntity(AoeEntity.class, "AOEEntity", id++, RekindledArcane.instance, 65, 20, false);
+        EntityRegistry.registerModEntity(AoeEntity.class, "AOEEntity", id++, RekindledArcane.instance, 64, 20, false);
+        EntityRegistry.registerModEntity(CelestialGreatswordProjectile.class, "CelestialGreatsword", id++,RekindledArcane.instance, 32, 20, false);
+        EntityRegistry.registerModEntity(HookChainProjectile.class, "HookChain", id++, RekindledArcane.instance, 64, 1, true);
     }
 }

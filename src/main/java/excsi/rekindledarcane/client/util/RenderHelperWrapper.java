@@ -4,7 +4,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 import org.lwjgl.opengl.GL11;
 
-public class StateRenderHelper {
+public class RenderHelperWrapper {
 
     public static boolean blendEnabled;
 
@@ -71,6 +71,10 @@ public class StateRenderHelper {
         tes.addVertexWithUV(x + width,y,zOffset,icon.getMaxU(),icon.getMinV());
         tes.addVertexWithUV(x,y,zOffset,icon.getMinU(),icon.getMinV());
         tes.addVertexWithUV(x,y + height,zOffset,icon.getMinU(),icon.getMaxV());
+    }
+
+    public static void drawCooldownSquare(Tessellator tes, int middleX, int middleY, int squareRadius) {
+
     }
 
     public static void drawTestGradientSquare(int x, int y, int width, int height, int z) {

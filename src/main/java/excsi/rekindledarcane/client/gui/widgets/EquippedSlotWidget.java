@@ -1,7 +1,7 @@
 package excsi.rekindledarcane.client.gui.widgets;
 
 import excsi.rekindledarcane.api.skill.IActiveAbilitySkill;
-import excsi.rekindledarcane.client.util.StateRenderHelper;
+import excsi.rekindledarcane.client.util.RenderHelperWrapper;
 import excsi.rekindledarcane.common.network.PacketManager;
 import excsi.rekindledarcane.common.network.client.ClientPacketEquipSkill;
 import excsi.rekindledarcane.common.network.client.ClientPacketUnEquipSkill;
@@ -23,7 +23,7 @@ public class EquippedSlotWidget extends Widget {
     @Override
     public void drawButton(Minecraft mc, int mouseX, int mouseY) {
         if(!locked && ability != null) {
-            StateRenderHelper.batchDrawIcon(Tessellator.instance, xPosition, yPosition, width, height, 0, ability.getIcon());
+            RenderHelperWrapper.batchDrawIcon(Tessellator.instance, xPosition, yPosition, width, height, 0, ability.getIcon());
         }
     }
 

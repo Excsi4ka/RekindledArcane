@@ -11,9 +11,13 @@ public interface ICastableAbility extends IActiveAbilitySkill {
 
     void onCastingStart(EntityPlayer player, Side side);
 
-    void onCastTick(EntityPlayer player, Side side);
+    void onCastTick(EntityPlayer player, int elapsedCastingTime, Side side);
 
     int getCastingTickAmount();
+
+    default float getMovementSpeedMultiplier() {
+        return 1f;
+    }
 
     ISkillCastAnimation getAnimation();
 

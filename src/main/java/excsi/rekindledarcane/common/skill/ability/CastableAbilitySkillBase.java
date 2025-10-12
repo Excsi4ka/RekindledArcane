@@ -7,9 +7,9 @@ import excsi.rekindledarcane.common.skill.AbstractSkillWithData;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 
-public abstract class CastableAbilitySkill<DATA extends AbstractData> extends AbstractSkillWithData<DATA> implements ICastableAbility {
+public abstract class CastableAbilitySkillBase<DATA extends AbstractData> extends AbstractSkillWithData<DATA> implements ICastableAbility {
 
-    public CastableAbilitySkill(String nameID) {
+    public CastableAbilitySkillBase(String nameID) {
         super(nameID);
     }
 

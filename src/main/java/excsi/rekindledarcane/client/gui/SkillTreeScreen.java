@@ -6,7 +6,7 @@ import excsi.rekindledarcane.api.skill.Point;
 import excsi.rekindledarcane.client.AssetLib;
 import excsi.rekindledarcane.client.gui.widgets.SkillUnlockWidget;
 import excsi.rekindledarcane.client.util.BlendMode;
-import excsi.rekindledarcane.client.util.StateRenderHelper;
+import excsi.rekindledarcane.client.util.RenderHelperWrapper;
 import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
 import excsi.rekindledarcane.common.network.PacketManager;
@@ -62,7 +62,7 @@ public class SkillTreeScreen extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         Tessellator tes = Tessellator.instance;
         mc.getTextureManager().bindTexture(AssetLib.backgroundTex);
-        StateRenderHelper.drawFullSizeTexturedRectangle(0,0,width,height,zLevel);
+        RenderHelperWrapper.drawFullSizeTexturedRectangle(0,0,width,height,zLevel);
         mc.getTextureManager().bindTexture(AssetLib.skillIconTextureAtlas);
         currentHoveringWidget = null;
 
@@ -73,14 +73,14 @@ public class SkillTreeScreen extends GuiScreen {
         GL11.glLineWidth(6f);
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
         GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
-        StateRenderHelper.enableBlend();
-        StateRenderHelper.blendMode(BlendMode.DEFAULT);
-        StateRenderHelper.disableTexture2D();
+        RenderHelperWrapper.enableBlend();
+        RenderHelperWrapper.blendMode(BlendMode.DEFAULT);
+        RenderHelperWrapper.disableTexture2D();
         tes.startDrawing(GL11.GL_LINES);
         int alpha = (int) (Math.sin(mc.thePlayer.ticksExisted * 0.1) * 70 + 170);
         skillWidgets.values().forEach(widget -> widget.drawConnectionLine(tes, alpha));
         tes.draw();
-        StateRenderHelper.restoreStates();
+        RenderHelperWrapper.restoreStates();
         GL11.glLineWidth(1f);
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
 

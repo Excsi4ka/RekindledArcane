@@ -10,6 +10,9 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
+/**
+ * {@link net.minecraft.client.model.ModelBiped}
+ */
 public class ModelBipedTransformer extends SubTransformer {
 
     public ModelBipedTransformer() {

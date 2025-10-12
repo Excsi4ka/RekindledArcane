@@ -3,7 +3,7 @@ package excsi.rekindledarcane.client.gui.widgets;
 import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.Point;
 import excsi.rekindledarcane.client.gui.SkillTreeScreen;
-import excsi.rekindledarcane.client.util.StateRenderHelper;
+import excsi.rekindledarcane.client.util.RenderHelperWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 
@@ -37,8 +37,8 @@ public class SkillUnlockWidget extends Widget {
             tessellator.setColorOpaque_F(0.3f,0.3f,0.3f);
         else
             tessellator.setColorOpaque_F(1f,1f,1f);
-        StateRenderHelper.batchDrawIcon(tessellator, xPosition + 3, yPosition + 3, 16, 16, 10, skill.getIcon());
-        StateRenderHelper.batchDrawIcon(tessellator, xPosition, yPosition, width, height, 10, skill.getSkillType().frameIcon);
+        RenderHelperWrapper.batchDrawIcon(tessellator, xPosition + 3, yPosition + 3, 16, 16, 10, skill.getIcon());
+        RenderHelperWrapper.batchDrawIcon(tessellator, xPosition, yPosition, width, height, 10, skill.getSkillType().frameIcon);
         if(isMouseOver(mouseX, mouseY)) {
             parentScreen.currentHoveringWidget = this;
         }

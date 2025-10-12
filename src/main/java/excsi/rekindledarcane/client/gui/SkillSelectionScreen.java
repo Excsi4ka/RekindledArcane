@@ -4,7 +4,7 @@ import excsi.rekindledarcane.api.skill.IActiveAbilitySkill;
 import excsi.rekindledarcane.client.AssetLib;
 import excsi.rekindledarcane.client.gui.widgets.AbilitySlotWidget;
 import excsi.rekindledarcane.client.gui.widgets.EquippedSlotWidget;
-import excsi.rekindledarcane.client.util.StateRenderHelper;
+import excsi.rekindledarcane.client.util.RenderHelperWrapper;
 import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
 import net.minecraft.client.gui.GuiScreen;
@@ -49,12 +49,12 @@ public class SkillSelectionScreen extends GuiScreen {
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
 
-        StateRenderHelper.scissorStart(width / 2 + 10, height / 2 - 68, 84, 138, scaleFactor);
+        RenderHelperWrapper.scissorStart(width / 2 + 10, height / 2 - 68, 84, 138, scaleFactor);
         skillPoolButtons.forEach(button -> {
             if(button != draggingWidget)
                 button.drawButton(mc, mouseX, mouseY);
         });
-        StateRenderHelper.scissorEnd();
+        RenderHelperWrapper.scissorEnd();
 
         equippedSkillsButtons.forEach(button -> button.drawButton(mc, mouseX, mouseY));
         if(draggingWidget != null) {

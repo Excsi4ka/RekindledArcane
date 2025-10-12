@@ -1,8 +1,12 @@
 package excsi.rekindledarcane.core;
 
 import excsi.rekindledarcane.core.transformers.ApplyPotionEventTransformer;
+import excsi.rekindledarcane.core.transformers.ArmorPropertiesTransformer;
+import excsi.rekindledarcane.core.transformers.EntityRendererTransformer;
+import excsi.rekindledarcane.core.transformers.ItemInWorldManagerTransformer;
 import excsi.rekindledarcane.core.transformers.ModelBipedTransformer;
 import excsi.rekindledarcane.core.transformers.NetHandlerServerTransformer;
+import excsi.rekindledarcane.core.transformers.PlayerControllerMPTransformer;
 import excsi.rekindledarcane.core.transformers.ThaumcraftTransformer;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
@@ -24,6 +28,10 @@ public class RekindledArcaneMainTransformer implements IClassTransformer {
         register(new ApplyPotionEventTransformer());
         register(new ModelBipedTransformer());
         register(new NetHandlerServerTransformer());
+        register(new PlayerControllerMPTransformer());
+        register(new EntityRendererTransformer());
+        register(new ItemInWorldManagerTransformer());
+        register(new ArmorPropertiesTransformer());
     }
 
     @Override
@@ -51,19 +59,19 @@ public class RekindledArcaneMainTransformer implements IClassTransformer {
                 RekindledArcaneCore.LOG.error("Error while transforming " + subTransformer.className);
                 e.printStackTrace();
             }
-//            if (true) {
-//                try {
-//                    File f = new File("C:/Users/Home/Desktop/123/RekindledArcane/outputClasses/" + transformedName + ".class");
-//                    f.getParentFile().mkdirs();
-//                    f.createNewFile();
-//                    FileOutputStream out = new FileOutputStream(f);
-//                    out.write(basicClass);
-//                    out.close();
-//                }
-//                catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
+            if (true) {
+                try {
+                    File f = new File("outputClasses/" + transformedName + ".class");
+                    f.getParentFile().mkdirs();
+                    f.createNewFile();
+                    FileOutputStream out = new FileOutputStream(f);
+                    out.write(basicClass);
+                    out.close();
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return basicClass;
     }

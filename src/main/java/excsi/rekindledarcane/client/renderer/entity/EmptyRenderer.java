@@ -1,4 +1,4 @@
-package excsi.rekindledarcane.client.renderer;
+package excsi.rekindledarcane.client.renderer.entity;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;

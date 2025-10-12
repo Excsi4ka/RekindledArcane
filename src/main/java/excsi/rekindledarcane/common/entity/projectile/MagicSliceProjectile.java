@@ -8,10 +8,11 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-public class MagicSliceProjectile extends Entity implements IEntityAdditionalSpawnData {
+public class MagicSliceProjectile extends GenericProjectile implements IEntityAdditionalSpawnData {
 
     public EntityPlayer shooter;
 
@@ -23,6 +24,11 @@ public class MagicSliceProjectile extends Entity implements IEntityAdditionalSpa
     }
 
     @Override
+    public void onImpact(MovingObjectPosition mop) {
+
+    }
+
+    @Override
     protected void entityInit() {}
 
     public MagicSliceProjectile(World world, EntityPlayer player, int maxAge) {
@@ -31,18 +37,6 @@ public class MagicSliceProjectile extends Entity implements IEntityAdditionalSpa
         this.maxAge = maxAge;
         this.shooter = player;
 
-    }
-
-    public MagicSliceProjectile setCoordinates(double x, double y, double z) {
-        setPosition(x, y, z);
-        return this;
-    }
-
-    public MagicSliceProjectile launch(double dx, double dy, double dz) {
-        motionX = dx;
-        motionY = dy;
-        motionZ = dz;
-        return this;
     }
 
     @Override
@@ -57,7 +51,7 @@ public class MagicSliceProjectile extends Entity implements IEntityAdditionalSpa
         if(worldObj.isRemote) {
             Vec3 vec3 = Vec3.createVectorHelper(motionX, motionY, motionZ).normalize();
             MathUtil.scale(vec3, -0.02500000037252903);
-            for(int i = 0; i < 6; ++i) {
+            for (int i = 0; i < 6; ++i) {
                 double lerpX = MathUtil.lerp(i / 5.0D, prevPosX, posX);
                 double lerpY = MathUtil.lerp(i / 5.0D, prevPosY, posY);
                 double lerpZ = MathUtil.lerp(i / 5.0D, prevPosZ, posZ);
@@ -65,24 +59,13 @@ public class MagicSliceProjectile extends Entity implements IEntityAdditionalSpa
                         170,
                         90,
                         0,
+                        32,
                         vec3.xCoord, vec3.yCoord, vec3.zCoord,
                         4.0f,
                         0.95f,
                         30);
             }
-//            int radius = 3;
-//            Vec3 vec3 = Vec3.createVectorHelper(motionX, motionY, motionZ).normalize();
-//            MathUtil.scale(vec3, -0.02500000037252903);
-//            for (double d = 0; d < Math.PI * 2; d += Math.PI / (radius*10)) {
-//                double x1 = posX + radius * Math.cos(d);
-//                double z1 = posZ + radius * Math.sin(d);
-//                double y1 = posY+0.3;
-
-//            }
-
         }
-
-
 //        if (!worldObj.isRemote && shooter != null) {
 //            Vec3 vector = shooter.getLookVec().normalize();
 //            MathUtil.scale(vector, 0.6f);

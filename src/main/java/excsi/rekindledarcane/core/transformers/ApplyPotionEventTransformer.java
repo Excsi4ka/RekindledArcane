@@ -13,6 +13,9 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
+/**
+ * {@link net.minecraft.entity.EntityLivingBase}
+ */
 public class ApplyPotionEventTransformer extends SubTransformer {
 
     public ApplyPotionEventTransformer() {

@@ -8,16 +8,19 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import excsi.rekindledarcane.common.event.RekindledArcaneEvents;
 import excsi.rekindledarcane.common.event.DataEventHandler;
 import excsi.rekindledarcane.common.network.PacketManager;
+import excsi.rekindledarcane.common.registry.RekindledArcaneEffects;
 import excsi.rekindledarcane.common.registry.RekindledArcaneEntities;
 import excsi.rekindledarcane.common.registry.RekindledArcaneItems;
 import excsi.rekindledarcane.common.registry.SkillSystemRegistry;
 import excsi.rekindledarcane.common.util.ParticleType;
 import excsi.rekindledarcane.common.util.RekindledArcaneConfig;
 import excsi.rekindledarcane.common.util.commands.SkillSystemCommands;
+import net.minecraft.potion.Potion;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.awt.*;
+import java.lang.reflect.Field;
 
 public class CommonProxy {
 
@@ -28,10 +31,14 @@ public class CommonProxy {
         RekindledArcaneItems.register();
         RekindledArcaneEntities.register();
 
+        if(RekindledArcaneConfig.extendPotionIDS) extendPotionIDS();
+        RekindledArcaneEffects.register();
+
         MinecraftForge.EVENT_BUS.register(new DataEventHandler());
         FMLCommonHandler.instance().bus().register(new DataEventHandler());
         MinecraftForge.EVENT_BUS.register(new RekindledArcaneEvents());
         FMLCommonHandler.instance().bus().register(new RekindledArcaneEvents());
+
     }
 
     public void init(FMLInitializationEvent event) {
@@ -47,8 +54,28 @@ public class CommonProxy {
 
     public void addEffect(ParticleType type, World world, double x, double y, double z, Color color, float scale, float resizeSpeed, int maxAge) {}
 
-    public void addEffect(ParticleType type, World world, double x, double y, double z, int r, int g, int b, float scale, float resizeSpeed, int maxAge) {}
+    public void addEffect(ParticleType type, World world, double x, double y, double z, int r, int g, int b, int alpha, float scale, float resizeSpeed, int maxAge) {}
 
-    public void addEffect(ParticleType type, World world, double x, double y, double z, int r, int g, int b, double dx, double dy, double dz, float scale, float resizeSpeed, int maxAge) {}
+    public void addEffect(ParticleType type, World world, double x, double y, double z, int r, int g, int b, int alpha, double dx, double dy, double dz, float scale, float resizeSpeed, int maxAge) {}
 
+
+    public void extendPotionIDS() {
+        for(Field f : Potion.class.getDeclaredFields()) {
+            f.setAccessible(true);
+            try {
+                if (f.getName().equals("potionTypes") || f.getName().equals("field_76425_a")) {
+                    Field modfield = Field.class.getDeclaredField("modifiers");
+                    modfield.setAccessible(true);
+                    modfield.setInt(f, f.getModifiers() & -17);
+                    Potion[] potionTypes = (Potion[])(f.get(null));
+                    Potion[] newPotionTypes = new Potion[256];
+                    System.arraycopy(potionTypes, 0, newPotionTypes, 0, potionTypes.length);
+                    f.set(null, newPotionTypes);
+                }
+            } catch (Exception var10) {
+                System.err.println("Severe error, please report this to the mod author:");
+                System.err.println(var10);
+            }
+        }
+    }
 }

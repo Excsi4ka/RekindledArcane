@@ -29,13 +29,15 @@ public class BatchedEntityFX extends EntityFX {
         return this;
     }
 
-    public BatchedEntityFX setColor(int r, int g, int b) {
+    public BatchedEntityFX setColor(int r, int g, int b, int alpha) {
         setRBGColorF(r / 255f, g / 255f, b / 255f);
+        setAlphaF(alpha / 255f);
         return this;
     }
 
     public BatchedEntityFX setColor(Color color) {
         setRBGColorF(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f);
+        setAlphaF(color.getAlpha() / 255f);
         return this;
     }
 
@@ -55,7 +57,7 @@ public class BatchedEntityFX extends EntityFX {
         float var13 = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)f - interpPosX);
         float var14 = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)f - interpPosY);
         float var15 = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)f - interpPosZ);
-        tessellator.setColorRGBA_F(particleRed, particleGreen, particleBlue, 0.125f);
+        tessellator.setColorRGBA_F(particleRed, particleGreen, particleBlue, particleAlpha);
         tessellator.addVertexWithUV((var13 - f1 * var12 - f4 * var12), (var14 - f2 * var12), (var15 - f3 * var12 - f5 * var12),1,1);
         tessellator.addVertexWithUV((var13 - f1 * var12 + f4 * var12), (var14 + f2 * var12), (var15 - f3 * var12 + f5 * var12),1,0);
         tessellator.addVertexWithUV((var13 + f1 * var12 + f4 * var12), (var14 + f2 * var12), (var15 + f3 * var12 + f5 * var12),0,0);
@@ -71,6 +73,8 @@ public class BatchedEntityFX extends EntityFX {
         if (particleAge++ >= particleMaxAge) {
             setDead();
         }
-        moveEntity(this.motionX, this.motionY, this.motionZ);
+        posX += motionX;
+        posY += motionY;
+        posZ += motionZ;
     }
 }

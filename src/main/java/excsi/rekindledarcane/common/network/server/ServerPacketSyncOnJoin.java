@@ -41,7 +41,7 @@ public class ServerPacketSyncOnJoin implements IMessage, IMessageHandler<ServerP
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             PlayerData playerData = PlayerDataManager.setPlayerDataDefault(player);
             playerData.readData(message.data, player);
-            ClientSkillCastingManager.INSTANCE.clearPlayer(player);
+            ClientSkillCastingManager.INSTANCE.clearAll();
         }
         return null;
     }

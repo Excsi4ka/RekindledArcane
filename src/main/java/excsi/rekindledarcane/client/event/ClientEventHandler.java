@@ -4,6 +4,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
+import excsi.rekindledarcane.api.RekindledArcaneAPI;
 import excsi.rekindledarcane.api.skill.IActiveAbilitySkill;
 import excsi.rekindledarcane.api.skill.SkillType;
 import excsi.rekindledarcane.client.AssetLib;
@@ -12,7 +13,8 @@ import excsi.rekindledarcane.client.gui.SkillCategorySelectionScreen;
 import excsi.rekindledarcane.client.gui.SkillSelectionScreen;
 import excsi.rekindledarcane.client.util.BlendMode;
 import excsi.rekindledarcane.client.util.ClientSkillCastingManager;
-import excsi.rekindledarcane.client.util.StateRenderHelper;
+import excsi.rekindledarcane.client.util.RenderHelperWrapper;
+import excsi.rekindledarcane.client.util.ScreenShakeManager;
 import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
 import excsi.rekindledarcane.common.network.PacketManager;
@@ -61,22 +63,34 @@ public class ClientEventHandler {
         Tessellator tes = Tessellator.instance;
         tes.startDrawingQuads();
 
-        StateRenderHelper.enableBlend();
-        StateRenderHelper.blendMode(BlendMode.DEFAULT);
+        RenderHelperWrapper.enableBlend();
+        RenderHelperWrapper.blendMode(BlendMode.DEFAULT);
         GL11.glColor4f(1f,1f,1f,1f);
         for (int i = 0; i < data.getActiveSlotCount(); i++) {
             IActiveAbilitySkill ability = data.getEquippedActiveSkills().get(i);
             if(ability != null) {
-                StateRenderHelper.batchDrawIcon(tes,5 + 21 * i, y, 20, 20, 0, ability.getIcon());
+                RenderHelperWrapper.batchDrawIcon(tes,5 + 21 * i, y, 20, 20, 0, ability.getIcon());
             }
             if(currentlySelected == i) {
-                StateRenderHelper.batchDrawIcon(tes, 4 + 21 * i, y - 1, 22, 22, 0, SkillType.ABILITY.frameIcon);
+                RenderHelperWrapper.batchDrawIcon(tes, 4 + 21 * i, y - 1, 22, 22, 0, SkillType.ABILITY.frameIcon);
                 continue;
             }
-            StateRenderHelper.batchDrawIcon(tes, 5 + 21 * i, y, 20, 20, 0, SkillType.PASSIVE.frameIcon);
+            RenderHelperWrapper.batchDrawIcon(tes, 5 + 21 * i, y, 20, 20, 0, SkillType.PASSIVE.frameIcon);
         }
         tes.draw();
-        StateRenderHelper.restoreStates();
+        RenderHelperWrapper.restoreStates();
+        if (ClientSkillCastingManager.INSTANCE.isClientCasting()) {
+            int centerX = event.resolution.getScaledWidth() / 2;
+            int centerY = event.resolution.getScaledHeight() / 2;
+            int time = ClientSkillCastingManager.INSTANCE.getClientRemainingCastTime();
+            String message = time / 20d + " seconds";
+            int offset = Minecraft.getMinecraft().fontRenderer.getStringWidth(message) / 2;
+            //Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(message, centerX - offset, centerY - 10, 0xFFFFFF);
+        }
+    }
+
+    public static float handleExtendedReach(float currentReachDistance) {
+        return (float) (currentReachDistance + Minecraft.getMinecraft().thePlayer.getEntityAttribute(RekindledArcaneAPI.REACH_DISTANCE).getAttributeValue());
     }
 
     @SubscribeEvent
@@ -86,6 +100,13 @@ public class ClientEventHandler {
         if(event.side == Side.SERVER)
             return;
         ClientSkillCastingManager.INSTANCE.tick(event.player);
+    }
+
+    @SubscribeEvent
+    public void onClientTick(TickEvent.ClientTickEvent event) {
+        if(event.phase == TickEvent.Phase.START)
+            return;
+        ScreenShakeManager.INSTANCE.tick();
     }
 
     @SubscribeEvent

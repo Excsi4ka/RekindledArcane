@@ -4,5 +4,11 @@
     "sounds": [
       "menu_ding"
     ]
+  },
+  "chain.throw": {
+    "category": "master",
+    "sounds": [
+      "chain_throw"
+    ]
   }
 }

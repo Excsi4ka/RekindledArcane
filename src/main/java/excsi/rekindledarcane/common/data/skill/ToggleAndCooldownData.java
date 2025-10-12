@@ -38,11 +38,13 @@ public class ToggleAndCooldownData extends AbstractData implements ITickable {
 
     @Override
     public void writeToNBT(NBTTagCompound compound) {
+        compound.setBoolean("toggled", toggled);
         compound.setInteger("cooldown", skillCooldown);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
+        toggled = compound.getBoolean("toggled");
         skillCooldown = compound.getInteger("cooldown");
     }
 

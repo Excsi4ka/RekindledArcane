@@ -32,17 +32,18 @@ public class AoeEntity extends Entity implements IEntityAdditionalSpawnData {
 
     @Override
     public void onUpdate() {
-        if(!worldObj.isRemote && ticksExisted > 1000) setDead();
-        int radius = 7;
+        if(!worldObj.isRemote && ticksExisted > 500) setDead();
+        int radius = 4;
         if(worldObj.isRemote) {
             for (double d = 0; d < Math.PI * 2; d += Math.PI / (radius*10)) {
                 double x1 = posX + radius * Math.cos(d);
                 double z1 = posZ + radius * Math.sin(d);
-                double y1 = posY+0.3;
+                double y1 = posY + 0.3;
                 RekindledArcane.proxy.addEffect(ParticleType.PARTICLE_ORB, worldObj, x1, y1, z1,
                         170,
                         90,
                         0,
+                        32,
                         5.0f,
                         0.99f,
                         15);
@@ -51,6 +52,7 @@ public class AoeEntity extends Entity implements IEntityAdditionalSpawnData {
                         170,
                         90,
                         0,
+                        70, //32
                         0,0.04,0,
                         7.0f,
                         0.95f,

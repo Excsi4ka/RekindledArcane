@@ -10,6 +10,9 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
+/**
+ * {@link thaumcraft.common.lib.events.EventHandlerRunic}
+ */
 public class ThaumcraftTransformer extends SubTransformer {
 
     public ThaumcraftTransformer() {

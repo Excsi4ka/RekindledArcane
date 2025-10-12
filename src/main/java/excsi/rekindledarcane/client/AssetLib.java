@@ -8,6 +8,8 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.client.model.AdvancedModelLoader;
+import net.minecraftforge.client.model.IModelCustom;
 
 public class AssetLib {
 
@@ -15,9 +17,15 @@ public class AssetLib {
 
     public static final ResourceLocation skillIconTextureAtlas = new ResourceLocation("textures/atlas/skill_icons.png");
 
-    public static final ResourceLocation menuDing = new ResourceLocation("rekindledarcane","menu.ding");
+    public static final ResourceLocation menuDing = rl("menu.ding");
 
     public static final ResourceLocation skillSelectorGui = rl("textures/gui/gui.png");
+
+    public static final IModelCustom greatswordModel = AdvancedModelLoader.loadModel(rl("models/Greatsword.obj"));
+
+    public static final ResourceLocation greatswordTexture = rl("textures/items/greatsword.png");
+
+    public static final ResourceLocation hookChainTexture = rl("textures/entity/chains.png");
 
     public static IIcon missingSkillTexture;
 

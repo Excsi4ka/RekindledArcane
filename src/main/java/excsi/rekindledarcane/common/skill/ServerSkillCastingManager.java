@@ -31,19 +31,25 @@ public class ServerSkillCastingManager {
         int time = playerCastTimeMap.get(uuid);
         ICastableAbility ability = playerAbilityMap.get(uuid);
         if(time-- > 0) {
-            ability.onCastTick(player, Side.SERVER);
+            ability.onCastTick(player, ability.getCastingTickAmount() - time, Side.SERVER);
             playerCastTimeMap.put(uuid, time);
+            applySpeedReduction(player, ability.getMovementSpeedMultiplier());
             return;
         }
-        ability.activateAbility(player);
+        ability.resolveSkillCast(player);
         playerCastTimeMap.remove(uuid);
         playerAbilityMap.remove(uuid);
     }
 
-    public void addCastingPlayer(EntityPlayer player, ICastableAbility ability) {
+    public void startCasting(EntityPlayer player, ICastableAbility ability) {
         playerCastTimeMap.put(player.getUniqueID(), ability.getCastingTickAmount());
         playerAbilityMap.put(player.getUniqueID(), ability);
         ability.onCastingStart(player, Side.SERVER);
+    }
+
+    public void applySpeedReduction(EntityPlayer player, float speedMultiplier) {
+        player.motionX *= speedMultiplier;
+        player.motionZ *= speedMultiplier;
     }
 
     public boolean alreadyCasting(EntityPlayer player) {

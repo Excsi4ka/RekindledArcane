@@ -5,7 +5,7 @@ import excsi.rekindledarcane.api.skill.ISkillCategory;
 import excsi.rekindledarcane.client.AssetLib;
 import excsi.rekindledarcane.client.gui.widgets.SkillCategoryWidget;
 import excsi.rekindledarcane.client.util.BlendMode;
-import excsi.rekindledarcane.client.util.StateRenderHelper;
+import excsi.rekindledarcane.client.util.RenderHelperWrapper;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
 import org.lwjgl.opengl.GL11;
@@ -44,10 +44,10 @@ public class SkillCategorySelectionScreen extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         mc.getTextureManager().bindTexture(AssetLib.backgroundTex);
-        StateRenderHelper.enableBlend();
-        StateRenderHelper.blendMode(BlendMode.DEFAULT);
-        StateRenderHelper.drawFullSizeTexturedRectangle(0, 0, width, height, zLevel);
-        StateRenderHelper.disableTexture2D();
+        RenderHelperWrapper.enableBlend();
+        RenderHelperWrapper.blendMode(BlendMode.DEFAULT);
+        RenderHelperWrapper.drawFullSizeTexturedRectangle(0, 0, width, height, zLevel);
+        RenderHelperWrapper.disableTexture2D();
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glShadeModel(GL11.GL_SMOOTH);
         Tessellator tes = Tessellator.instance;
@@ -56,7 +56,7 @@ public class SkillCategorySelectionScreen extends GuiScreen {
         tes.draw();
         GL11.glShadeModel(GL11.GL_FLAT);
         GL11.glEnable(GL11.GL_CULL_FACE);
-        StateRenderHelper.restoreStates();
+        RenderHelperWrapper.restoreStates();
 
         updateMouseMovement(mouseX, mouseY);
 

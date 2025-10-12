@@ -15,9 +15,13 @@ public class RekindledArcaneAPI {
 
     public static IAttribute MAGIC_RESISTANCE = new RangedAttribute("rekindledarcane.magicResistance", 0, 0, 100).setShouldWatch(true);
 
-    public static IAttribute MAX_SUMMONS = new RangedAttribute("rekindledarcane.maxSummons", 0, 0, 10).setShouldWatch(true);
+    public static IAttribute SUMMONING_STRENGTH = new RangedAttribute("rekindledarcane.summoningStrength", 0, 0, 10).setShouldWatch(true);
+
+    public static IAttribute MAX_SUMMONS = new RangedAttribute("rekindledarcane.maxSummons", 0, 0, Double.MAX_VALUE).setShouldWatch(true);
 
     public static IAttribute SPELL_POWER = new RangedAttribute("rekindledarcane.spellPower", 0, 0, Double.MAX_VALUE).setShouldWatch(true);
+
+    public static IAttribute REACH_DISTANCE = new RangedAttribute("rekindledarcane.reachDistance", 0, 0, 10).setShouldWatch(true);
 
     private static final HashMap<String, ISkillCategory> skillCategoryMap = new HashMap<>();
 

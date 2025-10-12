@@ -60,6 +60,7 @@ public class TracedArrowProjectile extends EntityArrow implements IEntityAdditio
                         170,
                         90,
                         0,
+                        32,
                         vec3.xCoord, vec3.yCoord, vec3.zCoord,
                         5.0f,
                         0.95f,
