@@ -27,19 +27,19 @@ public abstract class GenericProjectile extends Entity {
 
     public abstract void onImpact(MovingObjectPosition mop);
 
-    protected abstract void entityInit();
+    protected void entityInit() {}
 
-    protected abstract void readEntityFromNBT(NBTTagCompound nbtTagCompound);
+    protected void readEntityFromNBT(NBTTagCompound nbtTagCompound) {}
 
-    protected abstract void writeEntityToNBT(NBTTagCompound nbtTagCompound);
+    protected void writeEntityToNBT(NBTTagCompound nbtTagCompound) {}
 
     @Override
     public void onUpdate() {
         super.onUpdate();
-        posX += motionX;
-        posZ += motionZ;
-        posY += motionY;
-        setPosition(posX, posY, posZ);
+//        posX += motionX;
+//        posZ += motionZ;
+//        posY += motionY;
+        setPosition(posX + motionX, posY + motionY, posZ + motionZ);
         checkCollision();
     }
 

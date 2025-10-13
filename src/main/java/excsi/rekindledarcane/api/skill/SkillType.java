@@ -18,7 +18,6 @@ public enum SkillType {
 
     public final Color typeColor;
 
-    //set in AssetLib
     @SideOnly(Side.CLIENT)
     public IIcon frameIcon;
 

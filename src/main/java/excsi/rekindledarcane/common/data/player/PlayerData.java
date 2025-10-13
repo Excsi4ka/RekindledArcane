@@ -35,9 +35,9 @@ public class PlayerData {
     //-------- For data tracking and updating ---------
     public HashMap<String, AbstractData> trackingData = new HashMap<>();
 
-    public List<AbstractData> dataQueuedToSync = new ArrayList<>();
+    private List<AbstractData> dataQueuedToSync = new ArrayList<>();
 
-    public List<ITickable> tickingStuff = new ArrayList<>();
+    private List<ITickable> tickingStuff = new ArrayList<>();
     //----------------------------------------------------
 
     public PlayerData() {

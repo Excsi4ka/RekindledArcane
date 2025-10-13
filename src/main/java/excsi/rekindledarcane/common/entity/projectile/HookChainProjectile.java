@@ -3,6 +3,8 @@ package excsi.rekindledarcane.common.entity.projectile;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import excsi.rekindledarcane.common.registry.RekindledArcaneEffects;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,46 +24,34 @@ public class HookChainProjectile extends GenericProjectile implements IEntityAdd
         super(world);
         this.setSize(0.25f, 0.25f);
         this.ignoreFrustumCheck = true;
+        this.renderDistanceWeight = 2;
     }
 
     public HookChainProjectile(World world, EntityPlayer thrower) {
         super(world, thrower);
         this.setSize(0.25f, 0.25f);
         this.ignoreFrustumCheck = true;
+        this.renderDistanceWeight = 2;
     }
 
     @Override
     public void onImpact(MovingObjectPosition mop) {
-        if (worldObj.isRemote || mop == null || capturedEntity != null)
+        if (worldObj.isRemote)
+            return;
+        if (mop == null || capturedEntity != null)
             return;
         if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-            setDead();
-            return;
+            handleBlockImpact(mop);
         }
         if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
-            Entity entity = mop.entityHit;
-            if (entity == getThrower())
-                return;
-            if (!(entity instanceof EntityLivingBase))
-                return;
-            capturedEntity = (EntityLivingBase) entity;
-            motionX = motionY = motionZ = 0;
-            setPosition(capturedEntity.posX, capturedEntity.posY + capturedEntity.getEyeHeight() / 2, capturedEntity.posZ);
-            retrieveTimer = 20;
-            //velocityChanged = true;
-            capturedEntity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 600, 2));
-            capturedEntity.addPotionEffect(new PotionEffect(RekindledArcaneEffects.vulnerabilityEffect.getId(), 100, 10));
+            handleEntityImpact(mop);
         }
     }
 
     @Override
-    protected void entityInit() {}
-
-    @Override
-    protected void readEntityFromNBT(NBTTagCompound nbtTagCompound) {}
-
-    @Override
-    protected void writeEntityToNBT(NBTTagCompound nbtTagCompound) {}
+    public boolean writeToNBTOptional(NBTTagCompound tagCompound) {
+        return false;  //returns false to not save entity at all
+    }
 
     @Override
     public void writeSpawnData(ByteBuf data) {
@@ -69,52 +59,78 @@ public class HookChainProjectile extends GenericProjectile implements IEntityAdd
         data.writeDouble(this.motionX);
         data.writeDouble(this.motionY);
         data.writeDouble(this.motionZ);
-        data.writeFloat(this.rotationYaw);
-        data.writeFloat(this.rotationPitch);
     }
 
+    @Override
     public void readSpawnData(ByteBuf data) {
         Entity entity = worldObj.getEntityByID(data.readInt());
-        if(entity instanceof EntityPlayer) {
+        if (entity instanceof EntityPlayer) {
             setThrower((EntityPlayer) entity);
         }
         this.motionX = data.readDouble();
         this.motionY = data.readDouble();
         this.motionZ = data.readDouble();
-        this.rotationYaw = data.readFloat();
-        this.rotationPitch = data.readFloat();
-        this.prevRotationYaw = this.rotationYaw;
-        this.prevRotationPitch = this.rotationPitch;
     }
 
     @Override
     public void onUpdate() {
+        if (getThrower() == null) {
+            setDead();
+            return;
+        }
         super.onUpdate();
-        if(getThrower() == null)
+        if (worldObj.isRemote)
+            return;
+        if (getDistanceToEntity(getThrower()) > 20 && capturedEntity == null || ticksExisted > 200) {
             setDead();
-        if(!worldObj.isRemote && ticksExisted > 200)
-            setDead();
-        if(capturedEntity != null) {
-            setPosition(capturedEntity.posX, capturedEntity.posY + capturedEntity.getEyeHeight() / 2, capturedEntity.posZ);
-            if(retrieveTimer == 0) {
-                worldObj.playSoundEffect(posX, posY, posZ, "rekindledarcane:chain.throw", 0.8f, 0.85f);
-            }
-            if(retrieveTimer-- < 0) {
-                EntityPlayer player = getThrower();
-                double dx = player.posX - posX;
-                double dy = player.posY + 1.5 - posY;
-                double dz = player.posZ - posZ;
-                motionX = dx * 0.25;
-                motionY = dy * 0.25;
-                motionZ = dz * 0.25;
-                //velocityChanged = true;
-                capturedEntity.motionX = motionX;
-                capturedEntity.motionY = motionY;
-                capturedEntity.motionZ = motionZ;
-                capturedEntity.velocityChanged = true;
-                if(getDistanceToEntity(getThrower()) < 2)
-                    setDead();
+            return;
+        }
+        if (capturedEntity == null)
+            return;
+        EntityPlayer player = getThrower();
+        setPosition(capturedEntity.posX, capturedEntity.posY + capturedEntity.getEyeHeight() / 2, capturedEntity.posZ);
+        if (retrieveTimer == 0) {
+            worldObj.playSoundEffect(player.posX, player.posY, player.posZ, "rekindledarcane:chain.throw", 0.35f, 0.85f);
+        }
+        if (retrieveTimer-- < 0) {
+            double dx = player.posX - posX;
+            double dy = player.posY + 1.5 - posY;
+            double dz = player.posZ - posZ;
+//            motionX = dx * 0.25;
+//            motionY = dy * 0.25;
+//            motionZ = dz * 0.25;
+            capturedEntity.motionX = dx * 0.25;
+            capturedEntity.motionY = dy * 0.25;
+            capturedEntity.motionZ = dz * 0.25;
+            capturedEntity.velocityChanged = true;
+            if (getDistanceToEntity(getThrower()) < 2) {
+                setDead();
             }
         }
+    }
+
+    public void handleBlockImpact(MovingObjectPosition mop) {
+        Block block = worldObj.getBlock(mop.blockX, mop.blockY, mop.blockZ);
+        Material material = block.getMaterial();
+        if (material == Material.air || material == Material.grass || material == Material.water || material == Material.plants || material == Material.vine)
+            return;
+        setDead();
+    }
+
+    public void handleEntityImpact(MovingObjectPosition mop) {
+        Entity entity = mop.entityHit;
+        if (entity == getThrower())
+            return;
+        if (!(entity instanceof EntityLivingBase))
+            return;
+        EntityLivingBase entityLivingBase = (EntityLivingBase) entity;
+        if (entityLivingBase.isDead || entityLivingBase.getHealth() <= 0)
+            return;
+        capturedEntity = entityLivingBase;
+        motionX = motionY = motionZ = 0;
+        setPosition(capturedEntity.posX, capturedEntity.posY + capturedEntity.getEyeHeight() / 2, capturedEntity.posZ);
+        retrieveTimer = 20;
+        capturedEntity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 600, 2));
+        capturedEntity.addPotionEffect(new PotionEffect(RekindledArcaneEffects.vulnerabilityEffect.getId(), 100, 10));
     }
 }

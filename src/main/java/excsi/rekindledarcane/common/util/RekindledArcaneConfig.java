@@ -51,7 +51,7 @@ public class RekindledArcaneConfig {
         magicResistanceCap = CONFIG.getFloat("MagicResistanceAttributeCap", CATEGORY_SKILLS, 100, 0,
                 100, "The cap for magic resistance attribute value, 100 means full magic resistance is possible to achieve");
 
-        CONFIG.addCustomCategoryComment(CATEGORY_POTIONS, "Potion related settins");
+        CONFIG.addCustomCategoryComment(CATEGORY_POTIONS, "Potion related settings");
         extendPotionIDS = CONFIG.getBoolean("ExtendPotionIDS", CATEGORY_POTIONS,
                 true,"Toggles the potion ids extension\nMany mods do this already so you can disable this if needed");
         vulnerabilityPotionId = CONFIG.getInt("VulnerabilityPotionID", CATEGORY_POTIONS, 50, 0,

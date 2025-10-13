@@ -18,10 +18,6 @@ public interface ISkill {
 
     SkillType getSkillType();
 
-    ISkill getPreRequisite();
-
-    ISkill getAntiRequisite();
-
     ISkillCategory getSkillCategory();
 
     Point getPosition();
@@ -32,6 +28,10 @@ public interface ISkill {
 
     void forgetSkill(EntityPlayer player);
 
+    /**
+     * @return true if the skill should be applied everytime the player data is loaded from the disc.
+     * Event based skills use this to cache the players that have those skills to avoid looking it up all the time.
+     */
     boolean reapplyOnRestart();
 
     ISkill setSkillCategory(ISkillCategory category);
@@ -43,6 +43,10 @@ public interface ISkill {
     ISkill setPreRequisite(String id);
 
     ISkill setAntiRequisite(String id);
+
+    ISkill getPreRequisite();
+
+    ISkill getAntiRequisite();
 
     @SideOnly(Side.CLIENT)
     void registerSkillIcon(IIconRegister textureAtlas);

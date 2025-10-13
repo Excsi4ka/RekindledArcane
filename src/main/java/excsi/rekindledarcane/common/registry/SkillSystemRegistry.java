@@ -1,6 +1,7 @@
 package excsi.rekindledarcane.common.registry;
 
 import excsi.rekindledarcane.api.RekindledArcaneAPI;
+import excsi.rekindledarcane.api.skill.ISkillCategory;
 import excsi.rekindledarcane.api.skill.Point;
 import excsi.rekindledarcane.common.skill.SkillCategory;
 import excsi.rekindledarcane.common.skill.ability.AutoStrikeSkill;
@@ -20,7 +21,7 @@ import java.awt.Color;
 public class SkillSystemRegistry {
 
     public static void register() {
-        SkillCategory skillCategory = new SkillCategory("COMBAT", new Color(0, 66, 110, 152));
+        ISkillCategory skillCategory = new SkillCategory("COMBAT", new Color(0, 66, 110, 152));
         RekindledArcaneAPI.registerSkillCategory(skillCategory.getNameID(), skillCategory);
 
         skillCategory.registerSkill(new AttributeSkill("strength")

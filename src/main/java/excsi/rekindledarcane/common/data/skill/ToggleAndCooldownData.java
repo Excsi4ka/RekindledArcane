@@ -1,30 +1,14 @@
 package excsi.rekindledarcane.common.data.skill;
 
-import excsi.rekindledarcane.common.data.ITickable;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class ToggleAndCooldownData extends AbstractData implements ITickable {
-
-    private int skillCooldown;
-
-    private final int updateFrequency;
+public class ToggleAndCooldownData extends CooldownData {
 
     private boolean toggled = false;
 
     public ToggleAndCooldownData(String regName, int updateFrequency) {
-        super(regName, true);
-        this.skillCooldown = 0;
-        this.updateFrequency = updateFrequency;
-    }
-
-    public int getSkillCooldown() {
-        return skillCooldown;
-    }
-
-    public void setSkillCooldown(int skillCooldown) {
-        markChanged();
-        this.skillCooldown = skillCooldown;
+        super(regName, updateFrequency, true);
     }
 
     public boolean isToggled() {
@@ -38,35 +22,25 @@ public class ToggleAndCooldownData extends AbstractData implements ITickable {
 
     @Override
     public void writeToNBT(NBTTagCompound compound) {
+        super.writeToNBT(compound);
         compound.setBoolean("toggled", toggled);
-        compound.setInteger("cooldown", skillCooldown);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
+        super.readFromNBT(compound);
         toggled = compound.getBoolean("toggled");
-        skillCooldown = compound.getInteger("cooldown");
     }
 
     @Override
     public void writeToBuffer(ByteBuf buf) {
-        buf.writeInt(skillCooldown);
+        super.writeToBuffer(buf);
         buf.writeBoolean(toggled);
     }
 
     @Override
     public void readFromBuffer(ByteBuf buf) {
-        skillCooldown = buf.readInt();
+        super.readFromBuffer(buf);
         toggled = buf.readBoolean();
-    }
-
-    @Override
-    public boolean shouldTick() {
-        return skillCooldown > 0;
-    }
-
-    @Override
-    public void tick() {
-        if(skillCooldown-- % updateFrequency == 0) markChanged();
     }
 }

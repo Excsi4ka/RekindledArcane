@@ -15,7 +15,10 @@ public class HookChainSkill extends InstantAbilitySkillBase<CooldownData> {
 
     @Override
     public boolean canUse(EntityPlayer player) {
-        return true;
+        if (!hasThisSkill(player))
+            return false;
+        int cooldown = getSkillData(player).getSkillCooldown();
+        return cooldown == 0;
     }
 
     @Override
@@ -23,10 +26,11 @@ public class HookChainSkill extends InstantAbilitySkillBase<CooldownData> {
         Vec3 vec = player.getLookVec();
         MathUtil.scale(vec, 0.8);
         Entity projectile = new HookChainProjectile(player.worldObj, player)
-                .setPos(player.posX + vec.xCoord * 2, player.posY + 1.5 + vec.yCoord * 2, player.posZ + vec.zCoord *  2)
+                .setPos(player.posX + vec.xCoord * 2, player.posY + 1.5 + vec.yCoord * 2, player.posZ + vec.zCoord * 2)
                 .setSpeed(vec.xCoord, vec.yCoord, vec.zCoord);
         player.worldObj.spawnEntityInWorld(projectile);
         player.worldObj.playSoundEffect(player.posX, player.posY, player.posZ, "rekindledarcane:chain.throw", 0.8f, 0.65f);
+        getSkillData(player).setSkillCooldown(60);
     }
 
     @Override
