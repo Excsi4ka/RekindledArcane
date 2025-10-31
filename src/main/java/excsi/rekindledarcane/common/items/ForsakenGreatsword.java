@@ -10,6 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 
@@ -38,6 +39,11 @@ public class ForsakenGreatsword extends ItemSword {
             ScreenShakeManager.INSTANCE.startShaking(4);
         }
         return super.onLeftClickEntity(stack, player, entity);
+    }
+
+    @Override
+    public EnumRarity getRarity(ItemStack p_77613_1_) {
+        return super.getRarity(p_77613_1_);
     }
 
     @Override

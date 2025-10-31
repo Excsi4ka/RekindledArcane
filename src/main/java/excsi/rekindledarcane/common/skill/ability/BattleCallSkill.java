@@ -2,8 +2,9 @@ package excsi.rekindledarcane.common.skill.ability;
 
 import cpw.mods.fml.relauncher.Side;
 import excsi.rekindledarcane.RekindledArcane;
-import excsi.rekindledarcane.api.client.ISkillCastAnimation;
+import excsi.rekindledarcane.api.skill.ISkillCastAnimation;
 import excsi.rekindledarcane.common.data.skill.CooldownData;
+import excsi.rekindledarcane.api.skill.templates.CastableAbilitySkillBase;
 import excsi.rekindledarcane.common.util.MathUtil;
 import excsi.rekindledarcane.common.util.ParticleType;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,7 +42,13 @@ public class BattleCallSkill extends CastableAbilitySkillBase<CooldownData> {
 
     @Override
     public void onCastingStart(EntityPlayer player, Side side) {
-
+        if(side == Side.SERVER) return;
+        RekindledArcane.proxy.addBeam(ParticleType.LIGHT_BEAM, player.worldObj, player.posX, player.posY - 1.6, player.posZ,
+                (int) (255*Math.random()),
+                (int) (255*Math.random()),
+                (int) (170*Math.random()),
+                30.0f,
+                500);
     }
 
     @Override

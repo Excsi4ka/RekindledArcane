@@ -1,6 +1,7 @@
 package excsi.rekindledarcane.common.data.skill;
 
-import excsi.rekindledarcane.common.data.ITickable;
+import excsi.rekindledarcane.api.data.ITickable;
+import excsi.rekindledarcane.api.data.skill.AbstractData;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 

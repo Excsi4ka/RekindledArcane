@@ -1,9 +1,10 @@
 package excsi.rekindledarcane.common.skill.ability;
 
 import cpw.mods.fml.relauncher.Side;
-import excsi.rekindledarcane.api.client.ISkillCastAnimation;
+import excsi.rekindledarcane.api.skill.ISkillCastAnimation;
 import excsi.rekindledarcane.common.data.skill.CooldownData;
 import excsi.rekindledarcane.common.entity.util.AoeEntity;
+import excsi.rekindledarcane.api.skill.templates.CastableAbilitySkillBase;
 import net.minecraft.entity.player.EntityPlayer;
 
 import java.awt.Color;

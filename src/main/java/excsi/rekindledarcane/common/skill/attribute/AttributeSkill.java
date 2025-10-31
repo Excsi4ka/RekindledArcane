@@ -3,7 +3,7 @@ package excsi.rekindledarcane.common.skill.attribute;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import excsi.rekindledarcane.api.skill.SkillType;
-import excsi.rekindledarcane.common.skill.AbstractSkill;
+import excsi.rekindledarcane.api.skill.templates.AbstractSkill;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.BaseAttributeMap;
 import net.minecraft.entity.ai.attributes.IAttribute;
@@ -93,11 +93,6 @@ public class AttributeSkill extends AbstractSkill {
                         key, currentValue - attributeDataHolder.getAmount(), attributeDataHolder.getOperation()));
             });
         });
-    }
-
-    @Override
-    public boolean reapplyOnRestart() {
-        return false;
     }
 
     public static class AttributeDataHolder {

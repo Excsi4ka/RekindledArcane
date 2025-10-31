@@ -1,10 +1,10 @@
-package excsi.rekindledarcane.common.skill;
+package excsi.rekindledarcane.api.skill.templates;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
-import excsi.rekindledarcane.api.skill.Point;
+import excsi.rekindledarcane.api.misc.Point;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
@@ -25,10 +25,10 @@ public abstract class AbstractSkill implements ISkill {
 
     private String preRequisiteID, antiRequisiteID;
 
-    private static final Point fallbackPoint = new Point(0,0);
+    public static final Point fallbackPoint = new Point(0, 0);
 
     @SideOnly(Side.CLIENT)
-    public IIcon skillIcon;
+    private IIcon skillIcon;
 
     public AbstractSkill(String nameID) {
         this.nameID = nameID;
@@ -86,7 +86,7 @@ public abstract class AbstractSkill implements ISkill {
 
     @Override
     public Point getPosition() {
-        if(point == null)
+        if (point == null)
             return fallbackPoint;
         return point;
     }
@@ -129,7 +129,7 @@ public abstract class AbstractSkill implements ISkill {
 
     @Override
     public boolean equals(Object obj) {
-        if(!(obj instanceof ISkill))
+        if (!(obj instanceof ISkill))
             return false;
         ISkill skill = (ISkill) obj;
         return skill.getNameID().equals(nameID) && skillCategory.equals(skill.getSkillCategory());

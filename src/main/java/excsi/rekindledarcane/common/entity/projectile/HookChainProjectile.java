@@ -1,8 +1,6 @@
 package excsi.rekindledarcane.common.entity.projectile;
 
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import excsi.rekindledarcane.common.registry.RekindledArcaneEffects;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -14,7 +12,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
-public class HookChainProjectile extends GenericProjectile implements IEntityAdditionalSpawnData {
+public class HookChainProjectile extends GenericProjectile {
 
     public EntityLivingBase capturedEntity;
 
@@ -51,25 +49,6 @@ public class HookChainProjectile extends GenericProjectile implements IEntityAdd
     @Override
     public boolean writeToNBTOptional(NBTTagCompound tagCompound) {
         return false;  //returns false to not save entity at all
-    }
-
-    @Override
-    public void writeSpawnData(ByteBuf data) {
-        data.writeInt(getThrower().getEntityId());
-        data.writeDouble(this.motionX);
-        data.writeDouble(this.motionY);
-        data.writeDouble(this.motionZ);
-    }
-
-    @Override
-    public void readSpawnData(ByteBuf data) {
-        Entity entity = worldObj.getEntityByID(data.readInt());
-        if (entity instanceof EntityPlayer) {
-            setThrower((EntityPlayer) entity);
-        }
-        this.motionX = data.readDouble();
-        this.motionY = data.readDouble();
-        this.motionZ = data.readDouble();
     }
 
     @Override
@@ -131,6 +110,6 @@ public class HookChainProjectile extends GenericProjectile implements IEntityAdd
         setPosition(capturedEntity.posX, capturedEntity.posY + capturedEntity.getEyeHeight() / 2, capturedEntity.posZ);
         retrieveTimer = 20;
         capturedEntity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 600, 2));
-        capturedEntity.addPotionEffect(new PotionEffect(RekindledArcaneEffects.vulnerabilityEffect.getId(), 100, 10));
+        capturedEntity.addPotionEffect(new PotionEffect(RekindledArcaneEffects.frailPotion.getId(), 100, 10));
     }
 }

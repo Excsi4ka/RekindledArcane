@@ -2,8 +2,8 @@ package excsi.rekindledarcane.common.registry;
 
 import excsi.rekindledarcane.api.RekindledArcaneAPI;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
-import excsi.rekindledarcane.api.skill.Point;
-import excsi.rekindledarcane.common.skill.SkillCategory;
+import excsi.rekindledarcane.api.skill.templates.SkillCategory;
+import excsi.rekindledarcane.api.misc.Point;
 import excsi.rekindledarcane.common.skill.ability.AutoStrikeSkill;
 import excsi.rekindledarcane.common.skill.ability.BattleCallSkill;
 import excsi.rekindledarcane.common.skill.ability.HookChainSkill;
@@ -11,9 +11,9 @@ import excsi.rekindledarcane.common.skill.ability.MagicSlice;
 import excsi.rekindledarcane.common.skill.attribute.AttributeOperation;
 import excsi.rekindledarcane.common.skill.attribute.AttributeSkill;
 import excsi.rekindledarcane.common.skill.event.FortitudeSkill;
-import excsi.rekindledarcane.common.skill.event.LesserRunicShieldSkill;
 import excsi.rekindledarcane.common.skill.event.TestEventSkill;
 import excsi.rekindledarcane.common.skill.special.UnlockActiveSlotSkill;
+import excsi.rekindledarcane.common.integration.thaumcraft.LesserRunicShieldSkill;
 import net.minecraft.entity.SharedMonsterAttributes;
 
 import java.awt.Color;
@@ -103,10 +103,10 @@ public class SkillSystemRegistry {
         skillCategory = new SkillCategory("SUMMONING", new Color(14, 138, 67, 152));
         RekindledArcaneAPI.registerSkillCategory(skillCategory.getNameID(), skillCategory);
 
-        skillCategory = new SkillCategory("EXPLORATION", new Color(166, 136, 0, 171));
-        RekindledArcaneAPI.registerSkillCategory(skillCategory.getNameID(), skillCategory);
-
-        skillCategory = new SkillCategory("CRAFTSMANSHIP", new Color(136, 0, 0, 152));
-        RekindledArcaneAPI.registerSkillCategory(skillCategory.getNameID(), skillCategory);
+//        skillCategory = new SkillCategory("EXPLORATION", new Color(166, 136, 0, 171));
+//        RekindledArcaneAPI.registerSkillCategory(skillCategory.getNameID(), skillCategory);
+//
+//        skillCategory = new SkillCategory("CRAFTSMANSHIP", new Color(136, 0, 0, 152));
+//        RekindledArcaneAPI.registerSkillCategory(skillCategory.getNameID(), skillCategory);
     }
 }

@@ -8,6 +8,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import excsi.rekindledarcane.RekindledArcane;
 import excsi.rekindledarcane.client.event.ClientEventHandler;
 import excsi.rekindledarcane.client.fx.BatchedEntityFX;
+import excsi.rekindledarcane.client.fx.BeamFX;
 import excsi.rekindledarcane.client.fx.ParticleBatchRender;
 import excsi.rekindledarcane.client.renderer.entity.AoeEntityRenderer;
 import excsi.rekindledarcane.client.renderer.entity.CelestialGreatswordRenderer;
@@ -102,6 +103,14 @@ public class ClientProxy extends CommonProxy {
                 .setMotion(dx, dy, dz)
                 .setColor(r, g, b, alpha)
                 .setResizeRate(resizeSpeed)
+                .setMaxAge(maxAge)
+                .setScale(scale));
+    }
+
+    @Override
+    public void addBeam(ParticleType type, World world, double x, double y, double z, int r, int g, int b, float scale, int maxAge) {
+        ParticleBatchRender.INSTANCE.addEffect(type, new BeamFX(world, x, y, z)
+                .setColor(r, g, b, 255)
                 .setMaxAge(maxAge)
                 .setScale(scale));
     }

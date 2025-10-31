@@ -52,16 +52,16 @@ public class BatchedEntityFX extends EntityFX {
     }
 
     @Override
-    public void renderParticle(Tessellator tessellator, float f, float f1, float f2, float f3, float f4, float f5) {
+    public void renderParticle(Tessellator tessellator, float partialTicks, float f1, float f2, float f3, float f4, float f5) {
         float var12 = 0.1F * this.particleScale;
-        float var13 = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)f - interpPosX);
-        float var14 = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)f - interpPosY);
-        float var15 = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)f - interpPosZ);
+        float x = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)partialTicks - interpPosX);
+        float y = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)partialTicks - interpPosY);
+        float z = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)partialTicks - interpPosZ);
         tessellator.setColorRGBA_F(particleRed, particleGreen, particleBlue, particleAlpha);
-        tessellator.addVertexWithUV((var13 - f1 * var12 - f4 * var12), (var14 - f2 * var12), (var15 - f3 * var12 - f5 * var12),1,1);
-        tessellator.addVertexWithUV((var13 - f1 * var12 + f4 * var12), (var14 + f2 * var12), (var15 - f3 * var12 + f5 * var12),1,0);
-        tessellator.addVertexWithUV((var13 + f1 * var12 + f4 * var12), (var14 + f2 * var12), (var15 + f3 * var12 + f5 * var12),0,0);
-        tessellator.addVertexWithUV((var13 + f1 * var12 - f4 * var12), (var14 - f2 * var12), (var15 + f3 * var12 - f5 * var12),0,1);
+        tessellator.addVertexWithUV((x - f1 * var12 - f4 * var12), (y - f2 * var12), (z - f3 * var12 - f5 * var12),1,1);
+        tessellator.addVertexWithUV((x - f1 * var12 + f4 * var12), (y + f2 * var12), (z - f3 * var12 + f5 * var12),1,0);
+        tessellator.addVertexWithUV((x + f1 * var12 + f4 * var12), (y + f2 * var12), (z + f3 * var12 + f5 * var12),0,0);
+        tessellator.addVertexWithUV((x + f1 * var12 - f4 * var12), (y - f2 * var12), (z + f3 * var12 - f5 * var12),0,1);
     }
 
     @Override

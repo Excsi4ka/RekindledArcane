@@ -1,16 +1,15 @@
-package excsi.rekindledarcane.common.data.skill;
+package excsi.rekindledarcane.api.data.skill;
 
-import excsi.rekindledarcane.common.data.player.PlayerData;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 
 public abstract class AbstractData {
 
-    public String registryName;
+    private final String registryName;
 
-    public boolean sendClientUpdates;
+    private final boolean sendClientUpdates;
 
-    public PlayerData playerData;
+    private ISkillDataTracker dataTracker;
 
     public AbstractData(String registryName, boolean sendClientUpdates) {
         this.registryName = registryName;
@@ -26,13 +25,20 @@ public abstract class AbstractData {
     public abstract void readFromBuffer(ByteBuf buf);
 
     public void markChanged() {
-        if(!sendClientUpdates)
-            return;
-        playerData.queueDataToSync(this);
+        if (!sendClientUpdates) return;
+        dataTracker.queueDataToSync(this);
     }
 
-    public void setDataTracker(PlayerData playerData) {
-        this.playerData = playerData;
+    public String getRegistryName() {
+        return registryName;
+    }
+
+    public boolean shouldSendClientUpdates() {
+        return sendClientUpdates;
+    }
+
+    public void setDataTracker(ISkillDataTracker playerData) {
+        this.dataTracker = playerData;
     }
 
     @Override
@@ -42,7 +48,7 @@ public abstract class AbstractData {
 
     @Override
     public boolean equals(Object obj) {
-        if(!(obj instanceof AbstractData))
+        if (!(obj instanceof AbstractData))
             return false;
         AbstractData data = (AbstractData) obj;
         return data.registryName.equals(this.registryName);

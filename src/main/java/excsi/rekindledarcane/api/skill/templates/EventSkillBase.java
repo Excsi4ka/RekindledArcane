@@ -1,7 +1,6 @@
-package excsi.rekindledarcane.common.skill.event;
+package excsi.rekindledarcane.api.skill.templates;
 
 import excsi.rekindledarcane.api.skill.SkillType;
-import excsi.rekindledarcane.common.skill.AbstractSkill;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;

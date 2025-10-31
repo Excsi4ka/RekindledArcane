@@ -2,6 +2,7 @@ package excsi.rekindledarcane.common.skill.event;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import excsi.rekindledarcane.common.data.skill.CooldownData;
+import excsi.rekindledarcane.api.skill.templates.EventWithDataSkillBase;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class TestEventSkill extends EventWithDataSkillBase<CooldownData> {

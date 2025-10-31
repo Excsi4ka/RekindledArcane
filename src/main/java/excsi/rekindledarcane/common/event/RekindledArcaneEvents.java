@@ -64,8 +64,8 @@ public class RekindledArcaneEvents {
             event.ammount *= 1 - value / 100;
             if(event.ammount <= 0) event.setCanceled(true);
         }
-        if (event.entityLiving.isPotionActive(RekindledArcaneEffects.vulnerabilityEffect)) {
-            PotionEffect effect = event.entityLiving.getActivePotionEffect(RekindledArcaneEffects.vulnerabilityEffect);
+        if (event.entityLiving.isPotionActive(RekindledArcaneEffects.frailPotion)) {
+            PotionEffect effect = event.entityLiving.getActivePotionEffect(RekindledArcaneEffects.frailPotion);
             event.ammount *= 1.2 + 0.2 * effect.getAmplifier();
         }
     }

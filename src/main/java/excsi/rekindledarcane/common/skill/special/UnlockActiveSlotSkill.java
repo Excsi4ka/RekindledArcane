@@ -3,7 +3,7 @@ package excsi.rekindledarcane.common.skill.special;
 import excsi.rekindledarcane.api.skill.SkillType;
 import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
-import excsi.rekindledarcane.common.skill.AbstractSkill;
+import excsi.rekindledarcane.api.skill.templates.AbstractSkill;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class UnlockActiveSlotSkill extends AbstractSkill {
@@ -27,10 +27,5 @@ public class UnlockActiveSlotSkill extends AbstractSkill {
     public void forgetSkill(EntityPlayer player) {
         PlayerData data = PlayerDataManager.getPlayerData(player);
         data.lockActiveSlot();
-    }
-
-    @Override
-    public boolean reapplyOnRestart() {
-        return false;
     }
 }

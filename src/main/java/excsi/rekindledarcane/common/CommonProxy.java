@@ -58,7 +58,11 @@ public class CommonProxy {
 
     public void addEffect(ParticleType type, World world, double x, double y, double z, int r, int g, int b, int alpha, double dx, double dy, double dz, float scale, float resizeSpeed, int maxAge) {}
 
+    public void addBeam(ParticleType type, World world, double x, double y, double z, int r, int g, int b, float scale, int maxAge) {}
+
     public void extendPotionIDS() {
+        if(Potion.potionTypes.length >= 256)
+            return;
         for(Field f : Potion.class.getDeclaredFields()) {
             f.setAccessible(true);
             try {

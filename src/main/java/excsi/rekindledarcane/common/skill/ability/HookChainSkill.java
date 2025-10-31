@@ -2,6 +2,7 @@ package excsi.rekindledarcane.common.skill.ability;
 
 import excsi.rekindledarcane.common.data.skill.CooldownData;
 import excsi.rekindledarcane.common.entity.projectile.HookChainProjectile;
+import excsi.rekindledarcane.api.skill.templates.InstantAbilitySkillBase;
 import excsi.rekindledarcane.common.util.MathUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;

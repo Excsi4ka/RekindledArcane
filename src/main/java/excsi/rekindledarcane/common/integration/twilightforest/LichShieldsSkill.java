@@ -1,14 +1,16 @@
-package excsi.rekindledarcane.common.skill.ability;
+package excsi.rekindledarcane.common.integration.twilightforest;
 
 import cpw.mods.fml.relauncher.Side;
 import excsi.rekindledarcane.api.skill.ISkillCastAnimation;
+import excsi.rekindledarcane.api.skill.IUnlockCondition;
 import excsi.rekindledarcane.common.data.skill.CooldownData;
 import excsi.rekindledarcane.api.skill.templates.CastableAbilitySkillBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 
-public class CelestialGreatSwordStrike extends CastableAbilitySkillBase<CooldownData> {
+public class LichShieldsSkill extends CastableAbilitySkillBase<CooldownData> implements IUnlockCondition {
 
-    public CelestialGreatSwordStrike(String nameID) {
+    public LichShieldsSkill(String nameID) {
         super(nameID);
     }
 
@@ -40,5 +42,14 @@ public class CelestialGreatSwordStrike extends CastableAbilitySkillBase<Cooldown
     @Override
     public CooldownData createDefaultDataInstance() {
         return null;
+    }
+
+    @Override
+    public boolean hasCondition(EntityPlayer player) {
+        if (player.worldObj.isRemote)
+            return false;
+        EntityPlayerMP playerMP = (EntityPlayerMP) player;
+        //return playerMP.func_147099_x().hasAchievementUnlocked();
+        return false;
     }
 }

@@ -14,8 +14,6 @@ import net.minecraft.world.World;
 
 public class MagicSliceProjectile extends GenericProjectile implements IEntityAdditionalSpawnData {
 
-    public EntityPlayer shooter;
-
     public int age = 0, maxAge;
 
     public MagicSliceProjectile(World world) {
@@ -23,21 +21,14 @@ public class MagicSliceProjectile extends GenericProjectile implements IEntityAd
         setSize(1f, 0.5f);
     }
 
-    @Override
-    public void onImpact(MovingObjectPosition mop) {
-
-    }
-
-    @Override
-    protected void entityInit() {}
-
     public MagicSliceProjectile(World world, EntityPlayer player, int maxAge) {
-        this(world);
+        super(world, player);
         setSize(1f, 0.5f);
         this.maxAge = maxAge;
-        this.shooter = player;
-
     }
+
+    @Override
+    public void onImpact(MovingObjectPosition mop) {}
 
     @Override
     public void onUpdate() {
@@ -76,16 +67,6 @@ public class MagicSliceProjectile extends GenericProjectile implements IEntityAd
             setDead();
         }
         setPosition(this.posX, this.posY, this.posZ);
-    }
-
-    @Override
-    protected void readEntityFromNBT(NBTTagCompound p_70037_1_) {
-
-    }
-
-    @Override
-    protected void writeEntityToNBT(NBTTagCompound p_70014_1_) {
-
     }
 
     @Override

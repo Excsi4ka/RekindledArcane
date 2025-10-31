@@ -2,6 +2,7 @@ package excsi.rekindledarcane.api.skill;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import excsi.rekindledarcane.api.misc.Point;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IIcon;
@@ -28,12 +29,6 @@ public interface ISkill {
 
     void forgetSkill(EntityPlayer player);
 
-    /**
-     * @return true if the skill should be applied everytime the player data is loaded from the disc.
-     * Event based skills use this to cache the players that have those skills to avoid looking it up all the time.
-     */
-    boolean reapplyOnRestart();
-
     ISkill setSkillCategory(ISkillCategory category);
 
     ISkill setSkillPointCost(int pointCost);
@@ -53,4 +48,12 @@ public interface ISkill {
 
     @SideOnly(Side.CLIENT)
     IIcon getIcon();
+
+    /**
+     * @return true if {@link #unlockSkill} should be called everytime the game restarts and the player data gets loaded.
+     * Event based skills use this to cache the players that have those skills to avoid looking it up all the time.
+     */
+    default boolean reapplyOnRestart() {
+        return false;
+    }
 }

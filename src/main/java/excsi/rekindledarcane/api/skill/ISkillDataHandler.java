@@ -1,5 +1,6 @@
 package excsi.rekindledarcane.api.skill;
 
+import excsi.rekindledarcane.api.data.skill.ISkillDataTracker;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -9,7 +10,7 @@ public interface ISkillDataHandler {
      */
     String getRegistryName();
 
-    void writeData(EntityPlayer player, NBTTagCompound tagCompound);
+    void writeData(EntityPlayer player, ISkillDataTracker tracker, NBTTagCompound tagCompound);
 
-    void readData(EntityPlayer player, NBTTagCompound tagCompound);
+    void readData(EntityPlayer player, ISkillDataTracker tracker, NBTTagCompound tagCompound);
 }

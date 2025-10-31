@@ -8,6 +8,7 @@ import cpw.mods.fml.relauncher.Side;
 import excsi.rekindledarcane.api.RekindledArcaneAPI;
 import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
+import excsi.rekindledarcane.api.skill.IUnlockCondition;
 import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
 import excsi.rekindledarcane.common.util.RekindledArcaneConfig;
@@ -51,6 +52,8 @@ public class ClientPacketUnlockSkill implements IMessage, IMessageHandler<Client
             if (data.getUnlockedSkillsCount() >= RekindledArcaneConfig.maxSkillsCap)
                 return null;
             if (data.hasSkill(skill) || data.hasSkill(skill.getAntiRequisite()))
+                return null;
+            if (skill instanceof IUnlockCondition && !((IUnlockCondition) skill).hasCondition(player))
                 return null;
             if ((skill.getPreRequisite() == null || data.hasSkill(skill.getPreRequisite())) && data.hasEnoughPoints(skill)) {
                 data.unlockSkill(player, skill, true);

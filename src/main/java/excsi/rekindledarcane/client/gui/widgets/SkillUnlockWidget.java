@@ -1,7 +1,7 @@
 package excsi.rekindledarcane.client.gui.widgets;
 
 import excsi.rekindledarcane.api.skill.ISkill;
-import excsi.rekindledarcane.api.skill.Point;
+import excsi.rekindledarcane.api.misc.Point;
 import excsi.rekindledarcane.client.gui.SkillTreeScreen;
 import excsi.rekindledarcane.client.util.RenderHelperWrapper;
 import net.minecraft.client.Minecraft;
@@ -25,8 +25,8 @@ public class SkillUnlockWidget extends Widget {
         this.unlocked = unlocked;
         if(skill.getPreRequisite() != null) {
             Point connectionPoint = skill.getPreRequisite().getPosition();
-            connectionX = parentScreen.width / 2 + connectionPoint.x + 11;
-            connectionY = connectionPoint.y + 11;
+            connectionX = parentScreen.width / 2 + connectionPoint.getX() + 11;
+            connectionY = connectionPoint.getY() + 11;
         }
     }
 

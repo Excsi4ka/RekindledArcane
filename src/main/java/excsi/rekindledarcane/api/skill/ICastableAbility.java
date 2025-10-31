@@ -1,7 +1,6 @@
 package excsi.rekindledarcane.api.skill;
 
 import cpw.mods.fml.relauncher.Side;
-import excsi.rekindledarcane.api.client.ISkillCastAnimation;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**
@@ -15,9 +14,7 @@ public interface ICastableAbility extends IActiveAbilitySkill {
 
     int getCastingTickAmount();
 
-    default float getMovementSpeedMultiplier() {
-        return 1f;
-    }
+    float getMovementSpeedMultiplier();
 
     ISkillCastAnimation getAnimation();
 

@@ -1,4 +1,4 @@
-package excsi.rekindledarcane.api.client;
+package excsi.rekindledarcane.api.skill;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.player.EntityPlayer;

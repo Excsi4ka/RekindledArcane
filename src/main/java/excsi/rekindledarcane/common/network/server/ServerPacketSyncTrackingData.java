@@ -8,7 +8,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
-import excsi.rekindledarcane.common.data.skill.AbstractData;
+import excsi.rekindledarcane.api.data.skill.AbstractData;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,7 +39,7 @@ public class ServerPacketSyncTrackingData implements IMessage, IMessageHandler<S
     public void toBytes(ByteBuf buf) {
         buf.writeInt(enqueuedData.size());
         enqueuedData.forEach(data -> {
-            ByteBufUtils.writeUTF8String(buf, data.registryName);
+            ByteBufUtils.writeUTF8String(buf, data.getRegistryName());
             data.writeToBuffer(buf);
         });
         enqueuedData.clear();

@@ -17,13 +17,13 @@ public class RekindledArcaneAPI {
     public static final IAttribute MAGIC_RESISTANCE = new RangedAttribute("rekindledarcane.magicResistance", 0, 0, 100)
             .setShouldWatch(true);
 
-    public static final IAttribute SUMMONING_STRENGTH = new RangedAttribute("rekindledarcane.summoningStrength", 0, 0, Double.MAX_VALUE)
+    public static final IAttribute SUMMONING_STRENGTH = new RangedAttribute("rekindledarcane.summoningStrength", 1, 0, Double.MAX_VALUE)
             .setShouldWatch(true);
 
-    public static final IAttribute MAX_SUMMONS = new RangedAttribute("rekindledarcane.maxSummons", 0, 0, 10)
+    public static final IAttribute MAX_SUMMONS = new RangedAttribute("rekindledarcane.maxSummons", 0, 0, 15)
             .setShouldWatch(true);
 
-    public static final IAttribute SPELL_POWER = new RangedAttribute("rekindledarcane.spellPower", 0, 0, Double.MAX_VALUE)
+    public static final IAttribute SPELL_POWER = new RangedAttribute("rekindledarcane.spellPower", 1, 0, Double.MAX_VALUE)
             .setShouldWatch(true);
 
     public static final IAttribute REACH_DISTANCE = new RangedAttribute("rekindledarcane.reachDistance", 0, 0, 10)

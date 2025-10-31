@@ -1,11 +1,12 @@
-package excsi.rekindledarcane.common.skill;
+package excsi.rekindledarcane.api.skill.templates;
 
+import excsi.rekindledarcane.api.data.skill.ISkillDataTracker;
+import excsi.rekindledarcane.api.data.skill.AbstractData;
 import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
 import excsi.rekindledarcane.api.skill.ISkillDataHandler;
 import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
-import excsi.rekindledarcane.common.data.skill.AbstractData;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,10 +19,23 @@ public abstract class AbstractSkillWithData<DATA extends AbstractData> extends A
     private String registryName;
 
     //fast data lookup? maybe
-    public final HashMap<UUID, DATA> skillPlayerToDataMap = new HashMap<>();
+    private final HashMap<UUID, DATA> skillPlayerToDataMap = new HashMap<>();
 
     public AbstractSkillWithData(String nameID) {
         super(nameID);
+    }
+
+    public boolean hasThisSkill(EntityLivingBase entityLivingBase) {
+        if(!(entityLivingBase instanceof EntityPlayer))
+            return false;
+        return skillPlayerToDataMap.containsKey(entityLivingBase.getUniqueID());
+    }
+
+    public DATA getSkillData(EntityLivingBase entityLivingBase) {
+        if(!(entityLivingBase instanceof EntityPlayer))
+            return null;
+        EntityPlayer player = (EntityPlayer) entityLivingBase;
+        return skillPlayerToDataMap.get(player.getUniqueID());
     }
 
     @Override
@@ -46,15 +60,10 @@ public abstract class AbstractSkillWithData<DATA extends AbstractData> extends A
         skillPlayerToDataMap.remove(player.getUniqueID());
     }
 
-    @Override
-    public boolean reapplyOnRestart() {
-        return false;
-    }
-
     public abstract DATA createDefaultDataInstance();
 
     @Override
-    public void writeData(EntityPlayer player, NBTTagCompound compound) {
+    public void writeData(EntityPlayer player, ISkillDataTracker tracker, NBTTagCompound compound) {
         DATA data = skillPlayerToDataMap.get(player.getUniqueID());
         NBTTagCompound tagCompound = new NBTTagCompound();
         data.writeToNBT(tagCompound);
@@ -62,23 +71,15 @@ public abstract class AbstractSkillWithData<DATA extends AbstractData> extends A
     }
 
     @Override
-    public void readData(EntityPlayer player, NBTTagCompound compound) {
+    public void readData(EntityPlayer player, ISkillDataTracker tracker, NBTTagCompound compound) {
         DATA data = createDefaultDataInstance();
         data.readFromNBT(compound.getCompoundTag(registryName));
-        PlayerData playerData = PlayerDataManager.getPlayerData(player);
-        playerData.trackData(data);
+        tracker.trackData(data);
         skillPlayerToDataMap.put(player.getUniqueID(), data);
     }
 
     @Override
     public String getRegistryName() {
         return registryName;
-    }
-
-    public DATA getSkillData(EntityLivingBase entityLivingBase) {
-        if(!(entityLivingBase instanceof EntityPlayer))
-            return null;
-        EntityPlayer player = (EntityPlayer) entityLivingBase;
-        return skillPlayerToDataMap.get(player.getUniqueID());
     }
 }

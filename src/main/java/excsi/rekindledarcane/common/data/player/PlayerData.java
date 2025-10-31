@@ -1,12 +1,13 @@
 package excsi.rekindledarcane.common.data.player;
 
 import excsi.rekindledarcane.api.RekindledArcaneAPI;
+import excsi.rekindledarcane.api.data.ITickable;
+import excsi.rekindledarcane.api.data.skill.AbstractData;
+import excsi.rekindledarcane.api.data.skill.ISkillDataTracker;
 import excsi.rekindledarcane.api.skill.IActiveAbilitySkill;
 import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
 import excsi.rekindledarcane.api.skill.ISkillDataHandler;
-import excsi.rekindledarcane.common.data.ITickable;
-import excsi.rekindledarcane.common.data.skill.AbstractData;
 import excsi.rekindledarcane.common.network.PacketManager;
 import excsi.rekindledarcane.common.network.server.ServerPacketForgetSkill;
 import excsi.rekindledarcane.common.network.server.ServerPacketSyncSkillPoints;
@@ -24,7 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class PlayerData {
+public class PlayerData implements ISkillDataTracker {
 
     private int skillPoints, unlockedSkillsCount, slotCount;
 
@@ -35,9 +36,9 @@ public class PlayerData {
     //-------- For data tracking and updating ---------
     public HashMap<String, AbstractData> trackingData = new HashMap<>();
 
-    private List<AbstractData> dataQueuedToSync = new ArrayList<>();
+    private final List<AbstractData> dataQueuedToSync = new ArrayList<>();
 
-    private List<ITickable> tickingStuff = new ArrayList<>();
+    private final List<ITickable> tickingStuff = new ArrayList<>();
     //----------------------------------------------------
 
     public PlayerData() {
@@ -146,25 +147,6 @@ public class PlayerData {
         return list;
     }
 
-    public void trackData(AbstractData data) {
-        if(data.sendClientUpdates) {
-            trackingData.put(data.registryName, data);
-            data.setDataTracker(this);
-        }
-        if(data instanceof ITickable) {
-            tickingStuff.add((ITickable) data);
-        }
-    }
-
-    public void stopTrackingData(AbstractData data) {
-        trackingData.remove(data.registryName);
-        tickingStuff.remove((ITickable) data);
-    }
-
-    public void queueDataToSync(AbstractData data) {
-        dataQueuedToSync.add(data);
-    }
-
     public void unlockActiveSlot() {
         slotCount = Math.min(slotCount + 1, 5);
     }
@@ -200,19 +182,41 @@ public class PlayerData {
 
             if (skill instanceof ISkillDataHandler) {
                 ISkillDataHandler dataSkill = (ISkillDataHandler) skill;
-                dataSkill.readData(player, compound);
+                dataSkill.readData(player, this, compound);
             }
         }
     }
 
-    private static NBTTagList writeSkillsToNBT(EntityPlayer player, NBTTagCompound compound, Set<ISkill> skillList) {
+    private NBTTagList writeSkillsToNBT(EntityPlayer player, NBTTagCompound compound, Set<ISkill> skillList) {
         NBTTagList nbtTagList = new NBTTagList();
         skillList.forEach(skill -> {
             nbtTagList.appendTag(new NBTTagString(skill.getNameID()));
             if(skill instanceof ISkillDataHandler) {
-                ((ISkillDataHandler) skill).writeData(player, compound);
+                ((ISkillDataHandler) skill).writeData(player, this, compound);
             }
         });
         return nbtTagList;
+    }
+
+    @Override
+    public void trackData(AbstractData data) {
+        if(data.shouldSendClientUpdates()) {
+            trackingData.put(data.getRegistryName(), data);
+            data.setDataTracker(this);
+        }
+        if(data instanceof ITickable) {
+            tickingStuff.add((ITickable) data);
+        }
+    }
+
+    @Override
+    public void stopTrackingData(AbstractData data) {
+        trackingData.remove(data.getRegistryName());
+        tickingStuff.remove((ITickable) data);
+    }
+
+    @Override
+    public void queueDataToSync(AbstractData data) {
+        dataQueuedToSync.add(data);
     }
 }

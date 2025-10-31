@@ -1,5 +1,7 @@
 package excsi.rekindledarcane.common.entity.projectile;
 
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,7 +14,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public abstract class GenericProjectile extends Entity {
+public abstract class GenericProjectile extends Entity implements IEntityAdditionalSpawnData {
 
     private EntityPlayer thrower;
 
@@ -23,6 +25,26 @@ public abstract class GenericProjectile extends Entity {
     public GenericProjectile(World world, EntityPlayer thrower) {
         this(world);
         this.thrower = thrower;
+    }
+
+    public EntityPlayer getThrower() {
+        return thrower;
+    }
+
+    public void setThrower(EntityPlayer player) {
+        thrower = player;
+    }
+
+    public GenericProjectile setSpeed(double x, double y, double z) {
+        motionX = x;
+        motionY = y;
+        motionZ = z;
+        return this;
+    }
+
+    public GenericProjectile setPos(double x, double y, double z) {
+        setPosition(x, y, z);
+        return this;
     }
 
     public abstract void onImpact(MovingObjectPosition mop);
@@ -41,6 +63,25 @@ public abstract class GenericProjectile extends Entity {
 //        posY += motionY;
         setPosition(posX + motionX, posY + motionY, posZ + motionZ);
         checkCollision();
+    }
+
+    @Override
+    public void writeSpawnData(ByteBuf data) {
+        data.writeInt(getThrower().getEntityId());
+        data.writeDouble(this.motionX);
+        data.writeDouble(this.motionY);
+        data.writeDouble(this.motionZ);
+    }
+
+    @Override
+    public void readSpawnData(ByteBuf data) {
+        Entity entity = worldObj.getEntityByID(data.readInt());
+        if (entity instanceof EntityPlayer) {
+            setThrower((EntityPlayer) entity);
+        }
+        this.motionX = data.readDouble();
+        this.motionY = data.readDouble();
+        this.motionZ = data.readDouble();
     }
 
     //terrible mojank code
@@ -102,25 +143,5 @@ public abstract class GenericProjectile extends Entity {
                 this.onImpact(movingobjectposition);
             }
         }
-    }
-
-    public EntityPlayer getThrower() {
-        return thrower;
-    }
-
-    public void setThrower(EntityPlayer player) {
-        thrower = player;
-    }
-
-    public GenericProjectile setSpeed(double x, double y, double z) {
-        motionX = x;
-        motionY = y;
-        motionZ = z;
-        return this;
-    }
-
-    public GenericProjectile setPos(double x, double y, double z) {
-        setPosition(x, y, z);
-        return this;
     }
 }

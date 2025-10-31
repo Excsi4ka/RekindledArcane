@@ -92,12 +92,13 @@ public class ClientSkillCastingManager {
         }
 
         UUID uuid = player.getUniqueID();
-        if(!ClientSkillCastingManager.INSTANCE.playerAbilityMap.containsKey(uuid))
+        ClientSkillCastingManager manager = ClientSkillCastingManager.INSTANCE;
+        if(!manager.playerAbilityMap.containsKey(uuid))
             return;
 
-        ICastableAbility handler = ClientSkillCastingManager.INSTANCE.playerAbilityMap.get(uuid);
+        ICastableAbility handler = manager.playerAbilityMap.get(uuid);
         float partialTicks = Minecraft.getMinecraft().timer.renderPartialTicks;
-        int time = ClientSkillCastingManager.INSTANCE.playerCastTimeMap.get(uuid);
+        int time = manager.playerCastTimeMap.get(uuid);
         handler.getAnimation().animateModel(player, modelBiped, handler.getCastingTickAmount() - time, partialTicks);
     }
 }

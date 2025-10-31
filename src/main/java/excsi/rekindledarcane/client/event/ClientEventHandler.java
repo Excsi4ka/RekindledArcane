@@ -28,7 +28,7 @@ import org.lwjgl.opengl.GL11;
 
 public class ClientEventHandler {
 
-    public static int currentlySelected = 0;
+    private static int currentlySelected = 0;
 
     @SubscribeEvent
     public void onKeyPress(InputEvent.KeyInputEvent event) {

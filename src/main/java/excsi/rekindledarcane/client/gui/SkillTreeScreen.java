@@ -2,7 +2,7 @@ package excsi.rekindledarcane.client.gui;
 
 import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
-import excsi.rekindledarcane.api.skill.Point;
+import excsi.rekindledarcane.api.misc.Point;
 import excsi.rekindledarcane.client.AssetLib;
 import excsi.rekindledarcane.client.gui.widgets.SkillUnlockWidget;
 import excsi.rekindledarcane.client.util.BlendMode;
@@ -51,7 +51,7 @@ public class SkillTreeScreen extends GuiScreen {
         for (ISkill skill : category.getAllSkills()) {
             boolean isUnlocked = unlockedSkills.contains(skill);
             Point point = skill.getPosition();
-            skillWidgets.put(skill, new SkillUnlockWidget(id++, x + point.x, point.y, 22, 22,
+            skillWidgets.put(skill, new SkillUnlockWidget(id++, x + point.getX(), point.getY(), 22, 22,
                     skill, this, isUnlocked));
         }
         lastMouseX = Mouse.getEventX() * width / mc.displayWidth;
@@ -123,6 +123,21 @@ public class SkillTreeScreen extends GuiScreen {
     protected void keyTyped(char character, int index) {
         if(index == Keyboard.KEY_ESCAPE) {
             mc.displayGuiScreen(parentScreen);
+        }
+    }
+
+    @Override
+    public void updateScreen() {
+        if(!Keyboard.getEventKeyState())
+            return;
+        int offsetX = 0;
+        int offsetY = 0;
+        if (Keyboard.isKeyDown(Keyboard.KEY_W)) offsetY -= 2;
+        if (Keyboard.isKeyDown(Keyboard.KEY_A)) offsetX -= 2;
+        if (Keyboard.isKeyDown(Keyboard.KEY_S)) offsetY += 2;
+        if (Keyboard.isKeyDown(Keyboard.KEY_D)) offsetX += 2;
+        for (SkillUnlockWidget button : skillWidgets.values()) {
+            button.handleOffset(offsetX, offsetY);
         }
     }
 

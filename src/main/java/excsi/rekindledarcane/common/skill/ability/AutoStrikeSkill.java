@@ -6,6 +6,7 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import excsi.rekindledarcane.common.data.skill.ToggleAndCooldownData;
+import excsi.rekindledarcane.api.skill.templates.InstantAbilitySkillBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 

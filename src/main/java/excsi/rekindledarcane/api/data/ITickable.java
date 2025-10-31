@@ -1,4 +1,4 @@
-package excsi.rekindledarcane.common.data;
+package excsi.rekindledarcane.api.data;
 
 public interface ITickable {
 

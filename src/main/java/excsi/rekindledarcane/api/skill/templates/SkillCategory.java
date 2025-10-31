@@ -1,6 +1,6 @@
-package excsi.rekindledarcane.common.skill;
+package excsi.rekindledarcane.api.skill.templates;
 
-import excsi.rekindledarcane.RekindledArcane;
+import excsi.rekindledarcane.api.RekindledArcaneAPI;
 import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
 
@@ -29,8 +29,8 @@ public class SkillCategory implements ISkillCategory {
 
     @Override
     public void registerSkill(ISkill skill) {
-        if(skillMap.containsKey(skill.getNameID())) {
-            RekindledArcane.LOG.error("Skill with ID: " + skill.getNameID()
+        if (skillMap.containsKey(skill.getNameID())) {
+            RekindledArcaneAPI.LOG.error("Skill with ID: " + skill.getNameID()
                     + " is already registered. Skills should not have duplicate ids, it won't be registered");
             return;
         }
@@ -40,7 +40,7 @@ public class SkillCategory implements ISkillCategory {
 
     @Override
     public void unregisterSkill(String id) {
-        RekindledArcane.LOG.info("Removing skill with ID: " + id);
+        RekindledArcaneAPI.LOG.info("Removing skill with ID: " + id);
         skillMap.remove(id);
     }
 
@@ -76,7 +76,7 @@ public class SkillCategory implements ISkillCategory {
 
     @Override
     public boolean equals(Object obj) {
-        if(!(obj instanceof ISkillCategory))
+        if (!(obj instanceof ISkillCategory))
             return false;
         ISkillCategory category = (ISkillCategory) obj;
         return nameID.equals(category.getNameID());
