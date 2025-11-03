@@ -1,18 +1,17 @@
 package excsi.rekindledarcane.common.data.skill;
 
-import excsi.rekindledarcane.api.data.ITickable;
-import excsi.rekindledarcane.api.data.skill.AbstractData;
+import excsi.rekindledarcane.api.data.skill.SkillData;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class CooldownData extends AbstractData implements ITickable {
+public class CooldownData extends SkillData {
 
     private int skillCooldown;
 
     private final int updateFrequency;
 
     public CooldownData(String regName, int updateFrequency, boolean needsClientUpdates) {
-        super(regName, needsClientUpdates);
+        super(regName, needsClientUpdates, true);
         this.skillCooldown = 0;
         this.updateFrequency = updateFrequency;
     }
@@ -40,6 +39,10 @@ public class CooldownData extends AbstractData implements ITickable {
     public void writeToBuffer(ByteBuf buf) {
         buf.writeInt(skillCooldown);
     }
+    @Override
+    public boolean readyToTick() {
+        return skillCooldown > 0;
+    }
 
     @Override
     public void readFromBuffer(ByteBuf buf) {
@@ -47,12 +50,7 @@ public class CooldownData extends AbstractData implements ITickable {
     }
 
     @Override
-    public boolean shouldTick() {
-        return skillCooldown > 0;
-    }
-
-    @Override
     public void tick() {
-        if(skillCooldown-- % updateFrequency == 0) markChanged();
+        if (skillCooldown-- % updateFrequency == 0) markChanged();
     }
 }

@@ -26,7 +26,7 @@ public abstract class EventSkillBase extends AbstractSkill {
 
     @Override
     public SkillType getSkillType() {
-        return SkillType.ABILITY;
+        return SkillType.PASSIVE;
     }
 
     @Override

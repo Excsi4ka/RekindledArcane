@@ -57,7 +57,7 @@ public class ServerPacketUnlockSkill implements IMessage, IMessageHandler<Server
                 SkillTreeScreen screen = (SkillTreeScreen) Minecraft.getMinecraft().currentScreen;
                 SkillUnlockWidget widget = screen.skillWidgets.get(skill);
                 if (widget != null) {
-                    widget.unlocked = true;
+                    widget.setUnlocked(true);
                 }
             }
         }

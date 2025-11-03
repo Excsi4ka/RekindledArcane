@@ -57,7 +57,7 @@ public class ServerPacketForgetSkill implements IMessage, IMessageHandler<Server
                 SkillTreeScreen screen = (SkillTreeScreen) Minecraft.getMinecraft().currentScreen;
                 SkillUnlockWidget widget = screen.skillWidgets.get(skill);
                 if (widget != null) {
-                    widget.unlocked = false;
+                    widget.setUnlocked(false);
                 }
             }
         }

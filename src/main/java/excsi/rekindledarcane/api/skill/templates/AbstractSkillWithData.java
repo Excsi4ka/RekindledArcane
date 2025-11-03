@@ -1,12 +1,10 @@
 package excsi.rekindledarcane.api.skill.templates;
 
-import excsi.rekindledarcane.api.data.skill.ISkillDataTracker;
-import excsi.rekindledarcane.api.data.skill.AbstractData;
+import excsi.rekindledarcane.api.data.skill.IDataTracker;
+import excsi.rekindledarcane.api.data.skill.SkillData;
 import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
 import excsi.rekindledarcane.api.skill.ISkillDataHandler;
-import excsi.rekindledarcane.common.data.player.PlayerData;
-import excsi.rekindledarcane.common.data.player.PlayerDataManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,12 +12,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import java.util.HashMap;
 import java.util.UUID;
 
-public abstract class AbstractSkillWithData<DATA extends AbstractData> extends AbstractSkill implements ISkillDataHandler {
+public abstract class AbstractSkillWithData<DATA extends SkillData> extends AbstractSkill implements ISkillDataHandler {
 
     private String registryName;
 
     //fast data lookup? maybe
-    private final HashMap<UUID, DATA> skillPlayerToDataMap = new HashMap<>();
+    private final HashMap<UUID, DATA> playerToSkillDataMap = new HashMap<>();
 
     public AbstractSkillWithData(String nameID) {
         super(nameID);
@@ -28,15 +26,17 @@ public abstract class AbstractSkillWithData<DATA extends AbstractData> extends A
     public boolean hasThisSkill(EntityLivingBase entityLivingBase) {
         if(!(entityLivingBase instanceof EntityPlayer))
             return false;
-        return skillPlayerToDataMap.containsKey(entityLivingBase.getUniqueID());
+        return playerToSkillDataMap.containsKey(entityLivingBase.getUniqueID());
     }
 
     public DATA getSkillData(EntityLivingBase entityLivingBase) {
         if(!(entityLivingBase instanceof EntityPlayer))
             return null;
         EntityPlayer player = (EntityPlayer) entityLivingBase;
-        return skillPlayerToDataMap.get(player.getUniqueID());
+        return playerToSkillDataMap.get(player.getUniqueID());
     }
+
+    public abstract DATA createDefaultDataInstance();
 
     @Override
     public ISkill setSkillCategory(ISkillCategory skillCategory) {
@@ -46,40 +46,46 @@ public abstract class AbstractSkillWithData<DATA extends AbstractData> extends A
 
     @Override
     public void unlockSkill(EntityPlayer player) {
-        PlayerData playerData = PlayerDataManager.getPlayerData(player);
         DATA data = createDefaultDataInstance();
-        playerData.trackData(data);
-        skillPlayerToDataMap.put(player.getUniqueID(), data);
+        playerToSkillDataMap.put(player.getUniqueID(), data);
     }
 
     @Override
     public void forgetSkill(EntityPlayer player) {
-        PlayerData playerData = PlayerDataManager.getPlayerData(player);
-        DATA data = skillPlayerToDataMap.get(player.getUniqueID());
-        playerData.stopTrackingData(data);
-        skillPlayerToDataMap.remove(player.getUniqueID());
-    }
-
-    public abstract DATA createDefaultDataInstance();
-
-    @Override
-    public void writeData(EntityPlayer player, ISkillDataTracker tracker, NBTTagCompound compound) {
-        DATA data = skillPlayerToDataMap.get(player.getUniqueID());
-        NBTTagCompound tagCompound = new NBTTagCompound();
-        data.writeToNBT(tagCompound);
-        compound.setTag(registryName, tagCompound);
+        playerToSkillDataMap.remove(player.getUniqueID());
     }
 
     @Override
-    public void readData(EntityPlayer player, ISkillDataTracker tracker, NBTTagCompound compound) {
-        DATA data = createDefaultDataInstance();
-        data.readFromNBT(compound.getCompoundTag(registryName));
+    public void linkSkillData(EntityPlayer player, IDataTracker tracker) {
+        DATA data = playerToSkillDataMap.get(player.getUniqueID());
         tracker.trackData(data);
-        skillPlayerToDataMap.put(player.getUniqueID(), data);
+    }
+
+    @Override
+    public void unlinkSkillData(EntityPlayer player, IDataTracker tracker) {
+        DATA data = playerToSkillDataMap.get(player.getUniqueID());
+        tracker.stopTrackingData(data);
+    }
+
+    @Override
+    public void writeData(EntityPlayer player, NBTTagCompound compound) {
+        DATA data = playerToSkillDataMap.get(player.getUniqueID());
+        data.writeToNBT(compound);
+    }
+
+    @Override
+    public void readData(EntityPlayer player, NBTTagCompound compound) {
+        DATA data = playerToSkillDataMap.get(player.getUniqueID());
+        data.readFromNBT(compound);
     }
 
     @Override
     public String getRegistryName() {
         return registryName;
+    }
+
+    @Override
+    public boolean reapplyOnRestart() {
+        return true;
     }
 }

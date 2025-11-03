@@ -1,7 +1,6 @@
 package excsi.rekindledarcane.common.skill.ability;
 
 import cpw.mods.fml.relauncher.Side;
-import excsi.rekindledarcane.api.skill.ISkillCastAnimation;
 import excsi.rekindledarcane.common.data.skill.CooldownData;
 import excsi.rekindledarcane.api.skill.templates.CastableAbilitySkillBase;
 import net.minecraft.entity.player.EntityPlayer;

@@ -1,10 +1,10 @@
 package excsi.rekindledarcane.api.skill.templates;
 
 import excsi.rekindledarcane.api.skill.SkillType;
-import excsi.rekindledarcane.api.data.skill.AbstractData;
+import excsi.rekindledarcane.api.data.skill.SkillData;
 import net.minecraftforge.common.MinecraftForge;
 
-public abstract class EventWithDataSkillBase<DATA extends AbstractData> extends AbstractSkillWithData<DATA> {
+public abstract class EventWithDataSkillBase<DATA extends SkillData> extends AbstractSkillWithData<DATA> {
 
     public EventWithDataSkillBase(String nameID) {
         super(nameID);
@@ -13,6 +13,6 @@ public abstract class EventWithDataSkillBase<DATA extends AbstractData> extends 
 
     @Override
     public SkillType getSkillType() {
-        return SkillType.ABILITY;
+        return SkillType.PASSIVE;
     }
 }

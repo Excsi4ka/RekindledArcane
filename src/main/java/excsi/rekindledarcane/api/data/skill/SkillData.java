@@ -3,17 +3,20 @@ package excsi.rekindledarcane.api.data.skill;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 
-public abstract class AbstractData {
+public abstract class SkillData {
 
-    private final String registryName;
+    private final String registryName; // Usually CategoryID:SkillID
 
     private final boolean sendClientUpdates;
 
-    private ISkillDataTracker dataTracker;
+    private final boolean isTickingData;
 
-    public AbstractData(String registryName, boolean sendClientUpdates) {
+    private IDataTracker dataTracker;
+
+    public SkillData(String registryName, boolean sendClientUpdates, boolean shouldTick) {
         this.registryName = registryName;
         this.sendClientUpdates = sendClientUpdates;
+        this.isTickingData = shouldTick;
     }
 
     public abstract void writeToNBT(NBTTagCompound compound);
@@ -37,7 +40,17 @@ public abstract class AbstractData {
         return sendClientUpdates;
     }
 
-    public void setDataTracker(ISkillDataTracker playerData) {
+    public boolean isTickingData() {
+        return isTickingData;
+    }
+
+    public boolean readyToTick() {
+        return false;
+    }
+
+    public void tick() {}
+
+    public void setDataTracker(IDataTracker playerData) {
         this.dataTracker = playerData;
     }
 
@@ -48,9 +61,9 @@ public abstract class AbstractData {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof AbstractData))
+        if (!(obj instanceof SkillData))
             return false;
-        AbstractData data = (AbstractData) obj;
+        SkillData data = (SkillData) obj;
         return data.registryName.equals(this.registryName);
     }
 }

@@ -51,7 +51,6 @@ public interface ISkill {
 
     /**
      * @return true if {@link #unlockSkill} should be called everytime the game restarts and the player data gets loaded.
-     * Event based skills use this to cache the players that have those skills to avoid looking it up all the time.
      */
     default boolean reapplyOnRestart() {
         return false;

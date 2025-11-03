@@ -10,7 +10,6 @@ import excsi.rekindledarcane.api.skill.SkillType;
 import excsi.rekindledarcane.client.AssetLib;
 import excsi.rekindledarcane.client.ClientProxy;
 import excsi.rekindledarcane.client.gui.SkillCategorySelectionScreen;
-import excsi.rekindledarcane.client.gui.SkillSelectionScreen;
 import excsi.rekindledarcane.client.util.BlendMode;
 import excsi.rekindledarcane.client.util.ClientSkillCastingManager;
 import excsi.rekindledarcane.client.util.RenderHelperWrapper;
@@ -32,20 +31,17 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public void onKeyPress(InputEvent.KeyInputEvent event) {
-        if (ClientProxy.temp.isPressed()) {
+        if (ClientProxy.skillTreeOpen.isPressed()) {
             Minecraft.getMinecraft().displayGuiScreen(new SkillCategorySelectionScreen());
         }
-        if(ClientProxy.activateAbilityKey.isPressed()) {
+        if (ClientProxy.activateAbilityKey.isPressed()) {
             PacketManager.sendToServer(new ClientPacketActivateAbility(currentlySelected));
         }
-        if (ClientProxy.abilityChooseScreen.isPressed()) {
-            Minecraft.getMinecraft().displayGuiScreen(new SkillSelectionScreen());
-        }
-        if(ClientProxy.switchLeft.isPressed()) {
+        if (ClientProxy.switchLeft.isPressed()) {
             PlayerData data = PlayerDataManager.getPlayerData(Minecraft.getMinecraft().thePlayer);
             currentlySelected = currentlySelected - 1 < 0 ? data.getActiveSlotCount() - 1 : currentlySelected - 1;
         }
-        if(ClientProxy.switchRight.isPressed()) {
+        if (ClientProxy.switchRight.isPressed()) {
             PlayerData data = PlayerDataManager.getPlayerData(Minecraft.getMinecraft().thePlayer);
             currentlySelected = currentlySelected + 1 > data.getActiveSlotCount() - 1 ? 0 : currentlySelected + 1;
         }
@@ -53,7 +49,7 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public void onOverlay(RenderGameOverlayEvent.Post event) {
-        if(event.type != ElementType.HOTBAR)
+        if (event.type != ElementType.HOTBAR)
             return;
         int x = event.resolution.getScaledWidth() / 2 - 200;
         int y = event.resolution.getScaledHeight() - 25;
@@ -65,17 +61,17 @@ public class ClientEventHandler {
 
         RenderHelperWrapper.enableBlend();
         RenderHelperWrapper.blendMode(BlendMode.DEFAULT);
-        GL11.glColor4f(1f,1f,1f,1f);
+        GL11.glColor4f(1f, 1f, 1f, 1f);
         for (int i = 0; i < data.getActiveSlotCount(); i++) {
             IActiveAbilitySkill ability = data.getEquippedActiveSkills().get(i);
-            if(ability != null) {
-                RenderHelperWrapper.batchDrawIcon(tes,5 + 21 * i, y, 20, 20, 0, ability.getIcon());
+            if (ability != null) {
+                RenderHelperWrapper.batchDrawIcon(tes, 5 + 21 * i, y, 20, 20, 0, ability.getIcon());
             }
-            if(currentlySelected == i) {
-                RenderHelperWrapper.batchDrawIcon(tes, 4 + 21 * i, y - 1, 22, 22, 0, SkillType.ABILITY.frameIcon);
+            if (currentlySelected == i) {
+                RenderHelperWrapper.batchDrawIcon(tes, 4 + 21 * i, y - 1, 22, 22, 0, SkillType.ABILITY.getFrameIcon());
                 continue;
             }
-            RenderHelperWrapper.batchDrawIcon(tes, 5 + 21 * i, y, 20, 20, 0, SkillType.PASSIVE.frameIcon);
+            RenderHelperWrapper.batchDrawIcon(tes, 5 + 21 * i, y, 20, 20, 0, SkillType.PASSIVE.getFrameIcon());
         }
         tes.draw();
         RenderHelperWrapper.restoreStates();
@@ -95,16 +91,16 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if(event.phase == TickEvent.Phase.START)
+        if (event.phase == TickEvent.Phase.START)
             return;
-        if(event.side == Side.SERVER)
+        if (event.side == Side.SERVER)
             return;
         ClientSkillCastingManager.INSTANCE.tick(event.player);
     }
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
-        if(event.phase == TickEvent.Phase.START)
+        if (event.phase == TickEvent.Phase.START)
             return;
         ScreenShakeManager.INSTANCE.tick();
     }

@@ -1,0 +1,50 @@
+package excsi.rekindledarcane.client.gui.widgets;
+
+import excsi.rekindledarcane.api.skill.IActiveAbilitySkill;
+import excsi.rekindledarcane.client.AssetLib;
+import excsi.rekindledarcane.client.gui.SkillTreeScreen;
+import excsi.rekindledarcane.client.util.RenderHelperWrapper;
+import excsi.rekindledarcane.common.network.PacketManager;
+import excsi.rekindledarcane.common.network.client.ClientPacketEquipSkill;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.StatCollector;
+
+public class QuickEquipWidget extends Widget {
+
+    public final IActiveAbilitySkill ability;
+
+    public final boolean locked;
+
+    public final SkillTreeScreen parentScreen;
+
+    public QuickEquipWidget(int id, int x, int y, int width, int height, IActiveAbilitySkill ability, boolean locked, SkillTreeScreen screen) {
+        super(id, x, y, width, height);
+        this.ability = ability;
+        this.locked = locked;
+        this.parentScreen = screen;
+        if (ability != null)
+            descriptionTooltip.add(StatCollector.translateToLocal(ability.getUnlocalizedName()));
+        else
+            descriptionTooltip.add(StatCollector.translateToLocal("rekindledarcane.skill.slot.locked"));
+    }
+
+    @Override
+    public void drawButton(Minecraft mc, int mouseX, int mouseY) {
+        Tessellator tes = Tessellator.instance;
+        RenderHelperWrapper.batchDrawIcon(tes, xPosition, yPosition, 22, 22, 0, AssetLib.slot);
+        if (locked) {
+            RenderHelperWrapper.batchDrawIcon(tes, xPosition, yPosition, 22, 22, 0, AssetLib.lock);
+        }
+        if (ability != null) {
+            RenderHelperWrapper.batchDrawIcon(tes, xPosition + 3, yPosition + 3, 16, 16, 0, ability.getIcon());
+        }
+        if (isMouseOver(mouseX, mouseY) && parentScreen.equipmentMenuToggled()) {
+            parentScreen.setHoveringSlot(this);
+        }
+    }
+
+    public void onEquip(IActiveAbilitySkill skill) {
+        if (!locked) PacketManager.sendToServer(new ClientPacketEquipSkill(skill, id));
+    }
+}

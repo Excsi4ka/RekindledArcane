@@ -2,7 +2,7 @@ package excsi.rekindledarcane.client.util;
 
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
-import excsi.rekindledarcane.api.skill.ICastableAbility;
+import excsi.rekindledarcane.api.skill.ICastableSkill;
 import excsi.rekindledarcane.common.registry.RekindledArcaneItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
@@ -17,7 +17,7 @@ public class ClientSkillCastingManager {
 
     public static ClientSkillCastingManager INSTANCE = new ClientSkillCastingManager();
 
-    private final HashMap<UUID, ICastableAbility> playerAbilityMap;
+    private final HashMap<UUID, ICastableSkill> playerAbilityMap;
 
     private final HashMap<UUID, Integer> playerCastTimeMap;
 
@@ -34,7 +34,7 @@ public class ClientSkillCastingManager {
             return;
         UUID uuid = player.getUniqueID();
         int time = playerCastTimeMap.get(uuid);
-        ICastableAbility ability = playerAbilityMap.get(uuid);
+        ICastableSkill ability = playerAbilityMap.get(uuid);
         if(time-- > 0) {
             ability.onCastTick(player, ability.getCastingTickAmount() - time, Side.CLIENT);
             playerCastTimeMap.put(uuid, time);
@@ -45,7 +45,7 @@ public class ClientSkillCastingManager {
         playerAbilityMap.remove(uuid);
     }
 
-    public void startCasting(EntityPlayer player, ICastableAbility ability) {
+    public void startCasting(EntityPlayer player, ICastableSkill ability) {
         playerCastTimeMap.put(player.getUniqueID(), ability.getCastingTickAmount());
         playerAbilityMap.put(player.getUniqueID(), ability);
         ability.onCastingStart(player, Side.CLIENT);
@@ -96,7 +96,7 @@ public class ClientSkillCastingManager {
         if(!manager.playerAbilityMap.containsKey(uuid))
             return;
 
-        ICastableAbility handler = manager.playerAbilityMap.get(uuid);
+        ICastableSkill handler = manager.playerAbilityMap.get(uuid);
         float partialTicks = Minecraft.getMinecraft().timer.renderPartialTicks;
         int time = manager.playerCastTimeMap.get(uuid);
         handler.getAnimation().animateModel(player, modelBiped, handler.getCastingTickAmount() - time, partialTicks);

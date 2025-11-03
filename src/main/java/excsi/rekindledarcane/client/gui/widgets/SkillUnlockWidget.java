@@ -9,16 +9,16 @@ import net.minecraft.client.renderer.Tessellator;
 
 public class SkillUnlockWidget extends Widget {
 
-    public final ISkill skill;
+    private final ISkill skill;
 
     public final SkillTreeScreen parentScreen;
 
-    public boolean unlocked;
+    private boolean unlocked;
 
     public int connectionX, connectionY;
 
-    public SkillUnlockWidget(int id, int x, int y, int width, int height, ISkill skill, SkillTreeScreen parentScreen, boolean unlocked) {
-        super(id, x, y, width, height);
+    public SkillUnlockWidget(int x, int y, int width, int height, ISkill skill, SkillTreeScreen parentScreen, boolean unlocked) {
+        super(0, x, y, width, height);
         this.skill = skill;
         this.parentScreen = parentScreen;
         this.skill.addDescription(descriptionTooltip); //maybe shouldn't store descriptions for all skills upon screen init;
@@ -37,11 +37,23 @@ public class SkillUnlockWidget extends Widget {
             tessellator.setColorOpaque_F(0.3f,0.3f,0.3f);
         else
             tessellator.setColorOpaque_F(1f,1f,1f);
-        RenderHelperWrapper.batchDrawIcon(tessellator, xPosition + 3, yPosition + 3, 16, 16, 10, skill.getIcon());
-        RenderHelperWrapper.batchDrawIcon(tessellator, xPosition, yPosition, width, height, 10, skill.getSkillType().frameIcon);
-        if(isMouseOver(mouseX, mouseY)) {
-            parentScreen.currentHoveringWidget = this;
+        RenderHelperWrapper.batchDrawIcon(tessellator, xPosition + 3, yPosition + 3, 16, 16, 0, skill.getIcon());
+        RenderHelperWrapper.batchDrawIcon(tessellator, xPosition, yPosition, width, height, 0, skill.getSkillType().getFrameIcon());
+        if(isMouseOver(mouseX, mouseY) && !parentScreen.equipmentMenuToggled()) {
+            parentScreen.setCurrentHoveringWidget(this);
         }
+    }
+
+    public void setUnlocked(boolean unlocked) {
+        this.unlocked = unlocked;
+    }
+
+    public boolean isUnlocked() {
+        return unlocked;
+    }
+
+    public ISkill getSkill() {
+        return skill;
     }
 
     public void handleOffset(int offsetX, int offsetY) {

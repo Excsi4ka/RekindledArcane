@@ -19,10 +19,20 @@ public enum SkillType {
     public final Color typeColor;
 
     @SideOnly(Side.CLIENT)
-    public IIcon frameIcon;
+    private IIcon frameIcon;
 
     SkillType(String texName, Color typeColor) {
         this.typeTexName = "rekindledarcane:" + texName;
         this.typeColor = typeColor;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public IIcon getFrameIcon() {
+        return frameIcon;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void setFrameIcon(IIcon frameIcon) {
+        this.frameIcon = frameIcon;
     }
 }

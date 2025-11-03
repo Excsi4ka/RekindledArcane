@@ -7,7 +7,7 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import excsi.rekindledarcane.api.RekindledArcaneAPI;
-import excsi.rekindledarcane.api.skill.ICastableAbility;
+import excsi.rekindledarcane.api.skill.ICastableSkill;
 import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
 import excsi.rekindledarcane.client.util.ClientSkillCastingManager;
@@ -56,9 +56,9 @@ public class ServerPacketNotifyCasting implements IMessage, IMessageHandler<Serv
             if (category == null)
                 return null;
             ISkill skill = category.getSkillFromID(message.skillID);
-            if (!(skill instanceof ICastableAbility))
+            if (!(skill instanceof ICastableSkill))
                 return null;
-            ICastableAbility ability = (ICastableAbility) skill;
+            ICastableSkill ability = (ICastableSkill) skill;
             ClientSkillCastingManager.INSTANCE.startCasting(clientPlayer, ability);
         }
         return null;

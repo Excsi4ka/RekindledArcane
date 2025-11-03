@@ -15,6 +15,10 @@ public class AssetLib {
 
     public static final ResourceLocation backgroundTex = rl("textures/gui/background.png");
 
+    public static final ResourceLocation scroll = rl("textures/gui/scroll.png");
+
+    public static final ResourceLocation bg = rl("textures/gui/bg.png");
+
     public static final ResourceLocation skillIconTextureAtlas = new ResourceLocation("textures/atlas/skill_icons.png");
 
     public static final ResourceLocation menuDing = rl("menu.ding");
@@ -27,7 +31,9 @@ public class AssetLib {
 
     public static final ResourceLocation hookChainTexture = rl("textures/entity/chains.png");
 
-    public static IIcon missingSkillTexture;
+    public static IIcon slot;
+
+    public static IIcon lock;
 
     public static ResourceLocation rl(String resourcePath) {
         return new ResourceLocation("rekindledarcane", resourcePath);
@@ -40,10 +46,11 @@ public class AssetLib {
         RekindledArcane.LOG.info("Creating a texture atlas for skill icons");
         TextureMap map = event.map;
 
-        missingSkillTexture = map.registerIcon("rekindledarcane:missing_skill_icon");
+        slot = map.registerIcon("rekindledarcane:equipment_slot");
+        lock = map.registerIcon("rekindledarcane:equipment_lock");
 
         for (SkillType type : SkillType.values()) {
-            type.frameIcon = map.registerIcon(type.typeTexName);
+            type.setFrameIcon(map.registerIcon(type.typeTexName));
         }
 
         //the skills should have been loaded by now in preInit

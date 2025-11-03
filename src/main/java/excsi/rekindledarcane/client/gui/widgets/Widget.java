@@ -22,6 +22,11 @@ public abstract class Widget extends GuiButton {
         return mouseX >= xPosition && mouseY >= yPosition && mouseX < xPosition + width && mouseY < yPosition + height;
     }
 
+    public void setPosition(int x, int y) {
+        xPosition = x;
+        yPosition = y;
+    }
+
     @Override
     public void drawButton(Minecraft mc, int mouseX, int mouseY) {
         super.drawButton(mc, mouseX, mouseY);

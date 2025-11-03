@@ -8,7 +8,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
-import excsi.rekindledarcane.api.data.skill.AbstractData;
+import excsi.rekindledarcane.api.data.skill.SkillData;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ServerPacketSyncTrackingData implements IMessage, IMessageHandler<ServerPacketSyncTrackingData, IMessage> {
 
-    public List<AbstractData> enqueuedData;
+    public List<SkillData> enqueuedData;
 
     public ByteBuf buffer;
 
@@ -25,7 +25,7 @@ public class ServerPacketSyncTrackingData implements IMessage, IMessageHandler<S
 
     public ServerPacketSyncTrackingData() {}
 
-    public ServerPacketSyncTrackingData(List<AbstractData> data) {
+    public ServerPacketSyncTrackingData(List<SkillData> data) {
         this.enqueuedData = data;
     }
 

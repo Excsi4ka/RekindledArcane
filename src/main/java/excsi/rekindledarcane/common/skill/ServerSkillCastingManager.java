@@ -2,7 +2,7 @@ package excsi.rekindledarcane.common.skill;
 
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
-import excsi.rekindledarcane.api.skill.ICastableAbility;
+import excsi.rekindledarcane.api.skill.ICastableSkill;
 import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.HashMap;
@@ -12,7 +12,7 @@ public class ServerSkillCastingManager {
 
     public static ServerSkillCastingManager INSTANCE = new ServerSkillCastingManager();
 
-    private final HashMap<UUID, ICastableAbility> playerAbilityMap;
+    private final HashMap<UUID, ICastableSkill> playerAbilityMap;
 
     private final HashMap<UUID, Integer> playerCastTimeMap;
 
@@ -29,7 +29,7 @@ public class ServerSkillCastingManager {
             return;
         UUID uuid = player.getUniqueID();
         int time = playerCastTimeMap.get(uuid);
-        ICastableAbility ability = playerAbilityMap.get(uuid);
+        ICastableSkill ability = playerAbilityMap.get(uuid);
         if(time-- > 0) {
             ability.onCastTick(player, ability.getCastingTickAmount() - time, Side.SERVER);
             playerCastTimeMap.put(uuid, time);
@@ -41,7 +41,7 @@ public class ServerSkillCastingManager {
         playerAbilityMap.remove(uuid);
     }
 
-    public void startCasting(EntityPlayer player, ICastableAbility ability) {
+    public void startCasting(EntityPlayer player, ICastableSkill ability) {
         playerCastTimeMap.put(player.getUniqueID(), ability.getCastingTickAmount());
         playerAbilityMap.put(player.getUniqueID(), ability);
         ability.onCastingStart(player, Side.SERVER);

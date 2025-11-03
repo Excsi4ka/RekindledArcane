@@ -19,7 +19,7 @@ public abstract class AbstractSkill implements ISkill {
 
     private ISkillCategory skillCategory;
 
-    private Point point;
+    private Point point = fallbackPoint;
 
     private ISkill cachedPreRequisite = null, cachedAntiRequisite = null;
 
@@ -28,7 +28,7 @@ public abstract class AbstractSkill implements ISkill {
     public static final Point fallbackPoint = new Point(0, 0);
 
     @SideOnly(Side.CLIENT)
-    private IIcon skillIcon;
+    protected IIcon skillIcon;
 
     public AbstractSkill(String nameID) {
         this.nameID = nameID;
@@ -86,8 +86,6 @@ public abstract class AbstractSkill implements ISkill {
 
     @Override
     public Point getPosition() {
-        if (point == null)
-            return fallbackPoint;
         return point;
     }
 

@@ -5,7 +5,7 @@ import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import excsi.rekindledarcane.api.skill.IActiveAbilitySkill;
-import excsi.rekindledarcane.api.skill.ICastableAbility;
+import excsi.rekindledarcane.api.skill.ICastableSkill;
 import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
 import excsi.rekindledarcane.common.network.PacketManager;
@@ -54,8 +54,8 @@ public class ClientPacketActivateAbility implements IMessage, IMessageHandler<Cl
             if (ServerSkillCastingManager.INSTANCE.alreadyCasting(player))
                 return null;
 
-            if (ability instanceof ICastableAbility) {
-                ICastableAbility castableAbility = (ICastableAbility) ability;
+            if (ability instanceof ICastableSkill) {
+                ICastableSkill castableAbility = (ICastableSkill) ability;
                 ServerSkillCastingManager.INSTANCE.startCasting(player, castableAbility);
 
                 WorldServer worldServer = (WorldServer) player.worldObj;

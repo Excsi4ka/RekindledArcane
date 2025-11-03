@@ -1,7 +1,6 @@
 package excsi.rekindledarcane.common.integration.twilightforest;
 
 import cpw.mods.fml.relauncher.Side;
-import excsi.rekindledarcane.api.skill.ISkillCastAnimation;
 import excsi.rekindledarcane.api.skill.IUnlockCondition;
 import excsi.rekindledarcane.common.data.skill.CooldownData;
 import excsi.rekindledarcane.api.skill.templates.CastableAbilitySkillBase;
