@@ -82,8 +82,9 @@ public class PlayerData implements IDataTracker {
 
         skill.unlockSkill(player);
 
-        if (skill instanceof ISkillDataHandler)
+        if (skill instanceof ISkillDataHandler) {
             ((ISkillDataHandler) skill).linkSkillData(player, this);
+        }
 
         if (notifyClient) {
             PacketManager.sendToPlayer(new ServerPacketUnlockSkill(skill.getSkillCategory(), skill), player);
@@ -96,8 +97,14 @@ public class PlayerData implements IDataTracker {
         unlockedSkills.get(skill.getSkillCategory()).remove(skill);
         unlockedSkillsCount--;
 
-        if (skill instanceof ISkillDataHandler)
+        if (skill instanceof ISkillDataHandler) {
             ((ISkillDataHandler) skill).unlinkSkillData(player, this);
+        }
+
+        if (skill instanceof IActiveAbilitySkill) {
+            int index = activeSkills.indexOf(skill);
+            if (index != -1) activeSkills.set(index, null);
+        }
 
         skill.forgetSkill(player);
 
@@ -146,15 +153,15 @@ public class PlayerData implements IDataTracker {
         return activeSkills;
     }
 
-    public List<IActiveAbilitySkill> getAllActiveSkills() {
-        List<IActiveAbilitySkill> list = new ArrayList<>();
-        unlockedSkills.forEach(((category, iSkills) -> iSkills.forEach(skill -> {
-            if (skill instanceof IActiveAbilitySkill) {
-                list.add((IActiveAbilitySkill) skill);
-            }
-        })));
-        return list;
-    }
+//    public List<IActiveAbilitySkill> getAllActiveSkills() {
+//        List<IActiveAbilitySkill> list = new ArrayList<>();
+//        unlockedSkills.forEach(((category, iSkills) -> iSkills.forEach(skill -> {
+//            if (skill instanceof IActiveAbilitySkill) {
+//                list.add((IActiveAbilitySkill) skill);
+//            }
+//        })));
+//        return list;
+//    }
 
     public void unlockActiveSlot() {
         slotCount = Math.min(slotCount + 1, 5);
@@ -162,6 +169,7 @@ public class PlayerData implements IDataTracker {
 
     public void lockActiveSlot() {
         slotCount = Math.max(slotCount - 1, 0);
+        activeSkills.set(slotCount, null);
     }
 
     public int getActiveSlotCount() {

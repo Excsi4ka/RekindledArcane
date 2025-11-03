@@ -35,7 +35,7 @@ public class SkillTreeScreen extends GuiScreen {
 
     private SkillUnlockWidget currentHoveringWidget, equipmentCandidate;
 
-    public Map<ISkill, SkillUnlockWidget> skillWidgets;
+    public final Map<ISkill, SkillUnlockWidget> skillWidgets;
 
     private PlayerData playerData;
 

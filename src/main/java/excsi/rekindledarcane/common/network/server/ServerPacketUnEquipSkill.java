@@ -38,11 +38,14 @@ public class ServerPacketUnEquipSkill implements IMessage, IMessageHandler<Serve
         if(ctx.side == Side.CLIENT) {
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             PlayerData data = PlayerDataManager.getPlayerData(player);
-            data.getEquippedActiveSkills().set(message.slot, null);
-            if (Minecraft.getMinecraft().currentScreen instanceof SkillSelectionScreen) {
-                SkillSelectionScreen screen = (SkillSelectionScreen) Minecraft.getMinecraft().currentScreen;
-                screen.setupSlots();
-            }
+            int slot = message.slot;
+            if (slot < 0 || message.slot > 4)
+                return null;
+            data.getEquippedActiveSkills().set(slot, null);
+//            if (Minecraft.getMinecraft().currentScreen instanceof SkillSelectionScreen) {
+//                SkillSelectionScreen screen = (SkillSelectionScreen) Minecraft.getMinecraft().currentScreen;
+//                screen.setupSlots();
+//            }
         }
         return null;
     }

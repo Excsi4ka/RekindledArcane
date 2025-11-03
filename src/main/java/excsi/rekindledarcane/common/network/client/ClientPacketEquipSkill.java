@@ -57,10 +57,13 @@ public class ClientPacketEquipSkill implements IMessage, IMessageHandler<ClientP
                 return null;
             if (!(skill instanceof IActiveAbilitySkill))
                 return null;
-            if (message.slot < data.getActiveSlotCount()) {
+            int slot = message.slot;
+            if (slot < 0 || message.slot > 4)
+                return null;
+            if (slot < data.getActiveSlotCount()) {
                 IActiveAbilitySkill ability = (IActiveAbilitySkill) skill;
-                data.getEquippedActiveSkills().set(message.slot, ability);
-                PacketManager.sendToPlayer(new ServerPacketEquipSkill(ability, message.slot), player);
+                data.getEquippedActiveSkills().set(slot, ability);
+                PacketManager.sendToPlayer(new ServerPacketEquipSkill(ability, slot), player);
             }
         }
         return null;

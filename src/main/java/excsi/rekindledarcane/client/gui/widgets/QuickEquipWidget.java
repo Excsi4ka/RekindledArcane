@@ -7,7 +7,10 @@ import excsi.rekindledarcane.client.util.RenderHelperWrapper;
 import excsi.rekindledarcane.common.network.PacketManager;
 import excsi.rekindledarcane.common.network.client.ClientPacketEquipSkill;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
 public class QuickEquipWidget extends Widget {
@@ -42,6 +45,11 @@ public class QuickEquipWidget extends Widget {
         if (isMouseOver(mouseX, mouseY) && parentScreen.equipmentMenuToggled()) {
             parentScreen.setHoveringSlot(this);
         }
+    }
+
+    @Override
+    public void func_146113_a(SoundHandler soundHandler) {
+        if (!locked) soundHandler.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("rekindledarcane:slot.equip")));
     }
 
     public void onEquip(IActiveAbilitySkill skill) {

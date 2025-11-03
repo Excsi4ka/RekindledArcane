@@ -10,5 +10,11 @@
     "sounds": [
       "chain_throw"
     ]
+  },
+  "slot.equip": {
+    "category": "master",
+    "sounds": [
+      "slot_equip"
+    ]
   }
 }

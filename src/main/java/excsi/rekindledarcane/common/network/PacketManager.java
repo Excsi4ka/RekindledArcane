@@ -29,7 +29,7 @@ public class PacketManager {
         WRAPPER.registerMessage(ClientPacketUnlockSkill.class, ClientPacketUnlockSkill.class, id++, Side.SERVER);
         WRAPPER.registerMessage(ClientPacketActivateAbility.class, ClientPacketActivateAbility.class, id++, Side.SERVER);
         WRAPPER.registerMessage(ClientPacketEquipSkill.class, ClientPacketEquipSkill.class, id++, Side.SERVER);
-        WRAPPER.registerMessage(ClientPacketUnEquipSkill.class, ClientPacketUnEquipSkill.class, id++, Side.SERVER);
+        //WRAPPER.registerMessage(ClientPacketUnEquipSkill.class, ClientPacketUnEquipSkill.class, id++, Side.SERVER);
 
         WRAPPER.registerMessage(ServerPacketSyncOnJoin.class, ServerPacketSyncOnJoin.class, id++, Side.CLIENT);
         WRAPPER.registerMessage(ServerPacketUnlockSkill.class, ServerPacketUnlockSkill.class, id++, Side.CLIENT);
@@ -37,7 +37,7 @@ public class PacketManager {
         WRAPPER.registerMessage(ServerPacketSyncTrackingData.class, ServerPacketSyncTrackingData.class, id++, Side.CLIENT);
         WRAPPER.registerMessage(ServerPacketSyncSkillPoints.class, ServerPacketSyncSkillPoints.class, id++, Side.CLIENT);
         WRAPPER.registerMessage(ServerPacketEquipSkill.class, ServerPacketEquipSkill.class, id++, Side.CLIENT);
-        WRAPPER.registerMessage(ServerPacketUnEquipSkill.class, ServerPacketUnEquipSkill.class, id++, Side.CLIENT);
+        //WRAPPER.registerMessage(ServerPacketUnEquipSkill.class, ServerPacketUnEquipSkill.class, id++, Side.CLIENT);
         WRAPPER.registerMessage(ServerPacketNotifyCasting.class, ServerPacketNotifyCasting.class, id++, Side.CLIENT);
     }
 

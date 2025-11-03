@@ -108,27 +108,27 @@ public class SkillSelectionScreen extends GuiScreen {
     }
 
     public void setupSlots() {
-        equippedSkillsButtons.clear();
-        skillPoolButtons.clear();
-        int y = height / 2 - 68;
-        int x = width / 2 + 10;
-        int id = 0, row = 0, column = 0;
-        List<IActiveAbilitySkill> skills = playerData.getAllActiveSkills();
-        skills.removeAll(playerData.getEquippedActiveSkills());
-        for (IActiveAbilitySkill ability : skills) {
-            skillPoolButtons.add(new AbilitySlotWidget(id++, x + column++ * 27, y + 28 * row, 24, 24, ability));
-            if(column == 3) {
-                column = 0;
-                row++;
-            }
-        }
-        y = height / 2 - 73;
-        x = width / 2 - 82;
-        for (int i = 0; i < 5; i++) {
-            boolean unlocked = i < playerData.getActiveSlotCount();
-            IActiveAbilitySkill ability = playerData.getEquippedActiveSkills().get(i);
-            equippedSkillsButtons.add(new EquippedSlotWidget(i, x, y + 31 * i, 22, 22, ability, !unlocked));
-        }
+//        equippedSkillsButtons.clear();
+//        skillPoolButtons.clear();
+//        int y = height / 2 - 68;
+//        int x = width / 2 + 10;
+//        int id = 0, row = 0, column = 0;
+//        List<IActiveAbilitySkill> skills = playerData.getAllActiveSkills();
+//        skills.removeAll(playerData.getEquippedActiveSkills());
+//        for (IActiveAbilitySkill ability : skills) {
+//            skillPoolButtons.add(new AbilitySlotWidget(id++, x + column++ * 27, y + 28 * row, 24, 24, ability));
+//            if(column == 3) {
+//                column = 0;
+//                row++;
+//            }
+//        }
+//        y = height / 2 - 73;
+//        x = width / 2 - 82;
+//        for (int i = 0; i < 5; i++) {
+//            boolean unlocked = i < playerData.getActiveSlotCount();
+//            IActiveAbilitySkill ability = playerData.getEquippedActiveSkills().get(i);
+//            equippedSkillsButtons.add(new EquippedSlotWidget(i, x, y + 31 * i, 22, 22, ability, !unlocked));
+//        }
     }
 
     public AbilitySlotWidget getSelectedSkill(int mouseX, int mouseY) {

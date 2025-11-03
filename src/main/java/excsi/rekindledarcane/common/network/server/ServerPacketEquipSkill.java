@@ -57,13 +57,16 @@ public class ServerPacketEquipSkill implements IMessage, IMessageHandler<ServerP
             ISkill skill = category.getSkillFromID(message.skillID);
             if (!(skill instanceof IActiveAbilitySkill))
                 return null;
-            if (message.slot < data.getActiveSlotCount()) {
+            int slot = message.slot;
+            if (slot < 0 || message.slot > 4)
+                return null;
+            if (slot < data.getActiveSlotCount()) {
                 IActiveAbilitySkill ability = (IActiveAbilitySkill) skill;
-                data.getEquippedActiveSkills().set(message.slot, ability);
-                if (Minecraft.getMinecraft().currentScreen instanceof SkillSelectionScreen) {
-                    SkillSelectionScreen screen = (SkillSelectionScreen) Minecraft.getMinecraft().currentScreen;
-                    screen.setupSlots();
-                }
+                data.getEquippedActiveSkills().set(slot, ability);
+//                if (Minecraft.getMinecraft().currentScreen instanceof SkillSelectionScreen) {
+//                    SkillSelectionScreen screen = (SkillSelectionScreen) Minecraft.getMinecraft().currentScreen;
+//                    screen.setupSlots();
+//                }
             }
         }
         return null;

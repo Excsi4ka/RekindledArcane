@@ -36,7 +36,10 @@ public class ClientPacketUnEquipSkill implements IMessage, IMessageHandler<Clien
         if(ctx.side == Side.SERVER) {
             EntityPlayer player = ctx.getServerHandler().playerEntity;
             PlayerData data = PlayerDataManager.getPlayerData(player);
-            data.getEquippedActiveSkills().set(message.slot, null);
+            int slot = message.slot;
+            if (slot < 0 || message.slot > 4)
+                return null;
+            data.getEquippedActiveSkills().set(slot, null);
             PacketManager.sendToPlayer(new ServerPacketUnEquipSkill(message.slot), player);
         }
         return null;

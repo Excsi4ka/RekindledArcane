@@ -3,6 +3,7 @@ attribute.name.rekindledarcane.magicResistance=Magic Resistance
 attribute.name.rekindledarcane.maxSummons=Max Summons
 attribute.name.rekindledarcane.reachDistance=Reach Distance
 
+rekindledarcane.skill.equip=<mouse_rmb> Right click to equip
 rekindledarcane.skill.slot.locked=Slot Locked
 rekindledarcane.skill.strength=Strength I
 rekindledarcane.skill.strength2=Strength II
