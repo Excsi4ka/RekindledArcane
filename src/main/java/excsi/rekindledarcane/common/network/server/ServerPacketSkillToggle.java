@@ -7,55 +7,52 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import excsi.rekindledarcane.api.RekindledArcaneAPI;
-import excsi.rekindledarcane.api.skill.ICastableSkill;
 import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
-import excsi.rekindledarcane.client.util.ClientSkillManager;
+import excsi.rekindledarcane.api.skill.IToggleSwitch;
+import excsi.rekindledarcane.common.data.player.PlayerData;
+import excsi.rekindledarcane.common.data.player.PlayerDataManager;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class ServerPacketNotifyCasting implements IMessage, IMessageHandler<ServerPacketNotifyCasting,IMessage> {
+public class ServerPacketSkillToggle implements IMessage, IMessageHandler<ServerPacketSkillToggle,IMessage> {
 
     public String categoryID, skillID;
 
-    public int entityID;
+    public boolean toggled;
 
-    public ServerPacketNotifyCasting() {}
+    public ServerPacketSkillToggle() {}
 
-    public ServerPacketNotifyCasting(String categoryID, String skillID, int entityID) {
-        this.categoryID = categoryID;
-        this.skillID = skillID;
-        this.entityID = entityID;
+    public ServerPacketSkillToggle(ISkillCategory skillCategory, ISkill skill, boolean toggled) {
+        this.categoryID = skillCategory.getNameID();
+        this.skillID = skill.getNameID();
+        this.toggled = toggled;
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
         categoryID = ByteBufUtils.readUTF8String(buf);
         skillID = ByteBufUtils.readUTF8String(buf);
-        entityID = buf.readInt();
+        toggled = buf.readBoolean();
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         ByteBufUtils.writeUTF8String(buf, categoryID);
         ByteBufUtils.writeUTF8String(buf, skillID);
-        buf.writeInt(entityID);
+        buf.writeBoolean(toggled);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public IMessage onMessage(ServerPacketNotifyCasting message, MessageContext ctx) {
-        if(ctx.side == Side.CLIENT) {
-            Entity entity = Minecraft.getMinecraft().thePlayer.worldObj.getEntityByID(message.entityID);
-            if(!(entity instanceof EntityPlayer))
-                return null;
-            EntityPlayer clientPlayer = (EntityPlayer) entity;
+    public IMessage onMessage(ServerPacketSkillToggle message, MessageContext ctx) {
+        if (ctx.side == Side.CLIENT) {
+            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             ISkillCategory category = RekindledArcaneAPI.getCategory(message.categoryID);
             ISkill skill = category.getSkillFromID(message.skillID);
-            ICastableSkill ability = (ICastableSkill) skill;
-            ClientSkillManager.INSTANCE.startCasting(clientPlayer, ability);
+            IToggleSwitch toggleSkill = (IToggleSwitch) skill;
+            toggleSkill.toggle(player, message.toggled);
         }
         return null;
     }

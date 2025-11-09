@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SkillCategorySelectionScreen extends GuiScreen {
+public class  SkillCategorySelectionScreen extends GuiScreen {
 
     public int lastMouseX, lastMouseY;
 
@@ -29,13 +29,13 @@ public class SkillCategorySelectionScreen extends GuiScreen {
         int radius = 80;
         int categoryAmount = RekindledArcaneAPI.getAllCategories().size();
         int index = 0;
-        for(ISkillCategory category : RekindledArcaneAPI.getAllCategories()) {
+        for (ISkillCategory category : RekindledArcaneAPI.getAllCategories()) {
             double theta = Math.PI / categoryAmount;
             double centerTheta = theta * 2 * index;
             int pointX = (int) (x + radius * Math.sin(centerTheta));
             int pointY = (int) (y - radius * Math.cos(centerTheta));
-            radialMenuComponents.add(new SkillCategoryWidget(index++, pointX, pointY, 40, 40, category,
-                    centerTheta - theta, centerTheta + theta, this));
+            radialMenuComponents.add(new SkillCategoryWidget(index++, pointX, pointY,
+                    centerTheta - theta, centerTheta + theta, category, this));
         }
         lastMouseX = x;
         lastMouseY = y;
@@ -54,16 +54,19 @@ public class SkillCategorySelectionScreen extends GuiScreen {
         tes.startDrawing(GL11.GL_TRIANGLE_STRIP);
         radialMenuComponents.forEach(component -> component.drawButton(mc, mouseX, mouseY));
         tes.draw();
+//        tes.startDrawing(GL11.GL_TRIANGLES);
+//        radialMenuComponents.forEach(SkillCategoryWidget::drawWedge);
+//        tes.draw();
         GL11.glShadeModel(GL11.GL_FLAT);
         GL11.glEnable(GL11.GL_CULL_FACE);
         RenderHelperWrapper.restoreStates();
 
         updateMouseMovement(mouseX, mouseY);
 
-        if(currentlySelected != null) {
+        if (currentlySelected != null) {
             String name = currentlySelected.category.getNameID();
             int offset = mc.fontRenderer.getStringWidth(name) / 2;
-            mc.fontRenderer.drawStringWithShadow(currentlySelected.category.getNameID(), width / 2 - offset, height / 2 - 3, 0xFFFFFF);
+            mc.fontRenderer.drawStringWithShadow(name, width / 2 - offset, height / 2 - 3, 0xFFFFFF);
         }
         lastMouseX = mouseX;
         lastMouseY = mouseY;
@@ -71,7 +74,7 @@ public class SkillCategorySelectionScreen extends GuiScreen {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int clickType) {
-        if(clickType == 0 && currentlySelected != null)
+        if (clickType == 0 && currentlySelected != null)
             mc.displayGuiScreen(new SkillTreeScreen(currentlySelected.category, this));
     }
 
@@ -82,21 +85,21 @@ public class SkillCategorySelectionScreen extends GuiScreen {
 
     public SkillCategoryWidget getRadialMenuWedge(double angle) {
         for (SkillCategoryWidget component : radialMenuComponents) {
-            if(angle >= component.startAngle && angle <= component.stopAngle)
+            if (angle >= component.startAngle && angle <= component.stopAngle)
                 return component;
         }
         return radialMenuComponents.get(0);
     }
 
     public void updateMouseMovement(int mouseX, int mouseY) {
-        if(mouseX == lastMouseX && mouseY == lastMouseY)
+        if (mouseX == lastMouseX && mouseY == lastMouseY)
             return;
         int dX = mouseX - width / 2;
         int dY = height / 2 - mouseY;
         double angle = Math.toDegrees(Math.atan2(dX, dY));
-        if(angle < 0) angle+=360;
+        if (angle < 0) angle += 360;
         SkillCategoryWidget widget = getRadialMenuWedge(angle);
-        if(!widget.equals(currentlySelected)) {
+        if (!widget.equals(currentlySelected)) {
             widget.onSelect();
             currentlySelected = widget;
         }

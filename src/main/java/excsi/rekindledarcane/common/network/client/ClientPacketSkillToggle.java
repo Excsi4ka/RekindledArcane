@@ -1,29 +1,28 @@
-package excsi.rekindledarcane.common.network.server;
+package excsi.rekindledarcane.common.network.client;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import excsi.rekindledarcane.api.RekindledArcaneAPI;
 import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
-import excsi.rekindledarcane.client.gui.SkillTreeScreen;
-import excsi.rekindledarcane.client.gui.widgets.SkillUnlockWidget;
+import excsi.rekindledarcane.api.skill.IToggleSwitch;
 import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
+import excsi.rekindledarcane.common.network.PacketManager;
+import excsi.rekindledarcane.common.network.server.ServerPacketSkillToggle;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class ServerPacketForgetSkill implements IMessage, IMessageHandler<ServerPacketForgetSkill,IMessage> {
+public class ClientPacketSkillToggle implements IMessage, IMessageHandler<ClientPacketSkillToggle,IMessage> {
 
     public String categoryID, skillID;
 
-    public ServerPacketForgetSkill() {}
+    public ClientPacketSkillToggle() {}
 
-    public ServerPacketForgetSkill(ISkillCategory skillCategory, ISkill skill) {
+    public ClientPacketSkillToggle(ISkillCategory skillCategory, ISkill skill) {
         this.categoryID = skillCategory.getNameID();
         this.skillID = skill.getNameID();
     }
@@ -41,21 +40,24 @@ public class ServerPacketForgetSkill implements IMessage, IMessageHandler<Server
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public IMessage onMessage(ServerPacketForgetSkill message, MessageContext ctx) {
-        if (ctx.side == Side.CLIENT) {
-            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+    public IMessage onMessage(ClientPacketSkillToggle message, MessageContext ctx) {
+        if (ctx.side == Side.SERVER) {
+            EntityPlayer player = ctx.getServerHandler().playerEntity;
             PlayerData data = PlayerDataManager.getPlayerData(player);
             ISkillCategory category = RekindledArcaneAPI.getCategory(message.categoryID);
+            if (category == null)
+                return null;
             ISkill skill = category.getSkillFromID(message.skillID);
-            data.forgetSkill(player, skill, false);
-            if (Minecraft.getMinecraft().currentScreen instanceof SkillTreeScreen) {
-                SkillTreeScreen screen = (SkillTreeScreen) Minecraft.getMinecraft().currentScreen;
-                SkillUnlockWidget widget = screen.skillWidgets.get(skill);
-                if (widget != null) {
-                    widget.setUnlocked(false);
-                }
-            }
+            if (skill == null)
+                return null;
+            if (!data.hasSkill(skill))
+                return null;
+            if (!(skill instanceof IToggleSwitch))
+                return null;
+            IToggleSwitch toggleSkill = (IToggleSwitch) skill;
+            boolean toggled = toggleSkill.isToggled(player);
+            toggleSkill.toggle(player, !toggled);
+            PacketManager.sendToPlayer(new ServerPacketSkillToggle(category, skill, !toggled), player);
         }
         return null;
     }

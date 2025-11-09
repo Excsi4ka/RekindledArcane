@@ -108,6 +108,8 @@ public abstract class AbstractSkill implements ISkill {
 
     @Override
     public ISkill getPreRequisite() {
+        if (preRequisiteID == null)
+            return null;
         if (cachedPreRequisite == null)
             cachedPreRequisite = skillCategory.getSkillFromID(preRequisiteID);
         return cachedPreRequisite;
@@ -115,6 +117,8 @@ public abstract class AbstractSkill implements ISkill {
 
     @Override
     public ISkill getAntiRequisite() {
+        if (antiRequisiteID == null)
+            return null;
         if (cachedAntiRequisite == null)
             cachedAntiRequisite = skillCategory.getSkillFromID(antiRequisiteID);
         return cachedAntiRequisite;

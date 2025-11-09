@@ -45,6 +45,8 @@ public class ClientProxy extends CommonProxy {
 
     public static final KeyBinding skillTreeOpen = new KeyBinding("arcane.skillTreeOpen", Keyboard.KEY_NONE, RekindledArcane.MODID);
 
+    public static final KeyBinding openRadialMenu = new KeyBinding("arcane.openRadialMenu", Keyboard.KEY_NONE, RekindledArcane.MODID);
+
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
@@ -53,6 +55,7 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.registerKeyBinding(switchLeft);
         ClientRegistry.registerKeyBinding(switchRight);
         ClientRegistry.registerKeyBinding(skillTreeOpen);
+        ClientRegistry.registerKeyBinding(openRadialMenu);
 
         FMLCommonHandler.instance().bus().register(new ClientEventHandler());
         MinecraftForge.EVENT_BUS.register(new ClientEventHandler());

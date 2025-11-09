@@ -3,16 +3,16 @@ package excsi.rekindledarcane.common.skill.ability;
 import cpw.mods.fml.relauncher.Side;
 import excsi.rekindledarcane.api.client.ISkillCastAnimation;
 import excsi.rekindledarcane.common.data.skill.CooldownData;
-import excsi.rekindledarcane.common.entity.util.AoeEntity;
+import excsi.rekindledarcane.common.entity.projectile.GenericProjectile;
+import excsi.rekindledarcane.common.entity.projectile.MagicSliceProjectile;
 import excsi.rekindledarcane.api.skill.templates.CastableAbilitySkillBase;
 import net.minecraft.entity.player.EntityPlayer;
-
-import java.awt.Color;
+import net.minecraft.util.Vec3;
 
 public class MagicSlice extends CastableAbilitySkillBase<CooldownData> {
 
     public MagicSlice(String nameID) {
-        super(nameID);
+        super(nameID, false);
     }
 
     @Override
@@ -25,11 +25,12 @@ public class MagicSlice extends CastableAbilitySkillBase<CooldownData> {
 
     @Override
     public void resolveSkillCast(EntityPlayer player) {
-        player.worldObj.playSoundEffect(player.posX, player.posY, player.posZ, "fire.ignite", 1f, 1f);
-        AoeEntity entity = new AoeEntity(player.worldObj, new Color(50, 241, 0, 218).getRGB(), player);
-        entity.setPosition(player.posX, player.posY, player.posZ);
+        Vec3 vec = player.getLookVec();
+        GenericProjectile entity = new MagicSliceProjectile(player.worldObj, player, 100)
+                .setPos(player.posX + vec.xCoord, player.posY + 1.5 + vec.yCoord, vec.zCoord + player.posZ)
+                .setSpeed(vec.xCoord, vec.yCoord, vec.zCoord);
         player.worldObj.spawnEntityInWorld(entity);
-        getSkillData(player).setSkillCooldown(100);
+        getSkillData(player).setSkillCooldown(10);
     }
 
     @Override
@@ -38,26 +39,10 @@ public class MagicSlice extends CastableAbilitySkillBase<CooldownData> {
     }
 
     @Override
-    public void onCastingStart(EntityPlayer player, Side side) {
-        player.worldObj.playSoundEffect(player.posX, player.posY, player.posZ, "fire.fire", 1f, 1f);
-    }
+    public void onCastingStart(EntityPlayer player, Side side) {}
 
     @Override
-    public void onCastTick(EntityPlayer player, int elapsedCastingTime, Side side) {
-        if(side == Side.SERVER)
-            return;
-//        RekindledArcane.proxy.addEffect(ParticleType.PARTICLE_ORB, player.worldObj, player.posX, player.posY, player.posZ,
-//                170,
-//                90,
-//                0,
-//                160,
-//                Math.random() * (player.worldObj.rand.nextBoolean() ? -0.2f : 0.2f),
-//                Math.random() * (player.worldObj.rand.nextBoolean() ? -0.2f : 0.2f),
-//                Math.random() * (player.worldObj.rand.nextBoolean() ? -0.2f : 0.2f),
-//                5.0f,
-//                0.90f,
-//                15);
-    }
+    public void onCastTick(EntityPlayer player, int elapsedCastingTime, Side side) {}
 
     @Override
     public int getCastingTickAmount() {
@@ -65,18 +50,13 @@ public class MagicSlice extends CastableAbilitySkillBase<CooldownData> {
     }
 
     @Override
-    public float getMovementSpeedMultiplier() {
-        return 0.1f;
-    }
-
-    @Override
     public ISkillCastAnimation getAnimation() {
         return (player, modelBiped, timeElapsed, partialTicks) -> {
-            float raising = Math.min(1f, (timeElapsed + partialTicks) / 10f);
-            modelBiped.bipedRightArm.rotateAngleX = -1.75f * raising;
-            modelBiped.bipedRightArm.rotateAngleY = -0.5f * raising;
-            modelBiped.bipedLeftArm.rotateAngleX = -1.75f * raising;
-            modelBiped.bipedLeftArm.rotateAngleY = 0.5f * raising;
+//            float raising = (float) Math.max(0f, 2.75 - (timeElapsed + partialTicks) / 3);
+//            modelBiped.bipedRightArm.rotateAngleZ = 1.5f;
+//            modelBiped.bipedRightArm.rotateAngleX = -raising;
+            modelBiped.bipedRightArm.rotateAngleZ = 2.5f;
+            modelBiped.bipedLeftArm.rotateAngleZ = -2.5f;
         };
     }
 }

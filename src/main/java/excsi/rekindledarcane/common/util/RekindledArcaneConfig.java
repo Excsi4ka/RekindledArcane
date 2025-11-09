@@ -26,6 +26,8 @@ public class RekindledArcaneConfig {
 
     public static float magicResistanceCap;
 
+    public static float dodgeChanceCap;
+
     public static boolean extendPotionIDS;
 
     public static int vulnerabilityPotionId;
@@ -41,8 +43,8 @@ public class RekindledArcaneConfig {
         shouldHealPlayerOnRespawn = CONFIG.getBoolean("HealPlayerOnRespawn", CATEGORY_GENERAL,
                 false, "Should players be healed to their maximum health on respawn");
 
-        keepGearOnDeath = CONFIG.getBoolean("KeepGearOnDeath", CATEGORY_GENERAL,
-                false, "Makes the player keep important items on death like armor and tools and only drops secondary items");
+//        keepGearOnDeath = CONFIG.getBoolean("KeepGearOnDeath", CATEGORY_GENERAL,
+//                false, "Makes the player keep important items on death like armor and tools and only drops secondary items");
 
         CONFIG.addCustomCategoryComment(CATEGORY_SKILLS, "Skill system related settings");
         maxSkillsCap = CONFIG.getInt("MaxSkillsCap", CATEGORY_SKILLS, 50, 0,
@@ -50,6 +52,9 @@ public class RekindledArcaneConfig {
 
         magicResistanceCap = CONFIG.getFloat("MagicResistanceAttributeCap", CATEGORY_SKILLS, 100, 0,
                 100, "The cap for magic resistance attribute value, 100 means full magic resistance is possible to achieve");
+
+        dodgeChanceCap = CONFIG.getFloat("DodgeChanceAttributeCap", CATEGORY_SKILLS, 90, 0,
+                100, "The cap for dodge chance attribute");
 
         CONFIG.addCustomCategoryComment(CATEGORY_POTIONS, "Potion related settings");
         extendPotionIDS = CONFIG.getBoolean("ExtendPotionIDS", CATEGORY_POTIONS,

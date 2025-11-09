@@ -21,14 +21,14 @@ public class QuickEquipWidget extends Widget {
 
     public final SkillTreeScreen parentScreen;
 
-    public QuickEquipWidget(int id, int x, int y, int width, int height, IActiveAbilitySkill ability, boolean locked, SkillTreeScreen screen) {
-        super(id, x, y, width, height);
+    public QuickEquipWidget(int id, int x, int y, IActiveAbilitySkill ability, boolean locked, SkillTreeScreen screen) {
+        super(id, x, y, 22, 22);
         this.ability = ability;
         this.locked = locked;
         this.parentScreen = screen;
         if (ability != null)
             descriptionTooltip.add(StatCollector.translateToLocal(ability.getUnlocalizedName()));
-        else
+        if (locked)
             descriptionTooltip.add(StatCollector.translateToLocal("rekindledarcane.skill.slot.locked"));
     }
 

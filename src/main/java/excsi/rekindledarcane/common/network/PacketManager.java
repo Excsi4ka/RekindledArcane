@@ -7,15 +7,17 @@ import cpw.mods.fml.relauncher.Side;
 import excsi.rekindledarcane.RekindledArcane;
 import excsi.rekindledarcane.common.network.client.ClientPacketEquipSkill;
 import excsi.rekindledarcane.common.network.client.ClientPacketActivateAbility;
-import excsi.rekindledarcane.common.network.client.ClientPacketUnEquipSkill;
+import excsi.rekindledarcane.common.network.client.ClientPacketSkillToggle;
 import excsi.rekindledarcane.common.network.client.ClientPacketUnlockSkill;
+import excsi.rekindledarcane.common.network.client.ClientPacketSetActiveSlot;
 import excsi.rekindledarcane.common.network.server.ServerPacketEquipSkill;
 import excsi.rekindledarcane.common.network.server.ServerPacketForgetSkill;
 import excsi.rekindledarcane.common.network.server.ServerPacketNotifyCasting;
+import excsi.rekindledarcane.common.network.server.ServerPacketSetActiveSlot;
+import excsi.rekindledarcane.common.network.server.ServerPacketSkillToggle;
 import excsi.rekindledarcane.common.network.server.ServerPacketSyncOnJoin;
 import excsi.rekindledarcane.common.network.server.ServerPacketSyncSkillPoints;
 import excsi.rekindledarcane.common.network.server.ServerPacketSyncTrackingData;
-import excsi.rekindledarcane.common.network.server.ServerPacketUnEquipSkill;
 import excsi.rekindledarcane.common.network.server.ServerPacketUnlockSkill;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -30,6 +32,8 @@ public class PacketManager {
         WRAPPER.registerMessage(ClientPacketActivateAbility.class, ClientPacketActivateAbility.class, id++, Side.SERVER);
         WRAPPER.registerMessage(ClientPacketEquipSkill.class, ClientPacketEquipSkill.class, id++, Side.SERVER);
         //WRAPPER.registerMessage(ClientPacketUnEquipSkill.class, ClientPacketUnEquipSkill.class, id++, Side.SERVER);
+        WRAPPER.registerMessage(ClientPacketSetActiveSlot.class, ClientPacketSetActiveSlot.class, id++, Side.SERVER);
+        WRAPPER.registerMessage(ClientPacketSkillToggle.class, ClientPacketSkillToggle.class, id++, Side.SERVER);
 
         WRAPPER.registerMessage(ServerPacketSyncOnJoin.class, ServerPacketSyncOnJoin.class, id++, Side.CLIENT);
         WRAPPER.registerMessage(ServerPacketUnlockSkill.class, ServerPacketUnlockSkill.class, id++, Side.CLIENT);
@@ -39,6 +43,8 @@ public class PacketManager {
         WRAPPER.registerMessage(ServerPacketEquipSkill.class, ServerPacketEquipSkill.class, id++, Side.CLIENT);
         //WRAPPER.registerMessage(ServerPacketUnEquipSkill.class, ServerPacketUnEquipSkill.class, id++, Side.CLIENT);
         WRAPPER.registerMessage(ServerPacketNotifyCasting.class, ServerPacketNotifyCasting.class, id++, Side.CLIENT);
+        WRAPPER.registerMessage(ServerPacketSetActiveSlot.class, ServerPacketSetActiveSlot.class, id++, Side.CLIENT);
+        WRAPPER.registerMessage(ServerPacketSkillToggle.class, ServerPacketSkillToggle.class, id++, Side.CLIENT);
     }
 
     public static void sendToPlayer(IMessage message, EntityPlayer player) {

@@ -10,7 +10,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 public class LichShieldsSkill extends CastableAbilitySkillBase<CooldownData> implements IUnlockCondition {
 
     public LichShieldsSkill(String nameID) {
-        super(nameID);
+        super(nameID, false);
     }
 
     @Override

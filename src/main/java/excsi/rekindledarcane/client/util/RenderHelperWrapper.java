@@ -84,8 +84,14 @@ public class RenderHelperWrapper {
         tes.addVertexWithUV(x,y + height,zOffset,icon.getMinU(),icon.getMaxV());
     }
 
-    public static void drawCooldownSquare(Tessellator tes, int middleX, int middleY, int squareRadius) {
+    public static void drawCooldownSquare(int middleX, int middleY, int squareRadius, float progress) {
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        Tessellator tes = Tessellator.instance;
+        tes.startDrawing(GL11.GL_TRIANGLE_FAN);
+        tes.addVertex(middleX, middleY, 0);
 
+
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
 
     public static void drawTestGradientSquare(int x, int y, int width, int height, int z) {

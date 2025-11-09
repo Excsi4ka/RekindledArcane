@@ -18,6 +18,11 @@ public abstract class Widget extends GuiButton {
         this(id, x, y, width, height, null);
     }
 
+    @Override
+    public void drawButton(Minecraft mc, int mouseX, int mouseY) {
+        super.drawButton(mc, mouseX, mouseY);
+    }
+
     public boolean isMouseOver(int mouseX, int mouseY) {
         return mouseX >= xPosition && mouseY >= yPosition && mouseX < xPosition + width && mouseY < yPosition + height;
     }
@@ -25,11 +30,6 @@ public abstract class Widget extends GuiButton {
     public void setPosition(int x, int y) {
         xPosition = x;
         yPosition = y;
-    }
-
-    @Override
-    public void drawButton(Minecraft mc, int mouseX, int mouseY) {
-        super.drawButton(mc, mouseX, mouseY);
     }
 
     public List<String> getDescriptionTooltip() {

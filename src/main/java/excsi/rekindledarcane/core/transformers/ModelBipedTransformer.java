@@ -31,7 +31,7 @@ public class ModelBipedTransformer extends SubTransformer {
         mn.instructions.insertBefore(abstractInsnNode, new VarInsnNode(Opcodes.ALOAD, 7)); //entity
         mn.instructions.insertBefore(abstractInsnNode, new VarInsnNode(Opcodes.ALOAD, 0));
         mn.instructions.insertBefore(abstractInsnNode, new MethodInsnNode(Opcodes.INVOKESTATIC,
-                "excsi/rekindledarcane/client/util/ClientSkillCastingManager",
+                "excsi/rekindledarcane/client/util/ClientSkillManager",
                 "renderCallback",
                 "(Lnet/minecraft/entity/Entity;Lnet/minecraft/client/model/ModelBiped;)V",
                 false));

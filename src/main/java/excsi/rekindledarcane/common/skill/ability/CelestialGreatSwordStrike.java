@@ -8,7 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 public class CelestialGreatSwordStrike extends CastableAbilitySkillBase<CooldownData> {
 
     public CelestialGreatSwordStrike(String nameID) {
-        super(nameID);
+        super(nameID, false);
     }
 
     @Override

@@ -18,7 +18,7 @@ public class BattleCallSkill extends CastableAbilitySkillBase<CooldownData> {
     public int radius;
 
     public BattleCallSkill(String nameID, int radius) {
-        super(nameID);
+        super(nameID, false);
         this.radius = radius;
     }
 

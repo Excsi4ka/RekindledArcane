@@ -1,5 +1,6 @@
 package excsi.rekindledarcane.api.skill.templates;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import excsi.rekindledarcane.api.skill.SkillType;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,6 +17,7 @@ public abstract class EventSkillBase extends AbstractSkill {
         super(nameID);
         playersWithSkill = new HashSet<>();
         MinecraftForge.EVENT_BUS.register(this);
+        FMLCommonHandler.instance().bus().register(this);
     }
 
     public boolean hasThisSkill(EntityLivingBase entityLivingBase) {

@@ -9,15 +9,17 @@ import excsi.rekindledarcane.api.skill.IActiveAbilitySkill;
 import excsi.rekindledarcane.api.skill.SkillType;
 import excsi.rekindledarcane.client.AssetLib;
 import excsi.rekindledarcane.client.ClientProxy;
+import excsi.rekindledarcane.client.gui.RadialMenuEquipScreen;
 import excsi.rekindledarcane.client.gui.SkillCategorySelectionScreen;
 import excsi.rekindledarcane.client.util.BlendMode;
-import excsi.rekindledarcane.client.util.ClientSkillCastingManager;
+import excsi.rekindledarcane.client.util.ClientSkillManager;
 import excsi.rekindledarcane.client.util.RenderHelperWrapper;
 import excsi.rekindledarcane.client.util.ScreenShakeManager;
 import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
 import excsi.rekindledarcane.common.network.PacketManager;
 import excsi.rekindledarcane.common.network.client.ClientPacketActivateAbility;
+import excsi.rekindledarcane.common.network.client.ClientPacketSetActiveSlot;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -27,23 +29,26 @@ import org.lwjgl.opengl.GL11;
 
 public class ClientEventHandler {
 
-    private static int currentlySelected = 0;
-
     @SubscribeEvent
     public void onKeyPress(InputEvent.KeyInputEvent event) {
         if (ClientProxy.skillTreeOpen.isPressed()) {
             Minecraft.getMinecraft().displayGuiScreen(new SkillCategorySelectionScreen());
         }
         if (ClientProxy.activateAbilityKey.isPressed()) {
-            PacketManager.sendToServer(new ClientPacketActivateAbility(currentlySelected));
+            PacketManager.sendToServer(new ClientPacketActivateAbility());
         }
         if (ClientProxy.switchLeft.isPressed()) {
             PlayerData data = PlayerDataManager.getPlayerData(Minecraft.getMinecraft().thePlayer);
-            currentlySelected = currentlySelected - 1 < 0 ? data.getActiveSlotCount() - 1 : currentlySelected - 1;
+            int slot = data.getCurrentActiveSlot() - 1 < 0 ? data.getActiveSlotCount() - 1 : data.getCurrentActiveSlot() - 1;
+            PacketManager.sendToServer(new ClientPacketSetActiveSlot(slot));
         }
         if (ClientProxy.switchRight.isPressed()) {
             PlayerData data = PlayerDataManager.getPlayerData(Minecraft.getMinecraft().thePlayer);
-            currentlySelected = currentlySelected + 1 > data.getActiveSlotCount() - 1 ? 0 : currentlySelected + 1;
+            int slot = data.getCurrentActiveSlot() + 1 > data.getActiveSlotCount() - 1 ? 0 : data.getCurrentActiveSlot() + 1;
+            PacketManager.sendToServer(new ClientPacketSetActiveSlot(slot));
+        }
+        if (ClientProxy.openRadialMenu.isPressed()) {
+            Minecraft.getMinecraft().displayGuiScreen(new RadialMenuEquipScreen());
         }
     }
 
@@ -51,8 +56,8 @@ public class ClientEventHandler {
     public void onOverlay(RenderGameOverlayEvent.Post event) {
         if (event.type != ElementType.HOTBAR)
             return;
-        int x = event.resolution.getScaledWidth() / 2 - 200;
-        int y = event.resolution.getScaledHeight() - 25;
+        int x = event.resolution.getScaledWidth() / 2 - 130;
+        int y = event.resolution.getScaledHeight() - 22;
 
         Minecraft.getMinecraft().getTextureManager().bindTexture(AssetLib.skillIconTextureAtlas);
         PlayerData data = PlayerDataManager.getPlayerData(Minecraft.getMinecraft().thePlayer);
@@ -62,27 +67,21 @@ public class ClientEventHandler {
         RenderHelperWrapper.enableBlend();
         RenderHelperWrapper.blendMode(BlendMode.DEFAULT);
         GL11.glColor4f(1f, 1f, 1f, 1f);
-        for (int i = 0; i < data.getActiveSlotCount(); i++) {
-            IActiveAbilitySkill ability = data.getEquippedActiveSkills().get(i);
-            if (ability != null) {
-                RenderHelperWrapper.batchDrawIcon(tes, 5 + 21 * i, y, 20, 20, 0, ability.getIcon());
-            }
-            if (currentlySelected == i) {
-                RenderHelperWrapper.batchDrawIcon(tes, 4 + 21 * i, y - 1, 22, 22, 0, SkillType.ABILITY.getFrameIcon());
-                continue;
-            }
-            RenderHelperWrapper.batchDrawIcon(tes, 5 + 21 * i, y, 20, 20, 0, SkillType.PASSIVE.getFrameIcon());
+        IActiveAbilitySkill ability = data.getEquippedActiveSkills().get(data.getCurrentActiveSlot());
+        if (ability != null) {
+            RenderHelperWrapper.batchDrawIcon(tes, x + 3, y + 3, 16, 16, 0, ability.getIcon());
         }
+        RenderHelperWrapper.batchDrawIcon(tes, x, y, 22, 22, 0, SkillType.PASSIVE.getFrameIcon());
         tes.draw();
         RenderHelperWrapper.restoreStates();
-        if (ClientSkillCastingManager.INSTANCE.isClientCasting()) {
-            int centerX = event.resolution.getScaledWidth() / 2;
-            int centerY = event.resolution.getScaledHeight() / 2;
-            int time = ClientSkillCastingManager.INSTANCE.getClientRemainingCastTime();
-            String message = time / 20d + " seconds";
-            int offset = Minecraft.getMinecraft().fontRenderer.getStringWidth(message) / 2;
-            //Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(message, centerX - offset, centerY - 10, 0xFFFFFF);
-        }
+//        if (ClientSkillManager.INSTANCE.isClientCasting()) {
+//            int centerX = event.resolution.getScaledWidth() / 2;
+//            int centerY = event.resolution.getScaledHeight() / 2;
+//            int time = ClientSkillManager.INSTANCE.getClientRemainingCastTime();
+//            String message = time / 20d + " seconds";
+//            int offset = Minecraft.getMinecraft().fontRenderer.getStringWidth(message) / 2;
+//            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(message, centerX - offset, centerY - 10, 0xFFFFFF);
+//        }
     }
 
     public static float handleExtendedReach(float currentReachDistance) {
@@ -95,7 +94,7 @@ public class ClientEventHandler {
             return;
         if (event.side == Side.SERVER)
             return;
-        ClientSkillCastingManager.INSTANCE.tick(event.player);
+        ClientSkillManager.INSTANCE.tick(event.player);
     }
 
     @SubscribeEvent

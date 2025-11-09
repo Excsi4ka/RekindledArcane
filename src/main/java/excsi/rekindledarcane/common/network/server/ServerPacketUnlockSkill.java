@@ -47,11 +47,7 @@ public class ServerPacketUnlockSkill implements IMessage, IMessageHandler<Server
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             PlayerData data = PlayerDataManager.getPlayerData(player);
             ISkillCategory category = RekindledArcaneAPI.getCategory(message.categoryID);
-            if (category == null)
-                return null;
             ISkill skill = category.getSkillFromID(message.skillID);
-            if (skill == null)
-                return null;
             data.unlockSkill(player, skill, false);
             if (Minecraft.getMinecraft().currentScreen instanceof SkillTreeScreen) {
                 SkillTreeScreen screen = (SkillTreeScreen) Minecraft.getMinecraft().currentScreen;

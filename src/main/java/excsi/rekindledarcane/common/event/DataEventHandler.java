@@ -8,7 +8,7 @@ import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
 import excsi.rekindledarcane.common.network.PacketManager;
 import excsi.rekindledarcane.common.network.server.ServerPacketSyncOnJoin;
-import excsi.rekindledarcane.common.skill.ServerSkillCastingManager;
+import excsi.rekindledarcane.common.skill.ServerSkillManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -80,6 +80,6 @@ public class DataEventHandler {
         PlayerDataManager.getPlayerData(player).writeData(data, player);
         ServerPacketSyncOnJoin packet = new ServerPacketSyncOnJoin(data);
         PacketManager.sendToPlayer(packet, player);
-        ServerSkillCastingManager.INSTANCE.clearPlayer(player);
+        ServerSkillManager.INSTANCE.clearPlayer(player);
     }
 }

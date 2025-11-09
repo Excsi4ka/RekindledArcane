@@ -51,6 +51,8 @@ public class ForsakenGreatsword extends ItemSword {
     public Multimap getAttributeModifiers(ItemStack stack) {
         Multimap multimap = super.getAttributeModifiers(stack);
         multimap.put(RekindledArcaneAPI.REACH_DISTANCE.getAttributeUnlocalizedName(), new AttributeModifier(toolReachID, "WeaponReach", 1, 0));
+        multimap.put(RekindledArcaneAPI.CRIT_CHANCE.getAttributeUnlocalizedName(), new AttributeModifier(toolReachID, "WeaponCrit", 1, 1));
+        multimap.put(RekindledArcaneAPI.CRIT_DAMAGE.getAttributeUnlocalizedName(), new AttributeModifier(toolReachID, "WeaponCritDamage", 2.5, 1));
         return multimap;
     }
 }

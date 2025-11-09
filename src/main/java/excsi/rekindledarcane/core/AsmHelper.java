@@ -5,6 +5,8 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import java.util.function.Predicate;
+
 public class AsmHelper {
 
     public static MethodNode getMethodNodeByName(ClassNode classNode, String methodName, String obfMethodName) {
@@ -31,7 +33,16 @@ public class AsmHelper {
             if(insnNode.getOpcode() == opcode)
                 return insnNode;
         }
-        throw new RuntimeException("Unable to find opcode in " + node);
+        throw new RuntimeException("Unable to find opcode in " + node.name);
+    }
+
+    public static AbstractInsnNode getFirstMatchingOpcode(MethodNode node, int opcode, Predicate<AbstractInsnNode> predicate) {
+        for (int i = 0; i < node.instructions.size(); i++) {
+            AbstractInsnNode insnNode = node.instructions.get(i);
+            if(insnNode.getOpcode() == opcode && predicate.test(insnNode))
+                return insnNode;
+        }
+        throw new RuntimeException("Unable to find opcode in " + node.name);
     }
 
     public static MethodNode getMethodNodeByDescriptor(ClassNode classNode, String methodName, String obfMethodName, String descriptor) {

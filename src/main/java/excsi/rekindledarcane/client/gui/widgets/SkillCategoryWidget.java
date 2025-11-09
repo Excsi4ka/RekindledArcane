@@ -11,20 +11,20 @@ public class SkillCategoryWidget extends Widget {
 
     public ISkillCategory category;
 
-    public double startAngle, stopAngle;
+    public int startAngle, stopAngle;
 
     public SkillCategorySelectionScreen parentScreen;
 
-    public SkillCategoryWidget(int id, int x, int y, int width, int height, ISkillCategory category, double startAngle, double stopAngle, SkillCategorySelectionScreen screen) {
-        super(id, x, y, width, height);
+    public SkillCategoryWidget(int id, int x, int y, double startAngle, double stopAngle, ISkillCategory category, SkillCategorySelectionScreen screen) {
+        super(id, x, y, 40, 40);
         this.category = category;
-        this.startAngle = Math.toDegrees(startAngle);
-        this.stopAngle = Math.toDegrees(stopAngle);
+        this.startAngle = (int) Math.round(startAngle * 180 / Math.PI);
+        this.stopAngle = (int) Math.round(stopAngle * 180 / Math.PI);
         this.parentScreen = screen;
     }
 
     @Override
-    public void drawButton(Minecraft minecraft, int p_146112_2_, int p_146112_3_) {
+    public void drawButton(Minecraft minecraft, int mouseX, int mouseY) {
         int x = parentScreen.width / 2;
         int y = parentScreen.height / 2;
         int rgb = category.getPrimaryColor().getRGB();
@@ -40,6 +40,22 @@ public class SkillCategoryWidget extends Widget {
             tes.addVertex(x + Math.sin(radians) * (120 + radiusExpand), y - Math.cos(radians) * (120 + radiusExpand), 100);
         }
     }
+
+//    public void drawWedge() {
+//        int x = parentScreen.width / 2;
+//        int y = parentScreen.height / 2;
+//        int angleDiff = 2;
+//        Tessellator tes = Tessellator.instance;
+//        tes.setColorRGBA(207, 164, 108, 244);
+//        double radians = Math.toRadians(startAngle + angleDiff);
+//        tes.addVertex(x + Math.sin(radians) * 80, y - Math.cos(radians) * 80, 100);
+//        radians = Math.toRadians(startAngle);
+//        tes.setColorRGBA(207, 164, 108, 20);
+//        tes.addVertex(x + Math.sin(radians) * 160, y - Math.cos(radians) * 160, 100);
+//        radians = Math.toRadians(startAngle - angleDiff);
+//                tes.setColorRGBA(207, 164, 108, 244);
+//        tes.addVertex(x + Math.sin(radians) * 80, y - Math.cos(radians) * 80, 100);
+//    }
 
     public void onSelect() {
         parentScreen.mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(AssetLib.menuDing, 1.0F));

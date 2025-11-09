@@ -6,8 +6,8 @@ import excsi.rekindledarcane.api.data.skill.SkillData;
 
 public abstract class CastableAbilitySkillBase<DATA extends SkillData> extends InstantAbilitySkillBase<DATA> implements ICastableSkill {
 
-    public CastableAbilitySkillBase(String nameID) {
-        super(nameID);
+    public CastableAbilitySkillBase(String nameID, boolean registerForEvents) {
+        super(nameID, registerForEvents);
     }
 
     @Override

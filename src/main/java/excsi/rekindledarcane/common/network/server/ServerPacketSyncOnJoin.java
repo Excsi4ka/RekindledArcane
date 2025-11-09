@@ -6,7 +6,7 @@ import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import excsi.rekindledarcane.client.util.ClientSkillCastingManager;
+import excsi.rekindledarcane.client.util.ClientSkillManager;
 import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
 import io.netty.buffer.ByteBuf;
@@ -41,7 +41,7 @@ public class ServerPacketSyncOnJoin implements IMessage, IMessageHandler<ServerP
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             PlayerData playerData = PlayerDataManager.setPlayerDataDefault(player);
             playerData.readData(message.data, player);
-            ClientSkillCastingManager.INSTANCE.clearAll();
+            ClientSkillManager.INSTANCE.clearAll();
         }
         return null;
     }

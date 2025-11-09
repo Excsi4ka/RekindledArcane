@@ -4,6 +4,7 @@ import excsi.rekindledarcane.api.skill.IActiveAbilitySkill;
 import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
 import excsi.rekindledarcane.api.misc.Point;
+import excsi.rekindledarcane.api.skill.IToggleSwitch;
 import excsi.rekindledarcane.client.AssetLib;
 import excsi.rekindledarcane.client.gui.widgets.QuickEquipWidget;
 import excsi.rekindledarcane.client.gui.widgets.SkillUnlockWidget;
@@ -12,6 +13,7 @@ import excsi.rekindledarcane.client.util.RenderHelperWrapper;
 import excsi.rekindledarcane.common.data.player.PlayerData;
 import excsi.rekindledarcane.common.data.player.PlayerDataManager;
 import excsi.rekindledarcane.common.network.PacketManager;
+import excsi.rekindledarcane.common.network.client.ClientPacketSkillToggle;
 import excsi.rekindledarcane.common.network.client.ClientPacketUnlockSkill;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
@@ -59,8 +61,7 @@ public class SkillTreeScreen extends GuiScreen {
         for (ISkill skill : category.getAllSkills()) {
             boolean isUnlocked = unlockedSkills.contains(skill);
             Point point = skill.getPosition();
-            skillWidgets.put(skill, new SkillUnlockWidget(x + point.getX(), point.getY(), 22, 22,
-                    skill, this, isUnlocked));
+            skillWidgets.put(skill, new SkillUnlockWidget(x + point.getX(), point.getY(), skill, this, isUnlocked));
         }
         closeEquipmentMenu();
         lastMouseX = Mouse.getEventX() * width / mc.displayWidth;
@@ -116,10 +117,14 @@ public class SkillTreeScreen extends GuiScreen {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int button) {
         if (currentHoveringWidget != null) {
-            if (button == 0) {
+            if (button == 0 && !currentHoveringWidget.isUnlocked()) {
                 ISkill skill = currentHoveringWidget.getSkill();
                 currentHoveringWidget.func_146113_a(mc.getSoundHandler());
                 PacketManager.sendToServer(new ClientPacketUnlockSkill(skill.getSkillCategory(), skill));
+            }
+            if (button == 0 && currentHoveringWidget.isUnlocked() && isShiftKeyDown() && currentHoveringWidget.getSkill() instanceof IToggleSwitch) {
+                ISkill skill = currentHoveringWidget.getSkill();
+                PacketManager.sendToServer(new ClientPacketSkillToggle(skill.getSkillCategory(), skill));
             }
             if (button == 1 && currentHoveringWidget.getSkill() instanceof IActiveAbilitySkill && currentHoveringWidget.isUnlocked()) {
                 closeEquipmentMenu();
@@ -146,23 +151,23 @@ public class SkillTreeScreen extends GuiScreen {
         }
     }
 
+    public void createEquipSlots(SkillUnlockWidget widget) {
+        equipmentCandidate = widget;
+        for (int i = 0; i < 8; i++) {
+            boolean unlocked = i < playerData.getActiveSlotCount();
+            double theta = Math.PI / 8;
+            double centerTheta = theta * 2 * i;
+            int radius = 45;
+            int pointX = (int) (widget.xPosition + radius * Math.sin(centerTheta));
+            int pointY = (int) (widget.yPosition - radius * Math.cos(centerTheta));
+            IActiveAbilitySkill ability = playerData.getEquippedActiveSkills().get(i);
+            equipSlots.add(new QuickEquipWidget(i, pointX, pointY, ability, !unlocked, this));
+        }
+    }
+
     @Override
     public boolean doesGuiPauseGame() {
         return false;
-    }
-
-    public void createEquipSlots(SkillUnlockWidget widget) {
-        equipmentCandidate = widget;
-        for (int i = 0; i < 5; i++) {
-            boolean unlocked = i < playerData.getActiveSlotCount();
-            double theta = Math.PI / 5;
-            double centerTheta = theta * 2 * i;
-            int radius = 30;
-            int pointX = (int) (widget.xPosition + radius * Math.sin(centerTheta));
-            int pointY = (int) (widget.yPosition + 2 - radius * Math.cos(centerTheta));
-            IActiveAbilitySkill ability = playerData.getEquippedActiveSkills().get(i);
-            equipSlots.add(new QuickEquipWidget(i, pointX, pointY, 22, 22, ability, !unlocked, this));
-        }
     }
 
     public boolean equipmentMenuToggled() {

@@ -2,6 +2,7 @@ package excsi.rekindledarcane.core;
 
 import excsi.rekindledarcane.core.transformers.ApplyPotionEventTransformer;
 import excsi.rekindledarcane.core.transformers.ArmorPropertiesTransformer;
+import excsi.rekindledarcane.core.transformers.EntityPlayerTransformer;
 import excsi.rekindledarcane.core.transformers.EntityRendererTransformer;
 import excsi.rekindledarcane.core.transformers.ItemInWorldManagerTransformer;
 import excsi.rekindledarcane.core.transformers.ModelBipedTransformer;
@@ -32,6 +33,7 @@ public class RekindledArcaneMainTransformer implements IClassTransformer {
         register(new EntityRendererTransformer());
         register(new ItemInWorldManagerTransformer());
         register(new ArmorPropertiesTransformer());
+        register(new EntityPlayerTransformer());
     }
 
     @Override

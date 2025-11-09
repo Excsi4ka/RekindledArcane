@@ -8,15 +8,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class ServerSkillCastingManager {
+public class ServerSkillManager {
 
-    public static ServerSkillCastingManager INSTANCE = new ServerSkillCastingManager();
+    public static ServerSkillManager INSTANCE = new ServerSkillManager();
 
     private final HashMap<UUID, ICastableSkill> playerAbilityMap;
 
     private final HashMap<UUID, Integer> playerCastTimeMap;
 
-    private ServerSkillCastingManager() {
+    private ServerSkillManager() {
         playerAbilityMap = new HashMap<>();
         playerCastTimeMap = new HashMap<>();
     }

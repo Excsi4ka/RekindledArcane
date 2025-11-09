@@ -2,6 +2,7 @@ package excsi.rekindledarcane.client.gui.widgets;
 
 import excsi.rekindledarcane.api.skill.ISkill;
 import excsi.rekindledarcane.api.misc.Point;
+import excsi.rekindledarcane.api.skill.IToggleSwitch;
 import excsi.rekindledarcane.client.gui.SkillTreeScreen;
 import excsi.rekindledarcane.client.util.RenderHelperWrapper;
 import net.minecraft.client.Minecraft;
@@ -17,8 +18,8 @@ public class SkillUnlockWidget extends Widget {
 
     public int connectionX, connectionY;
 
-    public SkillUnlockWidget(int x, int y, int width, int height, ISkill skill, SkillTreeScreen parentScreen, boolean unlocked) {
-        super(0, x, y, width, height);
+    public SkillUnlockWidget(int x, int y, ISkill skill, SkillTreeScreen parentScreen, boolean unlocked) {
+        super(0, x, y, 22, 22);
         this.skill = skill;
         this.parentScreen = parentScreen;
         this.skill.addDescription(descriptionTooltip); //maybe shouldn't store descriptions for all skills upon screen init;

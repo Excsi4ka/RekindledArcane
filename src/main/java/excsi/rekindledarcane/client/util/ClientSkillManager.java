@@ -13,15 +13,15 @@ import net.minecraft.item.ItemStack;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class ClientSkillCastingManager {
+public class ClientSkillManager {
 
-    public static ClientSkillCastingManager INSTANCE = new ClientSkillCastingManager();
+    public static ClientSkillManager INSTANCE = new ClientSkillManager();
 
     private final HashMap<UUID, ICastableSkill> playerAbilityMap;
 
     private final HashMap<UUID, Integer> playerCastTimeMap;
 
-    private ClientSkillCastingManager() {
+    private ClientSkillManager() {
         playerAbilityMap = new HashMap<>();
         playerCastTimeMap = new HashMap<>();
     }
@@ -92,7 +92,7 @@ public class ClientSkillCastingManager {
         }
 
         UUID uuid = player.getUniqueID();
-        ClientSkillCastingManager manager = ClientSkillCastingManager.INSTANCE;
+        ClientSkillManager manager = ClientSkillManager.INSTANCE;
         if(!manager.playerAbilityMap.containsKey(uuid))
             return;
 

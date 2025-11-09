@@ -7,12 +7,12 @@ import net.minecraft.entity.player.EntityPlayer;
 public class ArrowBarrageSkill extends InstantAbilitySkillBase<ToggleAndCooldownData> {
 
     public ArrowBarrageSkill(String nameID) {
-        super(nameID);
+        super(nameID, true);
     }
 
     @Override
     public ToggleAndCooldownData createDefaultDataInstance() {
-        return new ToggleAndCooldownData(getRegistryName(), 100);
+        return new ToggleAndCooldownData(getRegistryName(), 1);
     }
 
     @Override

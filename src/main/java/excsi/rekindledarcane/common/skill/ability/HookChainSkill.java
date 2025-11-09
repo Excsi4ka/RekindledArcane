@@ -11,7 +11,7 @@ import net.minecraft.util.Vec3;
 public class HookChainSkill extends InstantAbilitySkillBase<CooldownData> {
 
     public HookChainSkill(String nameID) {
-        super(nameID);
+        super(nameID, false);
     }
 
     @Override

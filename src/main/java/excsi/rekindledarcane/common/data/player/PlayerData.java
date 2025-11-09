@@ -9,6 +9,7 @@ import excsi.rekindledarcane.api.skill.ISkillCategory;
 import excsi.rekindledarcane.api.skill.ISkillDataHandler;
 import excsi.rekindledarcane.common.network.PacketManager;
 import excsi.rekindledarcane.common.network.server.ServerPacketForgetSkill;
+import excsi.rekindledarcane.common.network.server.ServerPacketSetActiveSlot;
 import excsi.rekindledarcane.common.network.server.ServerPacketSyncSkillPoints;
 import excsi.rekindledarcane.common.network.server.ServerPacketSyncTrackingData;
 import excsi.rekindledarcane.common.network.server.ServerPacketUnlockSkill;
@@ -26,11 +27,11 @@ import java.util.Set;
 
 public class PlayerData implements IDataTracker {
 
-    private int skillPoints, unlockedSkillsCount, slotCount;
+    private int skillPoints, unlockedSkillsCount, slotCount, currentActiveSlot;
 
     private final HashMap<ISkillCategory, Set<ISkill>> unlockedSkills = new HashMap<>();
 
-    private final List<IActiveAbilitySkill> activeSkills = Arrays.asList(new IActiveAbilitySkill[5]);
+    private final List<IActiveAbilitySkill> activeSkills = Arrays.asList(new IActiveAbilitySkill[8]);
 
     //-------- For data tracking and updating ---------
     public HashMap<String, SkillData> trackingData = new HashMap<>();
@@ -43,7 +44,8 @@ public class PlayerData implements IDataTracker {
     public PlayerData() {
         this.skillPoints = 0;
         this.unlockedSkillsCount = 0;
-        this.slotCount = 1;
+        this.slotCount = 3;
+        this.currentActiveSlot = 0;
         RekindledArcaneAPI.getAllCategories().forEach(category -> unlockedSkills.put(category, new HashSet<>()));
     }
 
@@ -51,8 +53,9 @@ public class PlayerData implements IDataTracker {
         skillPoints = compound.getInteger("skillPoints");
         unlockedSkillsCount = compound.getInteger("unlockedSkillsCount");
         slotCount = compound.getInteger("activeSlotCount");
+        currentActiveSlot = compound.getInteger("currentActiveSlot");
         unlockedSkills.forEach((category, skills) -> {
-            if(compound.hasKey(category.getNameID())) {
+            if (compound.hasKey(category.getNameID())) {
                 readSkillsFromNBT(player, category, skills, compound);
             }
         });
@@ -67,6 +70,7 @@ public class PlayerData implements IDataTracker {
         compound.setInteger("skillPoints", skillPoints);
         compound.setInteger("unlockedSkillsCount", unlockedSkillsCount);
         compound.setInteger("activeSlotCount", slotCount);
+        compound.setInteger("currentActiveSlot", currentActiveSlot);
         unlockedSkills.forEach((category, skills) -> compound.setTag(category.getNameID(),
                 writeSkillsToNBT(player, compound, skills)));
         NBTTagList list = new NBTTagList();
@@ -128,7 +132,7 @@ public class PlayerData implements IDataTracker {
 
     public void addSkillPoints(EntityPlayer player, int points, boolean notifyClient) {
         skillPoints += points;
-        if(notifyClient) {
+        if (notifyClient) {
             PacketManager.sendToPlayer(new ServerPacketSyncSkillPoints(skillPoints), player);
         }
     }
@@ -153,18 +157,8 @@ public class PlayerData implements IDataTracker {
         return activeSkills;
     }
 
-//    public List<IActiveAbilitySkill> getAllActiveSkills() {
-//        List<IActiveAbilitySkill> list = new ArrayList<>();
-//        unlockedSkills.forEach(((category, iSkills) -> iSkills.forEach(skill -> {
-//            if (skill instanceof IActiveAbilitySkill) {
-//                list.add((IActiveAbilitySkill) skill);
-//            }
-//        })));
-//        return list;
-//    }
-
     public void unlockActiveSlot() {
-        slotCount = Math.min(slotCount + 1, 5);
+        slotCount = Math.min(slotCount + 1, 8);
     }
 
     public void lockActiveSlot() {
@@ -176,18 +170,28 @@ public class PlayerData implements IDataTracker {
         return slotCount;
     }
 
+    public int getCurrentActiveSlot() {
+        return currentActiveSlot;
+    }
+
+    public void setCurrentActiveSlot(int currentActiveSlot, EntityPlayer player, boolean notifyClient) {
+        this.currentActiveSlot = currentActiveSlot;
+        if (notifyClient)
+            PacketManager.sendToPlayer(new ServerPacketSetActiveSlot(currentActiveSlot), player);
+    }
+
     public void tick(EntityPlayer player) {
         tickingStuff.forEach(tickData -> {
             if (tickData.readyToTick()) tickData.tick();
         });
-        if(dataQueuedToSync.isEmpty())
+        if (dataQueuedToSync.isEmpty())
             return;
         ServerPacketSyncTrackingData packetSyncTrackingData = new ServerPacketSyncTrackingData(dataQueuedToSync);
         PacketManager.sendToPlayer(packetSyncTrackingData, player);
     }
 
     private void readSkillsFromNBT(EntityPlayer player, ISkillCategory category, Set<ISkill> skillList, NBTTagCompound compound) {
-        NBTTagList nbtList = compound.getTagList(category.getNameID(),8); //8 for string nbt
+        NBTTagList nbtList = compound.getTagList(category.getNameID(), 8); //8 for string nbt
         for (int i = 0; i < nbtList.tagCount(); i++) {
             ISkill skill = category.getSkillFromID(nbtList.getStringTagAt(i));
             if (skill == null)
@@ -209,7 +213,7 @@ public class PlayerData implements IDataTracker {
         NBTTagList nbtTagList = new NBTTagList();
         skillList.forEach(skill -> {
             nbtTagList.appendTag(new NBTTagString(skill.getNameID()));
-            if(skill instanceof ISkillDataHandler) {
+            if (skill instanceof ISkillDataHandler) {
                 ISkillDataHandler dataHandler = (ISkillDataHandler) skill;
                 NBTTagCompound tagCompound = new NBTTagCompound();
                 dataHandler.writeData(player, tagCompound);
@@ -221,11 +225,11 @@ public class PlayerData implements IDataTracker {
 
     @Override
     public void trackData(SkillData data) {
-        if(data.shouldSendClientUpdates()) {
+        if (data.shouldSendClientUpdates()) {
             trackingData.put(data.getRegistryName(), data);
             data.setDataTracker(this);
         }
-        if(data.isTickingData()) {
+        if (data.isTickingData()) {
             tickingStuff.add(data);
         }
     }

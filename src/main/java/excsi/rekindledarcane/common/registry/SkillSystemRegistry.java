@@ -4,13 +4,16 @@ import excsi.rekindledarcane.api.RekindledArcaneAPI;
 import excsi.rekindledarcane.api.skill.ISkillCategory;
 import excsi.rekindledarcane.api.skill.templates.SkillCategory;
 import excsi.rekindledarcane.api.misc.Point;
-import excsi.rekindledarcane.common.skill.ability.AutoStrikeSkill;
+import excsi.rekindledarcane.common.skill.ability.ChargedShotSkill;
+import excsi.rekindledarcane.common.skill.event.AutoStrikeSkill;
 import excsi.rekindledarcane.common.skill.ability.BattleCallSkill;
 import excsi.rekindledarcane.common.skill.ability.HookChainSkill;
 import excsi.rekindledarcane.common.skill.ability.MagicSlice;
 import excsi.rekindledarcane.common.skill.attribute.AttributeOperation;
 import excsi.rekindledarcane.common.skill.attribute.AttributeSkill;
+import excsi.rekindledarcane.common.skill.event.FocusedFireSkill;
 import excsi.rekindledarcane.common.skill.event.FortitudeSkill;
+import excsi.rekindledarcane.common.skill.event.ShadowVeilSkill;
 import excsi.rekindledarcane.common.skill.event.TestEventSkill;
 import excsi.rekindledarcane.common.skill.special.UnlockActiveSlotSkill;
 import excsi.rekindledarcane.common.integration.thaumcraft.LesserRunicShieldSkill;
@@ -26,7 +29,7 @@ public class SkillSystemRegistry {
 
         skillCategory.registerSkill(new AttributeSkill("strength")
                 .addSkillAttribute(SharedMonsterAttributes.maxHealth, AttributeOperation.ADDITIVE, 1)
-                .addSkillAttribute(RekindledArcaneAPI.MAGIC_RESISTANCE, AttributeOperation.ADDITIVE, 3)
+                .addSkillAttribute(RekindledArcaneAPI.MAGIC_RESISTANCE, AttributeOperation.MULTIPLY_BASE, 3)
                 .setPosition(Point.of(-11, 20)));
 
         skillCategory.registerSkill(new AttributeSkill("strength2")
@@ -97,16 +100,28 @@ public class SkillSystemRegistry {
                 .setPreRequisite("event2")
                 .setPosition(Point.of(-70, 170)));
 
+        skillCategory.registerSkill(new ShadowVeilSkill("invis")
+                .setPreRequisite("strength")
+                .setPosition(Point.of(30, 20)));
+
+        skillCategory.registerSkill(new ChargedShotSkill("chargedShot")
+                .setPreRequisite("invis")
+                .setPosition(Point.of(70, 20)));
+
+        skillCategory.registerSkill(new FocusedFireSkill("focusFire")
+                .setPreRequisite("chargedShot")
+                .setPosition(Point.of(110, 20)));
+
         skillCategory = new SkillCategory("SORCERY", new Color(50, 0, 134, 152));
         RekindledArcaneAPI.registerSkillCategory(skillCategory.getNameID(), skillCategory);
 
         skillCategory = new SkillCategory("SUMMONING", new Color(14, 138, 67, 152));
         RekindledArcaneAPI.registerSkillCategory(skillCategory.getNameID(), skillCategory);
 
-//        skillCategory = new SkillCategory("EXPLORATION", new Color(166, 136, 0, 171));
-//        RekindledArcaneAPI.registerSkillCategory(skillCategory.getNameID(), skillCategory);
-//
-//        skillCategory = new SkillCategory("CRAFTSMANSHIP", new Color(136, 0, 0, 152));
-//        RekindledArcaneAPI.registerSkillCategory(skillCategory.getNameID(), skillCategory);
+        skillCategory = new SkillCategory("EXPLORATION", new Color(166, 136, 0, 171));
+        RekindledArcaneAPI.registerSkillCategory(skillCategory.getNameID(), skillCategory);
+
+        skillCategory = new SkillCategory("CRAFTSMANSHIP", new Color(136, 0, 0, 152));
+        RekindledArcaneAPI.registerSkillCategory(skillCategory.getNameID(), skillCategory);
     }
 }
